@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="storm-ircd" default="all" basedir="../src">
+  <property name="debug" value="True"/>
+  <property name="optimize" value="False"/>
+  <target name="all">
+    <nant buildfile="../lib/SharpZipLib/SharpZlib.build" />
+    <echo message="Building storm-ircd..." />
+    <csc target="exe"
+         define="UNSTABLE"
+         nowarn="0169"
+         output="../bin/storm-ircd.exe"
+         optimize="${optimize}"
+	 debug="${debug}">
+      <sources>
+	<include name="Main.cs" />
+        <include name="AssemblyInfo.cs" />
+        <include name="base/*.cs" />
+        <include name="irc/IRCChannel.cs" />
+        <include name="irc/IRCChannelModes.cs" />
+        <include name="irc/IRCInterpretor.cs" />
+        <include name="irc/IRCServer.cs" />
+        <include name="irc/IURLHandler.cs" />
+        <include name="irc/StringParser.cs" />
+        <include name="irc/UserModes.cs" />
+        <include name="irc/ClientProtocol/RFC2812.cs" />
+        <include name="irc/Commands/*.cs" />
+        <include name="irc/ServerProtocol/RFC2813.cs" />
+	<include name="other/*.cs" />
+        <include name="services/*.cs" />
+        <include name="testing/*.cs" />
+      </sources>
+      <references>
+        <include name="Mono.Posix.dll" />
+        <include name="../lib/SharpZipLib/bin/ICSharpCode.SharpZipLib.dll" />
+      </references>
+    </csc>
+  </target>
+  <target name="clean">
+    <echo message="Cleaning storm-ircd..." />
+    <delete verbose="true">
+      <fileset basedir="../bin/">
+        <include name="storm-ircd.exe" />
+        <include name="storm-ircd.exe.mdb" />
+      </fileset>
+    </delete>
+    <nant buildfile="../lib/SharpZipLib/SharpZlib.build" target="clean" />
+  </target>
+</project>

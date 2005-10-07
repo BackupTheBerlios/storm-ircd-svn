@@ -1,0 +1,16 @@
+<Combine name="SharpZipLibTests" fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="False" name="SharpZipLibTests" />
+    </Configuration>
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="False" name="SharpZipLibTests" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="SharpZipLibTests" single="True">
+    <Execute type="None" entry="SharpZipLibTests" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./SharpZipLibTests.mdp" />
+  </Entries>
+</Combine>

@@ -1,0 +1,30 @@
+#!/bin/sh
+# storm-IRCd
+
+PATH=/bin:/sbin:/home/josef/Projects/storm-IRCd/bin/Release
+NAME="storm-ircd"
+DESC="ircd"
+
+case "$1" in
+  start)
+    echo -n "Starting $DESC: "
+    #storm-IRCd.exe > /dev/null
+    echo "$NAME."
+    ;;
+  stop)
+    echo -n "Stopping $DESC: "
+
+    echo "$NAME."
+    ;;
+  restart)
+    echo -n "Restarting $DESC: "
+
+    sleep 1
+    echo "$NAME."
+    ;;
+  *)
+    N=/etc/init.d/$NAME
+    echo "Usage: $N {start|stop|restart}" >&2
+    exit 1
+    ;;
+esac

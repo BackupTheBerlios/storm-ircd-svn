@@ -1,0 +1,72 @@
+<Project name="ICSharpCode.SharpZipLib" fileversion="2.0" language="C#" ctype="DotNetProject">
+  <Configurations active="Release">
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="../bin" assembly="ICSharpCode.SharpZipLib" />
+      <Build debugmode="False" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" />
+      <CodeGeneration compiler="Csc" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="../bin" assembly="ICSharpCode.SharpZipLib" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="False" consolepause="True" runtime="MsNet" />
+      <CodeGeneration compiler="Csc" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <References />
+  <DeploymentInformation strategy="File">
+    <excludeFiles />
+  </DeploymentInformation>
+  <Contents>
+    <File name="./build.bat" subtype="Code" buildaction="Exclude" />
+    <File name="./Main.cs" subtype="Code" buildaction="Compile" />
+    <File name="./AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Checksums/IChecksum.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Checksums/Adler32.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/ZipEntry.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/ZipInputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/ZipOutputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/ZipConstants.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/ZipFile.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/ZipException.cs" subtype="Code" buildaction="Compile" />
+    <File name="./NZipLib.ndoc" subtype="Code" buildaction="Exclude" />
+    <File name="./NZipLib.key" subtype="Code" buildaction="Exclude" />
+    <File name="./SharpZipLib.key" subtype="Code" buildaction="Exclude" />
+    <File name="./BZip2/BZip2InputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BZip2/BZip2OutputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BZip2/BZip2Constants.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BZip2/BZip2.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarEntry.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarHeader.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarBuffer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarOutputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/InvalidHeaderException.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarInputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarArchive.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/PendingBuffer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/InflaterDynHeader.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/InflaterHuffmanTree.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/DeflaterPending.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/DeflaterHuffman.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/DeflaterEngine.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/Inflater.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/DeflaterConstants.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/Deflater.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/Streams/DeflaterOutputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/Streams/InflaterInputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/Streams/StreamManipulator.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Zip/Compression/Streams/OutputWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar" subtype="Directory" buildaction="Nothing" />
+    <File name="./Zip/Compression" subtype="Directory" buildaction="Nothing" />
+    <File name="./Zip/Compression/Streams" subtype="Directory" buildaction="Nothing" />
+    <File name="./SharpZipBaseException.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tar/TarException.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GZip/GZipException.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BZip2/BZip2Exception.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GZip/GZIPConstants.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GZip/GzipInputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GZip/GzipOutputStream.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Checksums/CRC32.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Checksums/StrangeCRC.cs" subtype="Code" buildaction="Compile" />
+  </Contents>
+</Project>
