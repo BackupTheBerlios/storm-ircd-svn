@@ -20,29 +20,37 @@ using System.Xml.Serialization;
 
 using System.Net;
 
-[XmlRoot("bind")]
+[XmlRoot("BindTo")]
 public class BindObject
 {
-//	private IPAddress _ip;
+	private string _hostName;
 	private int _port;
 
 	public BindObject()
 	{
-//		this._ip = IPAddress.Parse("127.0.0.1");
+		this.Port = 6667;
+		this.HostName = "0.0.0.0";
 	}
-/*
-	public IPAddress IP
+
+	public BindObject(int port, string hostName)
+	{
+		this.Port = port;
+		this.HostName = hostName;
+	}
+
+	public string HostName
 	{
 		get
 		{
-			return this._ip;
+			return this._hostName;
 		}
 		set
 		{
-			this._ip = value;
+			// TODO: validate
+			this._hostName = value;
 		}
 	}
-*/
+
 	public int Port
 	{
 		get
@@ -51,7 +59,8 @@ public class BindObject
 		}
 		set
 		{
-			this._port = value;
+			if ((value <= IPEndPoint.MaxPort) && (value >= IPEndPoint.MinPort))
+				this._port = value;
 		}
 	}
 }

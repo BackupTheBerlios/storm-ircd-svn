@@ -23,7 +23,7 @@ using System.Collections;
 using System.Diagnostics;
 
 // compressing
-//using ICSharpCode.SharpZipLib.GZip;
+using ICSharpCode.SharpZipLib.GZip;
 //using ICSharpCode.SharpZipLib.BZip2;
 
 // intern
@@ -49,15 +49,12 @@ namespace Network
 	/// <summary>
 	/// Zusammenfassung fuer Connection.
 	/// </summary>
-	public class BaseConnection : MarshalByRefObject, IConnection, IDisposable // iCloseable
+	public class BaseConnection : IConnection, IDisposable
 	{
 		#region Fields
-//		private Encoding _encoding;
-
+		protected int _id;
 		private Random rnd = new Random();
 		private bool available = false;
-		//private int _id;
-		protected int _id;
 		private IServer _server;
 		private Socket handler;
 		private bool disposed = false;
@@ -70,6 +67,7 @@ namespace Network
 		///
 		static long traffic;
 		bool run = true;
+		bool use_gzip = false;
 		///
 
 		#region Construct
@@ -80,7 +78,6 @@ namespace Network
 		/// <param name="server">Server-Instance</param>
 		public BaseConnection(Socket client, IServer server)
 		{
-			Debug.WriteLine("IRCConnectin Konstruktor");
 			if (client == null)
 				throw new ArgumentNullException("client");
 
@@ -119,7 +116,7 @@ namespace Network
 		/// <param name="server">Server-Instance</param>
 		protected BaseConnection(IPEndPoint ep, IServer server)
 		{
-			Console.WriteLine("new baseconnection from IPEndPoint");
+			Console.WriteLine("new {1} from IPEndPoint", this);
 
 			if (ep == null)
 				throw new ArgumentNullException("ep");
@@ -132,7 +129,7 @@ namespace Network
 			Socket tmp = new Socket(AddressFamily.InterNetwork,
 				SocketType.Stream, ProtocolType.Tcp);
 
-// geht nicht			tmp.Blocking = false;
+//			tmp.Blocking = false;
 			tmp.Connect(ep);
 			this.handler = tmp;
 
@@ -152,7 +149,7 @@ namespace Network
 
 			this.available = true;
 			
-			Console.WriteLine("new " + this + " with id: {0}, is availbale", id);
+			Console.WriteLine("new " + this + " with id: {0}, is available", id);
 		}
 
 		~BaseConnection()
@@ -178,7 +175,7 @@ namespace Network
 				{
 					if (disposing)
 					{
-						this.run = false; // 100 % Bugfix
+						this.run = false;
 						this.handler.Close();
 					}
 				}
@@ -212,14 +209,12 @@ namespace Network
 #endif
 		}
 
-		private void InvokeReceived(IConnection connection, string text)
+		private void InvokeReceived(string text)
 		{
 			if (this.Received != null)
-				this.Received(connection, text);
+				this.Received(this, text);
 		}
 
-//#if UNSTABLE
-//#else
 		internal virtual void RecieveProc(object dat)
 		{
 			Console.WriteLine("RecieveProc");
@@ -227,7 +222,7 @@ namespace Network
 
 			try
 			{
-				while (this.run && handler.Connected) // 100 % Bugfix
+				while (this.run && handler.Connected)
 				{
 					Console.WriteLine("receiveproc()");
 					state.allDone.Reset();
@@ -243,20 +238,15 @@ namespace Network
 				Console.WriteLine(e.ToString());
 			}
 		}
-//#endif
-
 		#endregion
 
 		#region protected
+		[ObsoleteAttribute("Please use the IWorker-Interface")]
 		protected virtual void HandleRecieved(string text)
 		{
-		Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!WArnig");
-			//this.InvokeReceived(text);
+			this.InvokeReceived(text);
 		}
 
-		//public virtual void SendChat(string message
-		// TO/DO: BUGFIX: imported TicTacToeConnection Methode
-		// TicTacToeConnection source:
 		/// <summary>
 		/// 
 		/// </summary>
@@ -337,6 +327,7 @@ stat.traffic += num1;
 			GC.Collect();
 		}
 
+#if false
 		public virtual void SendALT(string text)
 		{
 			Console.WriteLine("Send Buffer: " + text);
@@ -363,31 +354,36 @@ stat.traffic += num1;
 				}
 			}
 		}
+#endif
 
-// TODO: nochmal alles überprüfen
 #if UNSTABLE
-		// TODO: kompriemieren wenn Z flag
 		public virtual void Send(string text)
 		{
-			// TODO: if kompriemier
 			this.Send(text, this._server.SocketManager.Priority);
+		}
+
+		public virtual void Send(byte[] data)
+		{
+			this.Send(data, this._server.SocketManager.Priority);
 		}
 
 		public virtual void Send(string text, MessagePriority priority)
 		{
-			if (priority.Equals(MessagePriority.RealTime))
+			//this._server.SocketManager.Send(this, text, priority);
+			this.Send(((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.Encoding.GetBytes(text), priority);
+		}
+
+		public virtual void Send(byte[] data, MessagePriority priority)
+		{
+			if (use_gzip)
 			{
-				this.SendSync(text);
+				// TODO: data = gzip ...
 			}
-			else
-			{
-				this._server.SocketManager.Send(this, text, priority); // socketmanager
-			}
+			this._server.SocketManager.Send(this, data, priority);
 		}
 
 		public virtual void SendLine(string text)
 		{
-			Console.WriteLine("new sender");
 			this.SendLine(text, this._server.SocketManager.Priority);
 		}
 
@@ -399,23 +395,24 @@ stat.traffic += num1;
 			this.Send(text, priority);
 		}
 #else
+		[ObsoleteAttribute("Please compile with \"#define UNSTABLE\"")]
 		public void Send(string text)
 		{
-			Console.WriteLine("!!!!!!!!!!!!! Use IRCConnection.SendLine() !!!!!!!!!!!!!");
 			this.SendSync(text);
 		}
 #endif
 
-		protected void SendSync(string text)
+		[ObsoleteAttribute("Never use SendSync()!")]
+		private void SendSync(string text)
 		{
 			// never use SendSync direktly!
 			Console.WriteLine("SendSync: " + text);
 			try
 			{
 				byte[] data = this.Encoding.GetBytes(text);
-///
-stat.traffic += data.Length;
-///
+				///
+				stat.traffic += data.Length;
+				///
 				this.handler.Send(data);
 			}
 			catch (Exception e)

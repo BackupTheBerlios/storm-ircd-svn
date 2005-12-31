@@ -22,7 +22,7 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		public virtual void m_server(IConnection connection, string[] ar)
+		public virtual void m_server(IRCConnection connection, string[] ar)
 		{
 			// SERVER test.oulu.fi 1 :[tolsun.oulu.fi]
 			// test.oulu.fi	== Server-Name
@@ -36,12 +36,12 @@ namespace IRC
 			}
 			if (connection is IRCUserConnection)
 			{
-				connection.SendLine("ERROR: already registered as client");
+				connection.SendLine("ERROR :already registered as client");
 				return;
 			}
 			if (ar.Length < 4)
 			{
-				connection.SendLine("ERROR: SERVER needs more params");
+				connection.SendLine("ERROR :SERVER needs more params");
 				this.CloseLink(connection);
 				return;
 			}
@@ -56,40 +56,40 @@ namespace IRC
 			if (connection is IRCServerConnection) // neu Server; wird uns von einen anderen Server mitgeteilt
 			{
 				SimpleServer rser = new SimpleServer();
-				rser.HopeCount = Convert.ToInt32(ar[3]);
+				rser.HopCount = Convert.ToInt32(ar[3]);
 				rser.UpLink = (IRCServerConnection)connection;
 			}
 			else // ein neuer Server versucht sich direkt zu registrieren
 			{
 				if (this.HasServer(connection.Socket.RemoteEndPoint)) // <-- HACK
 				{
-					connection.SendLine("ERROR: Server already exits; Potential Damage To Network Intergrity");
+					connection.SendLine("ERROR :Server already exits; Potential Damage To Network Intergrity");
 					this.CloseLink(connection);
 					return;
 				}
-/* TODO				if (this.HasServer(ar[?]))
+/*				if (this.HasServer(ar[2])) veraltet
 				{
 					connection.SendLine("hostmask allrady in use");
+					this.CloseLink(connection);
 					return;
-				}
-*/
+				}*/
 				if (!((IRCConnection)connection).PassSet)
 				{
-					connection.SendLine("ERROR: no permission");
+					connection.SendLine("ERROR :no permission");
 					this.CloseLink(connection);
 					return;
 				}
 				// anmerkung: wird nur gemacht wenn er sich direkt registriert
-				if (!this.HasServerAccess(ar[1]))
+				if (!this.HasServerAccess(ar[2]))
 				{
-					connection.SendLine("ERROR: no c/n lines");
+					connection.SendLine("ERROR :no c/n lines");
 					this.CloseLink(connection);
 					return;
 				}
 
 				// all fine, register the new server
 				SimpleServer ser = new SimpleServer(); // ausfüllen
-				ser.HopeCount = Convert.ToInt32(ar[3]);
+				ser.HopCount = Convert.ToInt32(ar[3]);
 				this.RegisterServer((IRCConnection)connection, ser);
 			}
 		}

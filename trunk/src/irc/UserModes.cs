@@ -17,31 +17,35 @@ using System;
 using System.Collections;
 
 namespace IRC
-{/*
-	// usermodes form unrealirc
-	public enum IRCUserModes : char
-	{
-		MODE_OP			=	'O',
-		MODE_INVISINLE	=	'i',
-		MODE_READWALLOP	=	'w',
-		MODE_RWOPS		=	'g'
-	}
+{
+/* modes from rfc
+      The available modes are as follows:
+
+           a - user is flagged as away;
+           i - marks a users as invisible;
+           w - user receives wallops;
+           r - restricted user connection;
+           o - operator flag;
+           O - local operator flag;
+           s - marks a user for receipt of server notices.
 */
+
 	public class IRCUserModes
 	{
 		private ArrayList list;
 		public IRCUserModes()
 		{
 			this.list = new ArrayList();
-			this.list.AddRange(new char[] {'O', 'i', 'w', 'g', 'c', 's'});
+			this.list.AddRange(new char[] {'a', 'i', 'w', 'r', 'o', 'O', 's', 'D'});
 		}
 
-		public static readonly char MODE_OP	=	'O';
-		public static readonly char MODE_INVISIBLE	=	'i';
-		public static readonly char MODE_READWALLOP	=	'w';
-		public static readonly char MODE_RWOPS	=	'g';
-		public static readonly char CAP_SERVICES = 'c';
-		public static readonly char MODE_STATUS = 's';
+		public static readonly char MODE_AWAY		= 'a';
+		public static readonly char MODE_INVISIBLE	= 'i';
+		public static readonly char MODE_REW_WALLOP	= 'w';
+		public static readonly char MODE_RESCONNETION	= 'r';
+		public static readonly char MODE_OP		= 'o';
+		public static readonly char MODE_LOCAL_OP	= 'O';
+		public static readonly char MODE_REC_SNOTICE	= 's';
 
 		public ArrayList List
 		{
@@ -51,40 +55,7 @@ namespace IRC
 			}
 		}
 	}
-/*
-	O = Local IRC Operator
-	i = Invisible (Wird nicht in der /WHO suche angezeigt)
-	w = kann Wallop Nachrichten lesen
-	g = Kann GlobOps und LocOps Nachrichten sowohl lesen als auch schreiben
-	h = Verfügbar um zu helfen (Help Operator)
-	s = Bekommt ServerNachrichten
-	k = Sieht /KILL's
-	S = Nur für die Services . (Schützt sie)
-	a = Services Administrator
-	A = Server Administrator
-	N = Network Administrator
-	T = Technical Administrator
-	C = Co Administrator
-	c = Sieht alle Connects/Disconnects auf dem lokalen Server
-	f = Bekommt alle FLOOD-Benachrichtigungen
-	r = Zeichnet den Nick als registriert aus
-	x = Gibt den Benutzer versteckte HOSTs
-	e = Kann alle Server Nachrichten lesen die zu +e Users (Eyes) geschickt wurden
-	b = kann ChatOps lesen und senden
-	W = Dadurch sieht man wer ein /WHOIS auf dich macht (IRC Operators only)
-	q = Nur U:lines könnenDich noch kicken (Services Admins only)
-	B = Markiert Dich als BOT
-	F = Lets you recieve Far and Local connect notices)
-	I = Unsichtbare Join/Part. Bist in Channel versteckt/Unsichtbar
-	H = Versteckt den IRCOP-Status in den /WHO und /WHOIS whois abfragen . (IRC Operators only)
-	d = Lässt keine ChannelNachrichten/PrivatNachrichten mehr empfangen
-	v = Empfängt abgelehnten infizierte DCC Sendungen
-	t = Sagt aus , dass du einen /VHOST benutzt
-	G = Filtert alle BÖSEN-WÖRTER aus Deinen NAchrichten raus .
-	z = MArkiert den Klienten als "Secure Connection (SSL) "
-	*/
 
-// mit "& and" und "^ xor" überprüfen
 	public class IRCUserMode
 	{
 		private int mode;
@@ -95,25 +66,26 @@ namespace IRC
 			this.mode = 0;
 			this.um = new IRCUserModes();
 		}
-/* nicht erlauben!
+
 		public IRCUserMode(int modes)
 		{
+			throw new NotImplementedException("IRCUserMode(int modes)");
 			this.mode = modes;
 			this.um = new IRCUserModes();
 		}
-*/
+
 		public IRCUserMode(string modes)
 		{
 			this.mode = 0;
 			this.um = new IRCUserModes();
-			this.FromString(modes); // BUGFIX: war vor "this.um = new IRCUserModes();" > nullreferenz
+			this.FromString(modes);
 		}
 
 		public bool FromString(string modes) // false und abbruch bei fehler
 		{
 			foreach (char c in modes)
 			{
-				if (!this.set(c, true)) // alle true setzen
+				if (!this.SetMode(c, true)) // alle true setzen
 					return false;
 			}
 			return true;
@@ -124,13 +96,13 @@ namespace IRC
 			string ret = String.Empty;
 			foreach (char c in this.um.List)
 			{
-				if (get(c))
+				if (HasMode(c))
 					ret += c;
 			}
 			return ret;
 		}
 
-		public bool get(char c)
+		public bool HasMode(char c)
 		{
 			int ret = this.FromChar(c);
 			
@@ -144,13 +116,13 @@ namespace IRC
 			return false;
 		}
 
-		public bool set(char c, bool state) // liefert false wenn die mode nicht vorhanden ist
+		public bool SetMode(char c, bool state) // liefert false wenn die mode nicht vorhanden ist
 		{
 			int ret = this.FromChar(c);
 			if (ret == -1)
 				return false; // fehler, "mode" ist nicht vorhanden
 
-			if (this.get(c) == state)
+			if (this.HasMode(c) == state)
 				return true; // nothing to do
 			else
 				this.mode = this.mode ^ ret; // xor; gegenteil

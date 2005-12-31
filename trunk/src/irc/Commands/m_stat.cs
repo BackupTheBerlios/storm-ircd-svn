@@ -37,12 +37,12 @@ namespace IRC
 			Console.WriteLine("===============================");
 		}
 */
-		public virtual void m_stat(IConnection connection, string[] ar)
+		public virtual void m_stat(IRCConnection connection, string[] ar)
 		{
-#if DEC
+#if false
 			IRCConnection src = (IRCConnection)connection;
 
-			if (src.UserMode.get(IRCUserModes.MODE_STATUS))
+			if (true)//src.UserMode.get('D')) // only for testing
 			{
 				if (ServiceManager.Services.HasService(typeof(Statistic)))
 				{
@@ -61,7 +61,7 @@ namespace IRC
 			}
 			else
 			{
-				src.Notice("server", "Permission denied, you have no s-umode");
+				src.Notice("server", "Permission denied, you have no D-umode");
 			}
 #endif
 		}

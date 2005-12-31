@@ -22,15 +22,14 @@ using System.Diagnostics;
 using System.Collections;
 using System.Net.Sockets;
 
-#if UNSTABLE
 using Mono.Unix;
 
 using IRC;
 using Tools;
+using Other;
 using Network;
-using Service;
 
-namespace Other
+namespace Service
 {
 	public class ApplicationHostInterpretor : BaseInterpretor
 	{
@@ -41,17 +40,21 @@ namespace Other
 
 		public override bool ProcessCommand(IConnection connection, string cmd)
 		{
+#if false
+			// TODO:
+			Request req = Deserialize(cmd);
+#endif
 			if (cmd == string.Empty)
 				return false;
 
 			Debug.WriteLine(this + ": has received: " + cmd);
 			if (cmd == "shutdown")
 			{
-				ServiceManager.Services[typeof(IRCService)].Unload(); // save
-				ServiceManager.Services.UnloadAll();
+				//ServiceManager.Services[typeof(IRCService)].Unload(); // save
+				//ServiceManager.Services.UnloadAll();
 
 				Console.WriteLine("MainClass.shutdown();");
-				MainClass.shutdown();
+				MainClass.Shutdown();
 			}
 			else if (cmd == "restart") // TODO: bug
 			{
@@ -105,13 +108,18 @@ namespace Other
 		}
 	}
 
-	public class ApplicationHost : IListener
+	public class ApplicationHost : IListener, IService
 	{
 		private IInterpretor _interpretor;
 		private SocketManager _socketManager;
 		private ArrayList _listeners = new ArrayList();
 		private ArrayList _clients = new ArrayList();
 		private string _fileName;
+		private bool _loaded = false;
+
+		public ApplicationHost(SocketManager sm) : this(SettingsHost.Instance.Settings.SocketFile, sm)
+		{
+		}
 
 		// note: SocketManager.AddListener erstellt eine kopie das _listeners array
 		// darum gibt es jetzt eine neue funktion SocketManager.UpdateListener
@@ -128,8 +136,6 @@ namespace Other
 			this._socketManager.AddListener(this);
 
 			this._interpretor = new ApplicationHostInterpretor();
-
-			this.Initialize();
 		}
 
 		~ApplicationHost()
@@ -161,11 +167,29 @@ namespace Other
 			}
 		}
 
+		public void Load()
+		{
+			if (this._loaded)
+				return;
+
+			this._loaded = true;
+			this.Initialize();
+		}
+
+		public void Unload()
+		{
+			if (!this._loaded)
+				return;
+
+			this._loaded = false;
+			this.Dispose();
+		}
+
 		public void Initialize()
 		{
 			try
 			{
-#if MONO
+#if UNIX
 				EndPoint endPoint = new UnixEndPoint(this._fileName);
 
 				if (File.Exists(this._fileName))
@@ -189,6 +213,14 @@ namespace Other
 			}
 		}
 
+		public Type[] Dependences
+		{
+			get
+			{
+				return new Type[]{typeof(SettingsHost)};
+			}
+		}
+
 		public SocketManager SocketManager
 		{
 			get
@@ -206,6 +238,14 @@ namespace Other
 			set
 			{
 				this._interpretor = value;
+			}
+		}
+
+		public bool Loaded
+		{
+			get
+			{
+				return this._loaded;
 			}
 		}
 
@@ -315,4 +355,3 @@ namespace Other
 	}
 }
 
-#endif // UNSTABLE

@@ -13,33 +13,51 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+using System;
+
 using IRC;
+using Service;
 using Network;
 
-
-using System.Net;
-using System.Net.Sockets;
-
-
-using System.Text;
-
-#if UNSTABLE
 namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_restart(IConnection connection, string[] par)
+		/*
+		* m_restart:
+		*/
+		private void m_restart(IRCConnection src, string[] ar)
 		{
-			System.Console.WriteLine("restart dummy");
-
-			if (false) // TODO
+			if (!this.IsUser(src) || !((IRCUserConnection)src).UserMode.HasMode(IRCUserModes.MODE_OP))
 			{
-/*				EndPoint endPoint = new Mono.Unix.UnixEndPoint("storm-interface"); // todo: von settings
-				Socket sock = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-				sock.Connect(endPoint);
-				sock.Send(Encoding.ASCII.GetBytes("restart"));*/
+				// :Permission Denied- You're not an IRC operator
+				src.SendCommand(ReplyCodes.ERR_NOPRIVILEGES,
+						((IRCUserConnection)src).NickName,
+						":Permission Denied- You're not an IRC operator");
+				return;
 			}
+
+			// Close all links
+			foreach (IRCConnection con in this.Clients)
+			{
+				if (this.IsServer(con))
+				{
+					con.SendCommand(((IRCUserConnection)src).SimpleUser, "ERROR", ":Restarted by " + src);
+					this.CloseLink(con);
+				}
+				else if (this.IsUser(con))
+				{
+					((IRCUserConnection)con).Notice("Server Restarting. " + src);
+					this.CloseLink(con, "Server Restarting");
+				}
+				else
+				{
+					this.CloseLink(con, "Server Restarting");
+				}
+			}
+
+			Logger.LogMsg("RESTART by " + src);
+			MainClass.Restart();
 		}
 	}
 }
-#endif

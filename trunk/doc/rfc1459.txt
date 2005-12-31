@@ -1,33 +1,13 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html><head><title>RFC 1459 (rfc1459) - Internet Relay Chat Protocol</title>
 
-<meta name="description" content="RFC 1459 - Internet Relay Chat Protocol">
-<script language="JavaScript1.2">
-function erfc(s)
-{document.write("<A href=\"/rfccomment.php?rfcnum="+s+"\" target=\"_blank\" onclick=\"window.open('/rfccomment.php?rfcnum="+s+"','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;\")>Comment on RFC "+s+"</A>\n");}
-//-->
-</script></head>
 
-<body bgcolor="#ffffff" text="#000000">
-<p align="center"><img src="rfc1459_dateien/library" alt="" align="middle" border="0" height="62" width="150"></p>
-<h1 align="center">RFC 1459 (RFC1459)</h1>
-<p align="center">Internet RFC/STD/FYI/BCP Archives</p>
 
-<div align="center">[ <a href="http://www.faqs.org/rfcs/">RFC Index</a> | <a href="http://www.faqs.org/rfcs/rfcsearch.html">RFC Search</a> | <a href="http://www.faqs.org/faqs/">Usenet FAQs</a> | <a href="http://www.faqs.org/contrib/">Web FAQs</a> | <a href="http://www.faqs.org/docs/">Documents</a> | <a href="http://www.city-data.com/">Cities</a> ]
-<p>
-<strong>Alternate Formats:</strong>
- <a href="http://www.faqs.org/ftp/rfc/rfc1459.txt">rfc1459.txt</a> |
- <a href="http://www.faqs.org/ftp/rfc/pdf/rfc1459.txt.pdf">rfc1459.txt.pdf</a></p></div>
-<p align="center"><script language="JavaScript"><!--
-erfc("1459");
-// --></script><a href="http://www.faqs.org/rfccomment.php?rfcnum=1459" target="_blank" onclick="window.open('/rfccomment.php?rfcnum=1459','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;" )="">Comment on RFC 1459</a>
-</p>
-<h3 align="center">RFC 1459 - Internet Relay Chat Protocol</h3>
-<hr noshade="noshade" size="2">
-<pre>
+
+
+
 Network Working Group                                      J. Oikarinen
 Request for Comments: 1459                                      D. Reed
                                                                May 1993
+
 
                       Internet Relay Chat Protocol
 
@@ -72,6 +52,13 @@ Table of Contents
          3.2.2 To a group (channel) ...............................   11
          3.2.3 To a host/server mask ..............................   12
       3.3 One to all ..............................................   12
+
+
+
+Oikarinen & Reed                                                [Page 1]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
          3.3.1 Client to Client ...................................   12
          3.3.2 Clients to Server ..................................   12
@@ -122,6 +109,13 @@ Table of Contents
       5.2 Rehash command ..........................................   39
       5.3 Restart command .........................................   39
 
+
+
+Oikarinen & Reed                                                [Page 2]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
       5.4 Summon message ..........................................   40
       5.5 Users message ...........................................   40
       5.6 Operwall command ........................................   41
@@ -165,6 +159,19 @@ Table of Contents
    11. Security Considerations ....................................   65
    12. Authors' Addresses .........................................   65
 
+
+
+
+
+
+
+
+
+Oikarinen & Reed                                                [Page 3]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 1.  INTRODUCTION
 
    The IRC (Internet Relay Chat) protocol has been designed over a
@@ -191,6 +198,7 @@ Table of Contents
    Fig. 1] where each server acts as a central node for the rest of the
    net it sees.
 
+
                            [ Server 15 ]  [ Server 13 ] [ Server 14]
                                  /                \         /
                                 /                  \       /
@@ -212,6 +220,13 @@ Table of Contents
                                   :
 
                  [ Fig. 1. Format of IRC server network ]
+
+
+
+Oikarinen & Reed                                                [Page 4]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 1.2 Clients
 
@@ -252,9 +267,9 @@ Table of Contents
    exist when the last client leaves it.  While channel exists, any
    client can reference the channel using the name of the channel.
 
-   Channels names are strings (beginning with a '&amp;' or '#' character) of
+   Channels names are strings (beginning with a '&' or '#' character) of
    length up to 200 characters.  Apart from the the requirement that the
-   first character being either '&amp;' or '#'; the only restriction on a
+   first character being either '&' or '#'; the only restriction on a
    channel name is that it may not contain any spaces (' '), a control G
    (^G or ASCII 7), or a comma (',' which is used as a list item
    separator by the protocol).
@@ -262,9 +277,16 @@ Table of Contents
    There are two types of channels allowed by this protocol.  One is a
    distributed channel which is known to all the servers that are
 
+
+
+Oikarinen & Reed                                                [Page 5]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    connected to the network. These channels are marked by the first
    character being a only clients on the server where it exists may join
-   it.  These are distinguished by a leading '&amp;' character.  On top of
+   it.  These are distinguished by a leading '&' character.  On top of
    these two types, there are the various channel modes available to
    alter the characteristics of individual channels.  See section 4.2.3
    (MODE command) for more details on this.
@@ -309,6 +331,14 @@ Table of Contents
         MODE    - Change the channel's mode
         INVITE  - Invite a client to an invite-only channel (mode +i)
         TOPIC   - Change the channel topic in a mode +t channel
+
+
+
+
+Oikarinen & Reed                                                [Page 6]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    A channel operator is identified by the '@' symbol next to their
    nickname whenever it is associated with a channel (ie replies to the
@@ -359,6 +389,13 @@ Table of Contents
    message itself.  There must be no gap (whitespace) between the colon
    and the prefix.  The prefix is used by servers to indicate the true
 
+
+
+Oikarinen & Reed                                                [Page 7]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    origin of the message.  If the prefix is missing from the message, it
    is assumed to have originated from the connection from which it was
    received.  Clients should not use prefix when sending a message from
@@ -388,33 +425,41 @@ Table of Contents
    which permits  use  of  the  sequence  CR-LF  between  messages
    without extra problems.
 
-   The extracted message is parsed into the components &lt;prefix&gt;,
-   &lt;command&gt; and list of parameters matched either by &lt;middle&gt; or
-   &lt;trailing&gt; components.
+   The extracted message is parsed into the components <prefix>,
+   <command> and list of parameters matched either by <middle> or
+   <trailing> components.
 
    The BNF representation for this is:
 
-&lt;message&gt;  ::= [':' &lt;prefix&gt; &lt;SPACE&gt; ] &lt;command&gt; &lt;params&gt; &lt;crlf&gt;
-&lt;prefix&gt;   ::= &lt;servername&gt; | &lt;nick&gt; [ '!' &lt;user&gt; ] [ '@' &lt;host&gt; ]
-&lt;command&gt;  ::= &lt;letter&gt; { &lt;letter&gt; } | &lt;number&gt; &lt;number&gt; &lt;number&gt;
-&lt;SPACE&gt;    ::= ' ' { ' ' }
-&lt;params&gt;   ::= &lt;SPACE&gt; [ ':' &lt;trailing&gt; | &lt;middle&gt; &lt;params&gt; ]
 
-&lt;middle&gt;   ::= &lt;Any *non-empty* sequence of octets not including SPACE
-               or NUL or CR or LF, the first of which may not be ':'&gt;
-&lt;trailing&gt; ::= &lt;Any, possibly *empty*, sequence of octets not including
-                 NUL or CR or LF&gt;
+<message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
+<prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+<command>  ::= <letter> { <letter> } | <number> <number> <number>
+<SPACE>    ::= ' ' { ' ' }
+<params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
 
-&lt;crlf&gt;     ::= CR LF
+<middle>   ::= <Any *non-empty* sequence of octets not including SPACE
+               or NUL or CR or LF, the first of which may not be ':'>
+<trailing> ::= <Any, possibly *empty*, sequence of octets not including
+                 NUL or CR or LF>
+
+<crlf>     ::= CR LF
+
+
+
+Oikarinen & Reed                                                [Page 8]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 NOTES:
 
-  1)    &lt;SPACE&gt; is consists only of SPACE character(s) (0x20).
+  1)    <SPACE> is consists only of SPACE character(s) (0x20).
         Specially notice that TABULATION, and all other control
         characters are considered NON-WHITE-SPACE.
 
   2)    After extracting the parameter list, all parameters are equal,
-        whether matched by &lt;middle&gt; or &lt;trailing&gt;. &lt;Trailing&gt; is just
+        whether matched by <middle> or <trailing>. <Trailing> is just
         a syntactic trick to allow SPACE within parameter.
 
   3)    The fact that CR and LF cannot appear in parameter strings is
@@ -427,7 +472,7 @@ NOTES:
 
   5)    The last parameter may be an empty string.
 
-  6)    Use of the extended prefix (['!' &lt;user&gt; ] ['@' &lt;host&gt; ]) must
+  6)    Use of the extended prefix (['!' <user> ] ['@' <host> ]) must
         not be used in server to server communications and is only
         intended for server to client messages in order to provide
         clients with more useful information about who a message is
@@ -439,25 +484,32 @@ NOTES:
    parameter after the command is the list of targets, which can be
    described with:
 
-   &lt;target&gt;     ::= &lt;to&gt; [ "," &lt;target&gt; ]
-   &lt;to&gt;         ::= &lt;channel&gt; | &lt;user&gt; '@' &lt;servername&gt; | &lt;nick&gt; | &lt;mask&gt;
-   &lt;channel&gt;    ::= ('#' | '&amp;') &lt;chstring&gt;
-   &lt;servername&gt; ::= &lt;host&gt;
-   &lt;host&gt;       ::= see <a href="http://www.faqs.org/rfcs/rfc952.html">RFC 952</a> [DNS:4] for details on allowed hostnames
-   &lt;nick&gt;       ::= &lt;letter&gt; { &lt;letter&gt; | &lt;number&gt; | &lt;special&gt; }
-   &lt;mask&gt;       ::= ('#' | '$') &lt;chstring&gt;
-   &lt;chstring&gt;   ::= &lt;any 8bit code except SPACE, BELL, NUL, CR, LF and
-                     comma (',')&gt;
+   <target>     ::= <to> [ "," <target> ]
+   <to>         ::= <channel> | <user> '@' <servername> | <nick> | <mask>
+   <channel>    ::= ('#' | '&') <chstring>
+   <servername> ::= <host>
+   <host>       ::= see RFC 952 [DNS:4] for details on allowed hostnames
+   <nick>       ::= <letter> { <letter> | <number> | <special> }
+   <mask>       ::= ('#' | '$') <chstring>
+   <chstring>   ::= <any 8bit code except SPACE, BELL, NUL, CR, LF and
+                     comma (',')>
 
    Other parameter syntaxes are:
 
-   &lt;user&gt;       ::= &lt;nonwhite&gt; { &lt;nonwhite&gt; }
-   &lt;letter&gt;     ::= 'a' ... 'z' | 'A' ... 'Z'
-   &lt;number&gt;     ::= '0' ... '9'
-   &lt;special&gt;    ::= '-' | '[' | ']' | '\' | '`' | '^' | '{' | '}'
+   <user>       ::= <nonwhite> { <nonwhite> }
+   <letter>     ::= 'a' ... 'z' | 'A' ... 'Z'
+   <number>     ::= '0' ... '9'
+   <special>    ::= '-' | '[' | ']' | '\' | '`' | '^' | '{' | '}'
 
-   &lt;nonwhite&gt;   ::= &lt;any 8bit code except SPACE (0x20), NUL (0x0), CR
-                     (0xd), and LF (0xa)&gt;
+
+
+Oikarinen & Reed                                                [Page 9]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
+   <nonwhite>   ::= <any 8bit code except SPACE (0x20), NUL (0x0), CR
+                     (0xd), and LF (0xa)>
 
 2.4 Numeric replies
 
@@ -477,6 +529,8 @@ NOTES:
    This section is devoted to describing the actual concepts behind  the
    organization  of  the  IRC  protocol and how the current
    implementations deliver different classes of messages.
+
+
 
                           1--\
                               A        D---4
@@ -501,16 +555,25 @@ NOTES:
 
    The following examples all refer to Figure 2 above.
 
+
+
+
+
+Oikarinen & Reed                                               [Page 10]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 Example 1:
      A message between clients 1 and 2 is only seen by server A, which
      sends it straight to client 2.
 
 Example 2:
-     A message between clients 1 and 3 is seen by servers A &amp; B, and
+     A message between clients 1 and 3 is seen by servers A & B, and
      client 3.  No other clients or servers are allowed see the message.
 
 Example 3:
-     A message between clients 2 and 4 is seen by servers A, B, C &amp; D
+     A message between clients 2 and 4 is seen by servers A, B, C & D
      and client 4 only.
 
 3.2 One-to-many
@@ -547,6 +610,15 @@ Example 3:
 Example 4:
      Any channel with 1 client in it. Messages to the channel go to the
      server and then nowhere else.
+
+
+
+
+
+Oikarinen & Reed                                               [Page 11]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 Example 5:
      2 clients in a channel. All messages traverse a path as if they
@@ -597,6 +669,13 @@ Example 6:
    servers, this is only required for any message that affects either a
    user, channel or server.  Since these are the basic items found in
 
+
+
+Oikarinen & Reed                                               [Page 12]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    IRC, nearly all messages originating from a server are broadcast to
    all other connected servers.
 
@@ -607,7 +686,7 @@ Example 6:
    must be implemented by any server for this protocol.
 
    Where the reply ERR_NOSUCHSERVER is listed, it means that the
-   &lt;server&gt; parameter could not be found.  The server must not send any
+   <server> parameter could not be found.  The server must not send any
    other replies after this for that command.
 
    The server to which a client is connected is required to parse the
@@ -645,14 +724,23 @@ Example 6:
    give some level of security to the actual connections.  The
    recommended order for a client to register is as follows:
 
+
+
+
+Oikarinen & Reed                                               [Page 13]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
            1. Pass message
            2. Nick message
            3. User message
 
 4.1.1 Password message
 
+
       Command: PASS
-   Parameters: &lt;password&gt;
+   Parameters: <password>
 
    The PASS command is used to set a 'connection password'.  The
    password can and must be set before any attempt to register the
@@ -674,10 +762,10 @@ Example 6:
 4.1.2 Nick message
 
       Command: NICK
-   Parameters: &lt;nickname&gt; [ &lt;hopcount&gt; ]
+   Parameters: <nickname> [ <hopcount> ]
 
    NICK message is used to give user a nickname or change the previous
-   one.  The &lt;hopcount&gt; parameter is only used by servers to indicate
+   one.  The <hopcount> parameter is only used by servers to indicate
    how far away a nick is from its home server.  A local connection has
    a hopcount of 0.  If supplied by a client, it must be ignored.
 
@@ -693,6 +781,13 @@ Example 6:
    directly connected, it may issue an ERR_NICKCOLLISION to the local
    client, drop the NICK command, and not generate any kills.
 
+
+
+Oikarinen & Reed                                               [Page 14]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    Numeric Replies:
 
            ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
@@ -707,7 +802,7 @@ Example 6:
 4.1.3 User message
 
       Command: USER
-   Parameters: &lt;username&gt; &lt;hostname&gt; &lt;servername&gt; &lt;realname&gt;
+   Parameters: <username> <hostname> <servername> <realname>
 
    The USER message is used at the beginning of connection to specify
    the username, hostname, servername and realname of s new user.  It is
@@ -739,11 +834,20 @@ Example 6:
 
    Examples:
 
+
    USER guest tolmoon tolsun :Ronnie Reagan
+
+
+
+Oikarinen & Reed                                               [Page 15]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                                    ; User registering themselves with a
                                    username of "guest" and real name
                                    "Ronnie Reagan".
+
 
    :testnick USER guest tolmoon tolsun :Ronnie Reagan
                                    ; message between servers with the
@@ -753,12 +857,12 @@ Example 6:
 4.1.4 Server message
 
       Command: SERVER
-   Parameters: &lt;servername&gt; &lt;hopcount&gt; &lt;info&gt;
+   Parameters: <servername> <hopcount> <info>
 
    The server message is used to tell a server that the other end of a
    new connection is a server. This message is also used to pass server
    data over whole net.  When a new server is connected to net,
-   information about it be broadcast to the whole network.  &lt;hopcount&gt;
+   information about it be broadcast to the whole network.  <hopcount>
    is used to give all servers some internal information on how far away
    all servers are.  With a full server list, it would be possible to
    construct a map of the entire server tree, but hostmasks prevent this
@@ -788,11 +892,20 @@ Example 6:
 
    Example:
 
+
+
+
+Oikarinen & Reed                                               [Page 16]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
                                 ; New server test.oulu.fi introducing
                                 itself and attempting to register.  The
                                 name in []'s is the hostname for the
                                 host running test.oulu.fi.
+
 
 :tolsun.oulu.fi SERVER csd.bu.edu 5 :BU Central Server
                                 ; Server tolsun.oulu.fi is our uplink
@@ -801,10 +914,10 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 4.1.5 Oper
 
       Command: OPER
-   Parameters: &lt;user&gt; &lt;password&gt;
+   Parameters: <user> <password>
 
    OPER message is used by a normal user to obtain operator privileges.
-   The combination of &lt;user&gt; and &lt;password&gt; are required to gain
+   The combination of <user> and <password> are required to gain
    Operator privileges.
 
    If the client sending the OPER command supplies the correct password
@@ -827,7 +940,7 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 4.1.6 Quit
 
       Command: QUIT
-   Parameters: [&lt;Quit message&gt;]
+   Parameters: [<Quit message>]
 
    A client session is ended with a quit message.  The server must close
    the connection to a client which sends a QUIT message. If a "Quit
@@ -835,6 +948,13 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
    the nickname.
 
    When netsplits (disconnecting of two servers) occur, the quit message
+
+
+
+Oikarinen & Reed                                               [Page 17]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    is composed of the names of two servers involved, separated by a
    space.  The first name is that of the server which is still connected
@@ -858,7 +978,7 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 4.1.7 Server quit message
 
       Command: SQUIT
-   Parameters: &lt;server&gt; &lt;comment&gt;
+   Parameters: <server> <comment>
 
    The SQUIT message is needed to tell about quitting or dead servers.
    If a server wishes to break the connection to another server it must
@@ -873,16 +993,24 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
    the remote server, updating the view of the network held by each
    server as explained below.
 
-   The &lt;comment&gt; should be supplied by all operators who execute a SQUIT
+   The <comment> should be supplied by all operators who execute a SQUIT
    for a remote server (that is not connected to the server they are
    currently on) so that other operators are aware for the reason of
-   this action.  The &lt;comment&gt; is also filled in by servers which may
+   this action.  The <comment> is also filled in by servers which may
    place an error or similar message here.
 
    Both of the servers which are on either side of the connection being
    closed are required to to send out a SQUIT message (to all its other
    server connections) for all other servers which are considered to be
    behind that link.
+
+
+
+
+Oikarinen & Reed                                               [Page 18]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    Similarly, a QUIT message must be sent to the other connected servers
    rest of the network on behalf of all clients behind that link.  In
@@ -916,13 +1044,13 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
    In implementing these, a number of race conditions are inevitable
    when clients at opposing ends of a network send commands which will
    ultimately clash.  It is also required that servers keep a nickname
-   history to ensure that wherever a &lt;nick&gt; parameter is given, the
+   history to ensure that wherever a <nick> parameter is given, the
    server check its history in case it has recently been changed.
 
 4.2.1 Join message
 
       Command: JOIN
-   Parameters: &lt;channel&gt;{,&lt;channel&gt;} [&lt;key&gt;{,&lt;key&gt;}]
+   Parameters: <channel>{,<channel>} [<key>{,<key>}]
 
    The JOIN command is used by client to start listening a specific
    channel. Whether or not a client is allowed to join a channel is
@@ -931,6 +1059,14 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
    from other servers.  The conditions which affect this are as follows:
 
            1.  the user must be invited if the channel is invite-only;
+
+
+
+
+Oikarinen & Reed                                               [Page 19]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
            2.  the user's nick/username/hostname must not match any
                active bans;
@@ -963,10 +1099,10 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 
    JOIN #foobar                    ; join channel #foobar.
 
-   JOIN &amp;foo fubar                 ; join channel &amp;foo using key "fubar".
+   JOIN &foo fubar                 ; join channel &foo using key "fubar".
 
-   JOIN #foo,&amp;bar fubar            ; join channel #foo using key "fubar"
-                                   and &amp;bar using no key.
+   JOIN #foo,&bar fubar            ; join channel #foo using key "fubar"
+                                   and &bar using no key.
 
    JOIN #foo,#bar fubar,foobar     ; join channel #foo using key "fubar".
                                    and channel #bar using key "foobar".
@@ -978,7 +1114,15 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 4.2.2 Part message
 
       Command: PART
-   Parameters: &lt;channel&gt;{,&lt;channel&gt;}
+   Parameters: <channel>{,<channel>}
+
+
+
+
+Oikarinen & Reed                                               [Page 20]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    The PART message causes the client sending the message to be removed
    from the list of active users for all given channels listed in the
@@ -993,7 +1137,7 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 
    PART #twilight_zone             ; leave channel "#twilight_zone"
 
-   PART #oz-ops,&amp;group5            ; leave both channels "&amp;group5" and
+   PART #oz-ops,&group5            ; leave both channels "&group5" and
                                    "#oz-ops".
 
 4.2.3 Mode message
@@ -1010,8 +1154,8 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 
 4.2.3.1 Channel modes
 
-   Parameters: &lt;channel&gt; {[+|-]|o|p|s|i|t|n|b|v} [&lt;limit&gt;] [&lt;user&gt;]
-               [&lt;ban mask&gt;]
+   Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
+               [<ban mask>]
 
    The MODE command is provided so that channel operators may change the
    characteristics of `their' channel.  It is also required that servers
@@ -1029,6 +1173,13 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
            m - moderated channel;
            l - set the user limit to channel;
 
+
+
+Oikarinen & Reed                                               [Page 21]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
            b - set a ban mask to keep users out;
            v - give/take the ability to speak on a moderated channel;
            k - set a channel key (password).
@@ -1039,7 +1190,7 @@ SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server
 
 4.2.3.2 User modes
 
-   Parameters: &lt;nickname&gt; {[+|-]|i|w|s|o}
+   Parameters: <nickname> {[+|-]|i|w|s|o}
 
    The user MODEs are typically changes which affect either how the
    client is seen by others or what 'extra' messages the client is sent.
@@ -1078,6 +1229,13 @@ MODE #Finnish +im               ; Makes #Finnish channel moderated and
 
 MODE #Finnish +o Kilroy         ; Gives 'chanop' privileges to Kilroy on
 
+
+
+Oikarinen & Reed                                               [Page 22]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
                                 channel #Finnish.
 
 MODE #Finnish +v Wiz            ; Allow WiZ to speak on #Finnish.
@@ -1090,11 +1248,11 @@ MODE #42 +k oulu                ; Set the channel key to "oulu".
 MODE #eu-opers +l 10            ; Set the limit for the number of users
                                 on channel to 10.
 
-MODE &amp;oulu +b                   ; list ban masks set for channel.
+MODE &oulu +b                   ; list ban masks set for channel.
 
-MODE &amp;oulu +b *!*@*             ; prevent all users from joining.
+MODE &oulu +b *!*@*             ; prevent all users from joining.
 
-MODE &amp;oulu +b *!*@*.edu         ; prevent any user from a hostname
+MODE &oulu +b *!*@*.edu         ; prevent any user from a hostname
                                 matching *.edu from joining.
 
         Use of user Modes:
@@ -1114,11 +1272,11 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
 4.2.4 Topic message
 
       Command: TOPIC
-   Parameters: &lt;channel&gt; [&lt;topic&gt;]
+   Parameters: <channel> [<topic>]
 
    The TOPIC message is used to change or view the topic of a channel.
-   The topic for channel &lt;channel&gt; is returned if there is no &lt;topic&gt;
-   given.  If the &lt;topic&gt; parameter is present, the topic for that
+   The topic for channel <channel> is returned if there is no <topic>
+   given.  If the <topic> parameter is present, the topic for that
    channel will be changed, if the channel modes permit this action.
 
    Numeric Replies:
@@ -1126,6 +1284,13 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
            ERR_NEEDMOREPARAMS              ERR_NOTONCHANNEL
            RPL_NOTOPIC                     RPL_TOPIC
            ERR_CHANOPRIVSNEEDED
+
+
+
+Oikarinen & Reed                                               [Page 23]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    Examples:
 
@@ -1139,16 +1304,16 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
 4.2.5 Names message
 
       Command: NAMES
-   Parameters: [&lt;channel&gt;{,&lt;channel&gt;}]
+   Parameters: [<channel>{,<channel>}]
 
    By using the NAMES command, a user can list all nicknames that are
    visible to them on any channel that they can see.  Channel names
    which they can see are those which aren't private (+p) or secret (+s)
-   or those which they are actually on.  The &lt;channel&gt; parameter
+   or those which they are actually on.  The <channel> parameter
    specifies which channel(s) to return information about if valid.
    There is no error reply for bad channel names.
 
-   If no &lt;channel&gt; parameter is given, a list of all channels and their
+   If no <channel> parameter is given, a list of all channels and their
    occupants is returned.  At the end of this list, a list of users who
    are visible but either not on any channel or not on a visible channel
    are listed as being on `channel' "*".
@@ -1168,13 +1333,20 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
 4.2.6 List message
 
       Command: LIST
-   Parameters: [&lt;channel&gt;{,&lt;channel&gt;} [&lt;server&gt;]]
+   Parameters: [<channel>{,<channel>} [<server>]]
 
    The list message is used to list channels and their topics.  If  the
-   &lt;channel&gt;  parameter  is  used,  only  the  status  of  that  channel
+   <channel>  parameter  is  used,  only  the  status  of  that  channel
    is displayed.  Private  channels  are  listed  (without  their
    topics)  as channel "Prv" unless the client generating the query is
    actually on that channel.  Likewise, secret channels are not listed
+
+
+
+Oikarinen & Reed                                               [Page 24]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    at  all  unless  the client is a member of the channel in question.
 
@@ -1192,11 +1364,11 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
 4.2.7 Invite message
 
       Command: INVITE
-   Parameters: &lt;nickname&gt; &lt;channel&gt;
+   Parameters: <nickname> <channel>
 
    The INVITE message is used to invite users to a channel.  The
-   parameter &lt;nickname&gt; is the nickname of the person to be invited to
-   the target channel &lt;channel&gt;.  There is no requirement that the
+   parameter <nickname> is the nickname of the person to be invited to
+   the target channel <channel>.  There is no requirement that the
    channel the target user is being invited to must exist or be a valid
    channel.  To invite a user to a channel which is invite only (MODE
    +i), the client sending the invite must be recognised as being a
@@ -1220,10 +1392,17 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
 4.2.8 Kick command
 
       Command: KICK
-   Parameters: &lt;channel&gt; &lt;user&gt; [&lt;comment&gt;]
+   Parameters: <channel> <user> [<comment>]
 
    The KICK command can be  used  to  forcibly  remove  a  user  from  a
    channel.   It  'kicks  them  out'  of the channel (forced PART).
+
+
+
+Oikarinen & Reed                                               [Page 25]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    Only a channel operator may kick another user out of a  channel.
    Each  server that  receives  a KICK message checks that it is valid
@@ -1238,7 +1417,7 @@ MODE WiZ -o                     ; WiZ 'deopping' (removing operator
 
    Examples:
 
-KICK &amp;Melbourne Matthew         ; Kick Matthew from &amp;Melbourne
+KICK &Melbourne Matthew         ; Kick Matthew from &Melbourne
 
 KICK #Finnish John :Speaking English
                                 ; Kick John from #Finnish using
@@ -1252,7 +1431,7 @@ NOTE:
      It is possible to extend the KICK command parameters to the
 following:
 
-&lt;channel&gt;{,&lt;channel&gt;} &lt;user&gt;{,&lt;user&gt;} [&lt;comment&gt;]
+<channel>{,<channel>} <user>{,<user>} [<comment>]
 
 4.3 Server queries and commands
 
@@ -1263,7 +1442,7 @@ following:
    a sign of a broken server and it must be disconnected/disabled as
    soon as possible until the situation is remedied.
 
-   In these queries, where a parameter appears as "&lt;server&gt;", it will
+   In these queries, where a parameter appears as "<server>", it will
    usually mean it can be a nickname or a server or a wildcard name of
    some sort.  For each parameter, however, only one query and set of
    replies is to be generated.
@@ -1271,10 +1450,18 @@ following:
 4.3.1 Version message
 
       Command: VERSION
-   Parameters: [&lt;server&gt;]
+   Parameters: [<server>]
+
+
+
+
+Oikarinen & Reed                                               [Page 26]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    The VERSION message is used  to  query  the  version  of  the  server
-   program.  An optional parameter &lt;server&gt; is used to query the version
+   program.  An optional parameter <server> is used to query the version
    of the server program which a client is not directly connected to.
 
    Numeric Replies:
@@ -1292,16 +1479,16 @@ following:
 4.3.2 Stats message
 
       Command: STATS
-   Parameters: [&lt;query&gt; [&lt;server&gt;]]
+   Parameters: [<query> [<server>]]
 
    The stats message is used to query statistics of certain server.  If
-   &lt;server&gt; parameter is omitted, only the end of stats reply is sent
+   <server> parameter is omitted, only the end of stats reply is sent
    back.  The implementation of this command is highly dependent on the
    server which replies, although the server must be able to supply
    information as described by the queries below (or similar).
 
    A query may be given by any single letter which is only checked by
-   the destination server (if given as the &lt;server&gt; parameter) and is
+   the destination server (if given as the <server> parameter) and is
    otherwise passed on by intermediate servers, ignored and unaltered.
    The following queries are those found in the current IRC
    implementation and provide a large portion of the setup information
@@ -1321,6 +1508,13 @@ following:
            k - returns a list of banned username/hostname combinations
                for that server;
            l - returns a list of the server's connections, showing how
+
+
+
+Oikarinen & Reed                                               [Page 27]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                long each connection has been established and the traffic
                over that connection in bytes and messages for each
@@ -1353,13 +1547,13 @@ STATS m                         ; check the command usage for the server
 4.3.3 Links message
 
       Command: LINKS
-   Parameters: [[&lt;remote server&gt;] &lt;server mask&gt;]
+   Parameters: [[<remote server>] <server mask>]
 
    With LINKS, a user can list all servers which are known by the server
    answering the query.  The returned list of servers must match the
    mask, or if no mask is given, the full list is returned.
 
-   If &lt;remote server&gt; is given in addition to &lt;server mask&gt;, the LINKS
+   If <remote server> is given in addition to <server mask>, the LINKS
    command is forwarded to the first server found that matches that name
    (if any), and that server is then required to answer the query.
 
@@ -1369,6 +1563,14 @@ STATS m                         ; check the command usage for the server
            RPL_LINKS                       RPL_ENDOFLINKS
 
    Examples:
+
+
+
+
+Oikarinen & Reed                                               [Page 28]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 LINKS *.au                      ; list all servers which have a name
                                 that matches *.au;
@@ -1380,7 +1582,7 @@ LINKS *.au                      ; list all servers which have a name
 4.3.4 Time message
 
       Command: TIME
-   Parameters: [&lt;server&gt;]
+   Parameters: [<server>]
 
    The time message is used to query local time from the specified
    server. If the server parameter is not given, the server handling the
@@ -1401,13 +1603,13 @@ LINKS *.au                      ; list all servers which have a name
 4.3.5 Connect message
 
       Command: CONNECT
-   Parameters: &lt;target server&gt; [&lt;port&gt; [&lt;remote server&gt;]]
+   Parameters: <target server> [<port> [<remote server>]]
 
    The CONNECT command can be used to force a server to try to establish
    a new connection to another server immediately.  CONNECT is a
    privileged command and is to be available only to IRC Operators.  If
    a remote server is given then the CONNECT attempt is made by that
-   server to &lt;target server&gt; and &lt;port&gt;.
+   server to <target server> and <port>.
 
    Numeric Replies:
 
@@ -1419,6 +1621,13 @@ LINKS *.au                      ; list all servers which have a name
 CONNECT tolsun.oulu.fi          ; Attempt to connect a server to
                                 tolsun.oulu.fi
 
+
+
+Oikarinen & Reed                                               [Page 29]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 :WiZ CONNECT eff.org 6667 csd.bu.edu
                                 ; CONNECT attempt by WiZ to get servers
                                 eff.org and csd.bu.edu connected on port
@@ -1427,22 +1636,22 @@ CONNECT tolsun.oulu.fi          ; Attempt to connect a server to
 4.3.6 Trace message
 
       Command: TRACE
-   Parameters: [&lt;server&gt;]
+   Parameters: [<server>]
 
    TRACE command is used to find the route to specific server.  Each
    server that processes this message must tell the sender about it by
    sending a reply indicating it is a pass-through link, forming a chain
    of replies similar to that gained from using "traceroute".  After
    sending this reply back, it must then send the TRACE message to the
-   next server until given server is reached.  If the &lt;server&gt; parameter
+   next server until given server is reached.  If the <server> parameter
    is omitted, it is recommended that TRACE command send a message to
    the sender telling which servers the current server has direct
    connection to.
 
-   If the destination given by "&lt;server&gt;" is an actual server, then the
+   If the destination given by "<server>" is an actual server, then the
    destination server is required to report all servers and users which
    are connected to it, although only operators are permitted to see
-   users present.  If the destination given by &lt;server&gt; is a nickname,
+   users present.  If the destination given by <server> is a nickname,
    they only a reply for that nickname is given.
 
    Numeric Replies:
@@ -1467,15 +1676,23 @@ CONNECT tolsun.oulu.fi          ; Attempt to connect a server to
 
 TRACE *.oulu.fi                 ; TRACE to a server matching *.oulu.fi
 
+
+
+
+Oikarinen & Reed                                               [Page 30]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 :WiZ TRACE AngelDust            ; TRACE issued by WiZ to nick AngelDust
 
 4.3.7 Admin command
 
       Command: ADMIN
-   Parameters: [&lt;server&gt;]
+   Parameters: [<server>]
 
    The admin message is used to find the name of the administrator of
-   the given server, or current server if &lt;server&gt; parameter is omitted.
+   the given server, or current server if <server> parameter is omitted.
    Each server must have the ability to forward ADMIN messages to other
    servers.
 
@@ -1496,7 +1713,7 @@ TRACE *.oulu.fi                 ; TRACE to a server matching *.oulu.fi
 4.3.8 Info command
 
       Command: INFO
-   Parameters: [&lt;server&gt;]
+   Parameters: [<server>]
 
    The INFO command is required to return information which describes
    the server: its version, when it was compiled, the patchlevel, when
@@ -1516,6 +1733,13 @@ TRACE *.oulu.fi                 ; TRACE to a server matching *.oulu.fi
    :Avalon INFO *.fi               ; INFO request from Avalon for first
                                    server found to match *.fi.
 
+
+
+Oikarinen & Reed                                               [Page 31]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    INFO Angel                      ; request info from the server that
                                    Angel is connected to.
 
@@ -1530,13 +1754,13 @@ TRACE *.oulu.fi                 ; TRACE to a server matching *.oulu.fi
 4.4.1 Private messages
 
       Command: PRIVMSG
-   Parameters: &lt;receiver&gt;{,&lt;receiver&gt;} &lt;text to be sent&gt;
+   Parameters: <receiver>{,<receiver>} <text to be sent>
 
-   PRIVMSG is used to send private messages between users.  &lt;receiver&gt;
-   is the nickname of the receiver of the message.  &lt;receiver&gt; can also
+   PRIVMSG is used to send private messages between users.  <receiver>
+   is the nickname of the receiver of the message.  <receiver> can also
    be a list of names or channels separated with commas.
 
-   The &lt;receiver&gt; parameter may also me a host mask  (#mask)  or  server
+   The <receiver> parameter may also me a host mask  (#mask)  or  server
    mask  ($mask).   In  both cases the server will only send the PRIVMSG
    to those who have a server or host matching the mask.  The mask  must
    have at  least  1  (one)  "."  in it and no wildcards following the
@@ -1559,11 +1783,18 @@ TRACE *.oulu.fi                 ; TRACE to a server matching *.oulu.fi
 :Angel PRIVMSG Wiz :Hello are you receiving this message ?
                                 ; Message from Angel to Wiz.
 
-PRIVMSG Angel :yes I'm receiving it !receiving it !'u&gt;(768u+1n) .br ;
+PRIVMSG Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br ;
                                 Message to Angel.
 
-PRIVMSG <a href="mailto:jto@tolsun.oulu.fi">jto@tolsun.oulu.fi</a> :Hello !
+PRIVMSG jto@tolsun.oulu.fi :Hello !
                                 ; Message to a client on server
+
+
+
+Oikarinen & Reed                                               [Page 32]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                                 tolsun.oulu.fi with username of "jto".
 
@@ -1578,7 +1809,7 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
 4.4.2 Notice
 
       Command: NOTICE
-   Parameters: &lt;nickname&gt; &lt;text&gt;
+   Parameters: <nickname> <text>
 
    The NOTICE message is used similarly to PRIVMSG.  The difference
    between NOTICE and PRIVMSG is that automatic replies must never be
@@ -1605,19 +1836,26 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
 4.5.1 Who query
 
       Command: WHO
-   Parameters: [&lt;name&gt; [&lt;o&gt;]]
+   Parameters: [<name> [<o>]]
 
    The WHO message is used by a client to generate a query which returns
-   a list of information which 'matches' the &lt;name&gt; parameter given by
-   the client.  In the absence of the &lt;name&gt; parameter, all visible
+   a list of information which 'matches' the <name> parameter given by
+   the client.  In the absence of the <name> parameter, all visible
    (users who aren't invisible (user mode +i) and who don't have a
    common channel with the requesting client) are listed.  The same
-   result can be achieved by using a &lt;name&gt; of "0" or any wildcard which
+   result can be achieved by using a <name> of "0" or any wildcard which
+
+
+
+Oikarinen & Reed                                               [Page 33]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    will end up matching every entry possible.
 
-   The &lt;name&gt; passed to WHO is matched against users' host, server, real
-   name and nickname if the channel &lt;name&gt; cannot be found.
+   The <name> passed to WHO is matched against users' host, server, real
+   name and nickname if the channel <name> cannot be found.
 
    If the "o" parameter is passed only operators are returned according
    to the name mask supplied.
@@ -1638,13 +1876,13 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
 4.5.2 Whois query
 
       Command: WHOIS
-   Parameters: [&lt;server&gt;] &lt;nickmask&gt;[,&lt;nickmask&gt;[,...]]
+   Parameters: [<server>] <nickmask>[,<nickmask>[,...]]
 
    This message is used to query information about particular user.  The
    server will answer this message with several numeric messages
    indicating different statuses of each user which matches the nickmask
    (if you are entitled to see them).  If no wildcard is present in the
-   &lt;nickmask&gt;, any information about that nick which you are allowed to
+   <nickmask>, any information about that nick which you are allowed to
    see is presented.  A comma (',') separated list of nicknames may be
    given.
 
@@ -1663,6 +1901,13 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
            RPL_WHOISIDLE                   ERR_NOSUCHNICK
            RPL_ENDOFWHOIS
 
+
+
+Oikarinen & Reed                                               [Page 34]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    Examples:
 
    WHOIS wiz                       ; return available user information
@@ -1674,7 +1919,7 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
 4.5.3 Whowas
 
       Command: WHOWAS
-   Parameters: &lt;nickname&gt; [&lt;count&gt; [&lt;server&gt;]]
+   Parameters: <nickname> [<count> [<server>]]
 
    Whowas asks for information about a nickname which no longer exists.
    This may either be due to a nickname change or the user leaving IRC.
@@ -1682,9 +1927,9 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
    history, looking for any nicks which are lexically the same (no wild
    card matching here).  The history is searched backward, returning the
    most recent entry first.  If there are multiple entries, up to
-   &lt;count&gt; replies will be returned (or all of them if no &lt;count&gt;
+   <count> replies will be returned (or all of them if no <count>
    parameter is given).  If a non-positive number is passed as being
-   &lt;count&gt;, then a full search is done.
+   <count>, then a full search is done.
 
    Numeric Replies:
 
@@ -1710,10 +1955,19 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
    Messages in this category do not fit into any of the above categories
    but are nonetheless still a part of and required by the protocol.
 
+
+
+
+
+Oikarinen & Reed                                               [Page 35]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 4.6.1 Kill message
 
       Command: KILL
-   Parameters: &lt;nickname&gt; &lt;comment&gt;
+   Parameters: <nickname> <comment>
 
    The KILL message is used to cause a client-server connection to be
    closed by the server which has the actual connection.  KILL is used
@@ -1746,19 +2000,30 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
            ERR_NOPRIVILEGES                ERR_NEEDMOREPARAMS
            ERR_NOSUCHNICK                  ERR_CANTKILLSERVER
 
-   KILL David (csd.bu.edu &lt;- tolsun.oulu.fi)
+
+   KILL David (csd.bu.edu <- tolsun.oulu.fi)
                                    ; Nickname collision between csd.bu.edu
                                    and tolson.oulu.fi
+
 
    NOTE:
    It is recommended that only Operators be allowed to kill other users
    with KILL message.  In an ideal world not even operators would need
    to do this and it would be left to servers to deal with.
 
+
+
+
+
+Oikarinen & Reed                                               [Page 36]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 4.6.2 Ping message
 
       Command: PING
-   Parameters: &lt;server1&gt; [&lt;server2&gt;]
+   Parameters: <server1> [<server2>]
 
    The PING message is used to test the presence of an active client at
    the other end of the connection.  A PING message is sent at regular
@@ -1766,12 +2031,12 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
    a connection fails to respond to a PING command within a set amount
    of time, that connection is closed.
 
-   Any client which receives a PING message must respond to &lt;server1&gt;
+   Any client which receives a PING message must respond to <server1>
    (server which sent the PING message out) as quickly as possible with
    an appropriate PONG message to indicate it is still there and alive.
    Servers should not respond to PING commands but rely on PINGs from
    the other end of the connection to indicate the connection is alive.
-   If the &lt;server2&gt; parameter is specified, the PING message gets
+   If the <server2> parameter is specified, the PING message gets
    forwarded there.
 
    Numeric Replies:
@@ -1789,10 +2054,10 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
 4.6.3 Pong message
 
       Command: PONG
-   Parameters: &lt;daemon&gt; [&lt;daemon2&gt;]
+   Parameters: <daemon> [<daemon2>]
 
-   PONG message is a reply to ping message.  If parameter &lt;daemon2&gt; is
-   given this message must be forwarded to given daemon.  The &lt;daemon&gt;
+   PONG message is a reply to ping message.  If parameter <daemon2> is
+   given this message must be forwarded to given daemon.  The <daemon>
    parameter is the name of the daemon who has responded to PING message
    and generated this message.
 
@@ -1804,12 +2069,19 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
 
    PONG csd.bu.edu tolsun.oulu.fi  ; PONG message from csd.bu.edu to
 
+
+
+Oikarinen & Reed                                               [Page 37]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
                                    tolsun.oulu.fi
 
 4.6.4 Error
 
       Command: ERROR
-   Parameters: &lt;error message&gt;
+   Parameters: <error message>
 
    The ERROR command is for use by servers when reporting a serious or
    fatal error to its operators.  It may also be sent from one server to
@@ -1853,6 +2125,13 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
       Command: AWAY
    Parameters: [message]
 
+
+
+Oikarinen & Reed                                               [Page 38]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    With the AWAY message, clients can set an automatic reply string for
    any PRIVMSG commands directed at them (not to a channel they are on).
    The automatic reply is sent by the server to client sending the
@@ -1872,6 +2151,7 @@ PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
                                    Back in 5".
 
    :WiZ AWAY                       ; unmark WiZ as being away.
+
 
 5.2 Rehash message
 
@@ -1901,6 +2181,13 @@ REHASH                          ; message from client with operator
    risk to allow arbitrary people to connect to a server as an operator
    and execute this command, causing (at least) a disruption to service.
 
+
+
+Oikarinen & Reed                                               [Page 39]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    The RESTART command must always be fully processed by the server to
    which the sending client is connected and not be passed onto other
    connected servers.
@@ -1916,7 +2203,7 @@ REHASH                          ; message from client with operator
 5.4 Summon message
 
       Command: SUMMON
-   Parameters: &lt;user&gt; [&lt;server&gt;]
+   Parameters: <user> [<server>]
 
    The SUMMON command can be used to give users who are on a host
    running an IRC server a message asking them to please join IRC.  This
@@ -1924,7 +2211,7 @@ REHASH                          ; message from client with operator
    the user is logged in and (c) the server process can write to the
    user's tty (or similar).
 
-   If no &lt;server&gt; parameter is given it tries to summon &lt;user&gt; from the
+   If no <server> parameter is given it tries to summon <user> from the
    server the client is connected to is assumed as the target.
 
    If summon is not enabled in a server, it must return the
@@ -1944,10 +2231,18 @@ REHASH                          ; message from client with operator
                                    server named "tolsun.oulu.fi" is
                                    running.
 
+
 5.5 Users
 
       Command: USERS
-   Parameters: [&lt;server&gt;]
+   Parameters: [<server>]
+
+
+
+Oikarinen & Reed                                               [Page 40]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    The USERS command returns a list of users logged into the server in a
    similar  format  to  who(1),  rusers(1)  and finger(1).  Some people
@@ -1998,10 +2293,17 @@ USERS eff.org                   ; request a list of users logged in on
                                    CONNECT message it received and acted
                                    upon from Joshua.
 
+
+
+Oikarinen & Reed                                               [Page 41]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 5.7 Userhost message
 
       Command: USERHOST
-   Parameters: &lt;nickname&gt;{&lt;space&gt;&lt;nickname&gt;}
+   Parameters: <nickname>{<space><nickname>}
 
    The USERHOST command takes a list of up to 5 nicknames, each
    separated by a space character and returns a list of information
@@ -2020,7 +2322,7 @@ USERS eff.org                   ; request a list of users logged in on
 5.8 Ison message
 
       Command: ISON
-   Parameters: &lt;nickname&gt;{&lt;space&gt;&lt;nickname&gt;}
+   Parameters: <nickname>{<space><nickname>}
 
    The ISON command was implemented to provide  a  quick  and  efficient
    means  to get a response about whether a given nickname was currently
@@ -2047,6 +2349,13 @@ USERS eff.org                   ; request a list of users logged in on
    ISON phone trillian WiZ jarlek Avalon Angel Monstah
                                    ; Sample ISON request for 7 nicks.
 
+
+
+Oikarinen & Reed                                               [Page 42]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 6. REPLIES
 
    The following is a list of numeric replies which are generated in
@@ -2056,24 +2365,24 @@ USERS eff.org                   ; request a list of users logged in on
 6.1 Error Replies.
 
         401     ERR_NOSUCHNICK
-                        "&lt;nickname&gt; :No such nick/channel"
+                        "<nickname> :No such nick/channel"
 
                 - Used to indicate the nickname parameter supplied to a
                   command is currently unused.
 
         402     ERR_NOSUCHSERVER
-                        "&lt;server name&gt; :No such server"
+                        "<server name> :No such server"
 
                 - Used to indicate the server name given currently
                   doesn't exist.
 
         403     ERR_NOSUCHCHANNEL
-                        "&lt;channel name&gt; :No such channel"
+                        "<channel name> :No such channel"
 
                 - Used to indicate the given channel name is invalid.
 
         404     ERR_CANNOTSENDTOCHAN
-                        "&lt;channel name&gt; :Cannot send to channel"
+                        "<channel name> :Cannot send to channel"
 
                 - Sent to a user who is either (a) not on a channel
                   which is mode +n or (b) not a chanop (or mode +v) on
@@ -2081,20 +2390,27 @@ USERS eff.org                   ; request a list of users logged in on
                   a PRIVMSG message to that channel.
 
         405     ERR_TOOMANYCHANNELS
-                        "&lt;channel name&gt; :You have joined too many \
+                        "<channel name> :You have joined too many \
                          channels"
                 - Sent to a user when they have joined the maximum
                   number of allowed channels and they try to join
                   another channel.
 
         406     ERR_WASNOSUCHNICK
-                        "&lt;nickname&gt; :There was no such nickname"
+                        "<nickname> :There was no such nickname"
 
                 - Returned by WHOWAS to indicate there is no history
                   information for that nickname.
 
         407     ERR_TOOMANYTARGETS
-                        "&lt;target&gt; :Duplicate recipients. No message \
+                        "<target> :Duplicate recipients. No message \
+
+
+
+Oikarinen & Reed                                               [Page 43]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                          delivered"
 
@@ -2110,22 +2426,22 @@ USERS eff.org                   ; request a list of users logged in on
                   without valid prefixes.
 
         411     ERR_NORECIPIENT
-                        ":No recipient given (&lt;command&gt;)"
+                        ":No recipient given (<command>)"
         412     ERR_NOTEXTTOSEND
                         ":No text to send"
         413     ERR_NOTOPLEVEL
-                        "&lt;mask&gt; :No toplevel domain specified"
+                        "<mask> :No toplevel domain specified"
         414     ERR_WILDTOPLEVEL
-                        "&lt;mask&gt; :Wildcard in toplevel domain"
+                        "<mask> :Wildcard in toplevel domain"
 
                 - 412 - 414 are returned by PRIVMSG to indicate that
                   the message wasn't delivered for some reason.
                   ERR_NOTOPLEVEL and ERR_WILDTOPLEVEL are errors that
                   are returned when an invalid use of
-                  "PRIVMSG $&lt;server&gt;" or "PRIVMSG #&lt;host&gt;" is attempted.
+                  "PRIVMSG $<server>" or "PRIVMSG #<host>" is attempted.
 
         421     ERR_UNKNOWNCOMMAND
-                        "&lt;command&gt; :Unknown command"
+                        "<command> :Unknown command"
 
                 - Returned to a registered client to indicate that the
                   command sent is unknown by the server.
@@ -2136,14 +2452,21 @@ USERS eff.org                   ; request a list of users logged in on
                 - Server's MOTD file could not be opened by the server.
 
         423     ERR_NOADMININFO
-                        "&lt;server&gt; :No administrative info available"
+                        "<server> :No administrative info available"
 
                 - Returned by a server in response to an ADMIN message
                   when there is an error in finding the appropriate
                   information.
 
         424     ERR_FILEERROR
-                ":File error doing &lt;file op&gt; on &lt;file&gt;"
+                ":File error doing <file op> on <file>"
+
+
+
+Oikarinen & Reed                                               [Page 44]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                 - Generic error message used to report a failed file
                   operation during the processing of a message.
@@ -2155,47 +2478,54 @@ USERS eff.org                   ; request a list of users logged in on
                   command and isn't found.
 
         432     ERR_ERRONEUSNICKNAME
-                        "&lt;nick&gt; :Erroneus nickname"
+                        "<nick> :Erroneus nickname"
 
                 - Returned after receiving a NICK message which contains
                   characters which do not fall in the defined set.  See
                   section x.x.x for details on valid nicknames.
 
         433     ERR_NICKNAMEINUSE
-                        "&lt;nick&gt; :Nickname is already in use"
+                        "<nick> :Nickname is already in use"
 
                 - Returned when a NICK message is processed that results
                   in an attempt to change to a currently existing
                   nickname.
 
         436     ERR_NICKCOLLISION
-                        "&lt;nick&gt; :Nickname collision KILL"
+                        "<nick> :Nickname collision KILL"
 
                 - Returned by a server to a client when it detects a
                   nickname collision (registered of a NICK that
                   already exists by another server).
 
         441     ERR_USERNOTINCHANNEL
-                        "&lt;nick&gt; &lt;channel&gt; :They aren't on that channel"
+                        "<nick> <channel> :They aren't on that channel"
 
                 - Returned by the server to indicate that the target
                   user of the command is not on the given channel.
 
         442     ERR_NOTONCHANNEL
-                        "&lt;channel&gt; :You're not on that channel"
+                        "<channel> :You're not on that channel"
 
                 - Returned by the server whenever a client tries to
                   perform a channel effecting command for which the
                   client isn't a member.
 
         443     ERR_USERONCHANNEL
-                        "&lt;user&gt; &lt;channel&gt; :is already on channel"
+                        "<user> <channel> :is already on channel"
 
                 - Returned when a client tries to invite a user to a
                   channel they are already on.
 
+
+
+Oikarinen & Reed                                               [Page 45]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
         444     ERR_NOLOGIN
-                        "&lt;user&gt; :User not logged in"
+                        "<user> :User not logged in"
 
                 - Returned by the summon after a SUMMON command for a
                   user was unable to be performed since they were not
@@ -2221,7 +2551,7 @@ USERS eff.org                   ; request a list of users logged in on
                   to be parsed in detail.
 
         461     ERR_NEEDMOREPARAMS
-                        "&lt;command&gt; :Not enough parameters"
+                        "<command> :Not enough parameters"
 
                 - Returned by the server by numerous commands to
                   indicate to the client that it didn't supply enough
@@ -2234,6 +2564,7 @@ USERS eff.org                   ; request a list of users logged in on
                   change part of the registered details (such as
                   password or user details from second USER message).
 
+
         463     ERR_NOPERMFORHOST
                         ":Your host isn't among the privileged"
 
@@ -2241,6 +2572,13 @@ USERS eff.org                   ; request a list of users logged in on
                   a server which does not been setup to allow
                   connections from the host the attempted connection
                   is tried.
+
+
+
+Oikarinen & Reed                                               [Page 46]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
         464     ERR_PASSWDMISMATCH
                         ":Password incorrect"
@@ -2257,17 +2595,17 @@ USERS eff.org                   ; request a list of users logged in on
                   explicitly deny connections to you.
 
         467     ERR_KEYSET
-                        "&lt;channel&gt; :Channel key already set"
+                        "<channel> :Channel key already set"
         471     ERR_CHANNELISFULL
-                        "&lt;channel&gt; :Cannot join channel (+l)"
+                        "<channel> :Cannot join channel (+l)"
         472     ERR_UNKNOWNMODE
-                        "&lt;char&gt; :is unknown mode char to me"
+                        "<char> :is unknown mode char to me"
         473     ERR_INVITEONLYCHAN
-                        "&lt;channel&gt; :Cannot join channel (+i)"
+                        "<channel> :Cannot join channel (+i)"
         474     ERR_BANNEDFROMCHAN
-                        "&lt;channel&gt; :Cannot join channel (+b)"
+                        "<channel> :Cannot join channel (+b)"
         475     ERR_BADCHANNELKEY
-                        "&lt;channel&gt; :Cannot join channel (+k)"
+                        "<channel> :Cannot join channel (+k)"
         481     ERR_NOPRIVILEGES
                         ":Permission Denied- You're not an IRC operator"
 
@@ -2276,7 +2614,7 @@ USERS eff.org                   ; request a list of users logged in on
                   unsuccessful.
 
         482     ERR_CHANOPRIVSNEEDED
-                        "&lt;channel&gt; :You're not channel operator"
+                        "<channel> :You're not channel operator"
 
                 - Any command requiring 'chanop' privileges (such as
                   MODE messages) must return this error if the client
@@ -2289,6 +2627,14 @@ USERS eff.org                   ; request a list of users logged in on
                 - Any attempts to use the KILL command on a server
                   are to be refused and this error returned directly
                   to the client.
+
+
+
+
+Oikarinen & Reed                                               [Page 47]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
         491     ERR_NOOPERHOST
                         ":No O-lines for your host"
@@ -2317,13 +2663,13 @@ USERS eff.org                   ; request a list of users logged in on
                         Dummy reply number. Not used.
 
         302     RPL_USERHOST
-                        ":[&lt;reply&gt;{&lt;space&gt;&lt;reply&gt;}]"
+                        ":[<reply>{<space><reply>}]"
 
                 - Reply format used by USERHOST to list replies to
                   the query list.  The reply string is composed as
                   follows:
 
-                  &lt;reply&gt; ::= &lt;nick&gt;['*'] '=' &lt;'+'|'-'&gt;&lt;hostname&gt;
+                  <reply> ::= <nick>['*'] '=' <'+'|'-'><hostname>
 
                   The '*' indicates whether the client has registered
                   as an Operator.  The '-' or '+' characters represent
@@ -2331,13 +2677,20 @@ USERS eff.org                   ; request a list of users logged in on
                   respectively.
 
         303     RPL_ISON
-                        ":[&lt;nick&gt; {&lt;space&gt;&lt;nick&gt;}]"
+                        ":[<nick> {<space><nick>}]"
 
                 - Reply format used by ISON to list replies to the
                   query list.
 
         301     RPL_AWAY
-                        "&lt;nick&gt; :&lt;away message&gt;"
+                        "<nick> :<away message>"
+
+
+
+Oikarinen & Reed                                               [Page 48]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
         305     RPL_UNAWAY
                         ":You are no longer marked as being away"
@@ -2352,17 +2705,17 @@ USERS eff.org                   ; request a list of users logged in on
                   client removes and sets an AWAY message.
 
         311     RPL_WHOISUSER
-                        "&lt;nick&gt; &lt;user&gt; &lt;host&gt; * :&lt;real name&gt;"
+                        "<nick> <user> <host> * :<real name>"
         312     RPL_WHOISSERVER
-                        "&lt;nick&gt; &lt;server&gt; :&lt;server info&gt;"
+                        "<nick> <server> :<server info>"
         313     RPL_WHOISOPERATOR
-                        "&lt;nick&gt; :is an IRC operator"
+                        "<nick> :is an IRC operator"
         317     RPL_WHOISIDLE
-                        "&lt;nick&gt; &lt;integer&gt; :seconds idle"
+                        "<nick> <integer> :seconds idle"
         318     RPL_ENDOFWHOIS
-                        "&lt;nick&gt; :End of /WHOIS list"
+                        "<nick> :End of /WHOIS list"
         319     RPL_WHOISCHANNELS
-                        "&lt;nick&gt; :{[@|+]&lt;channel&gt;&lt;space&gt;}"
+                        "<nick> :{[@|+]<channel><space>}"
 
                 - Replies 311 - 313, 317 - 319 are all replies
                   generated in response to a WHOIS message.  Given that
@@ -2380,13 +2733,20 @@ USERS eff.org                   ; request a list of users logged in on
                   the end of processing a WHOIS message.
 
         314     RPL_WHOWASUSER
-                        "&lt;nick&gt; &lt;user&gt; &lt;host&gt; * :&lt;real name&gt;"
+                        "<nick> <user> <host> * :<real name>"
         369     RPL_ENDOFWHOWAS
-                        "&lt;nick&gt; :End of WHOWAS"
+                        "<nick> :End of WHOWAS"
 
                 - When replying to a WHOWAS message, a server must use
                   the replies RPL_WHOWASUSER, RPL_WHOISSERVER or
                   ERR_WASNOSUCHNICK for each nickname in the presented
+
+
+
+Oikarinen & Reed                                               [Page 49]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                   list.  At the end of all reply batches, there must
                   be RPL_ENDOFWHOWAS (even if there was only one reply
@@ -2395,7 +2755,7 @@ USERS eff.org                   ; request a list of users logged in on
         321     RPL_LISTSTART
                         "Channel :Users  Name"
         322     RPL_LIST
-                        "&lt;channel&gt; &lt;# visible&gt; :&lt;topic&gt;"
+                        "<channel> <# visible> :<topic>"
         323     RPL_LISTEND
                         ":End of /LIST"
 
@@ -2406,12 +2766,12 @@ USERS eff.org                   ; request a list of users logged in on
                   and end reply must be sent.
 
         324     RPL_CHANNELMODEIS
-                        "&lt;channel&gt; &lt;mode&gt; &lt;mode params&gt;"
+                        "<channel> <mode> <mode params>"
 
         331     RPL_NOTOPIC
-                        "&lt;channel&gt; :No topic is set"
+                        "<channel> :No topic is set"
         332     RPL_TOPIC
-                        "&lt;channel&gt; :&lt;topic&gt;"
+                        "<channel> :<topic>"
 
                 - When sending a TOPIC message to determine the
                   channel topic, one of two replies is sent.  If
@@ -2419,49 +2779,56 @@ USERS eff.org                   ; request a list of users logged in on
                   RPL_NOTOPIC.
 
         341     RPL_INVITING
-                        "&lt;channel&gt; &lt;nick&gt;"
+                        "<channel> <nick>"
 
                 - Returned by the server to indicate that the
                   attempted INVITE message was successful and is
                   being passed onto the end client.
 
         342     RPL_SUMMONING
-                        "&lt;user&gt; :Summoning user to IRC"
+                        "<user> :Summoning user to IRC"
 
                 - Returned by a server answering a SUMMON message to
                   indicate that it is summoning that user.
 
         351     RPL_VERSION
-                        "&lt;version&gt;.&lt;debuglevel&gt; &lt;server&gt; :&lt;comments&gt;"
+                        "<version>.<debuglevel> <server> :<comments>"
 
                 - Reply by the server showing its version details.
-                  The &lt;version&gt; is the version of the software being
+                  The <version> is the version of the software being
+
+
+
+Oikarinen & Reed                                               [Page 50]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                   used (including any patchlevel revisions) and the
-                  &lt;debuglevel&gt; is used to indicate if the server is
+                  <debuglevel> is used to indicate if the server is
                   running in "debug mode".
 
                   The "comments" field may contain any comments about
                   the version or further version details.
 
         352     RPL_WHOREPLY
-                        "&lt;channel&gt; &lt;user&gt; &lt;host&gt; &lt;server&gt; &lt;nick&gt; \
-                         &lt;H|G&gt;[*][@|+] :&lt;hopcount&gt; &lt;real name&gt;"
+                        "<channel> <user> <host> <server> <nick> \
+                         <H|G>[*][@|+] :<hopcount> <real name>"
         315     RPL_ENDOFWHO
-                        "&lt;name&gt; :End of /WHO list"
+                        "<name> :End of /WHO list"
 
                 - The RPL_WHOREPLY and RPL_ENDOFWHO pair are used
                   to answer a WHO message.  The RPL_WHOREPLY is only
                   sent if there is an appropriate match to the WHO
                   query.  If there is a list of parameters supplied
                   with a WHO message, a RPL_ENDOFWHO must be sent
-                  after processing each list item with &lt;name&gt; being
+                  after processing each list item with <name> being
                   the item.
 
         353     RPL_NAMREPLY
-                        "&lt;channel&gt; :[[@|+]&lt;nick&gt; [[@|+]&lt;nick&gt; [...]]]"
+                        "<channel> :[[@|+]<nick> [[@|+]<nick> [...]]]"
         366     RPL_ENDOFNAMES
-                        "&lt;channel&gt; :End of /NAMES list"
+                        "<channel> :End of /NAMES list"
 
                 - To reply to a NAMES message, a reply pair consisting
                   of RPL_NAMREPLY and RPL_ENDOFNAMES is sent by the
@@ -2474,19 +2841,26 @@ USERS eff.org                   ; request a list of users logged in on
                   the end.
 
         364     RPL_LINKS
-                        "&lt;mask&gt; &lt;server&gt; :&lt;hopcount&gt; &lt;server info&gt;"
+                        "<mask> <server> :<hopcount> <server info>"
         365     RPL_ENDOFLINKS
-                        "&lt;mask&gt; :End of /LINKS list"
+                        "<mask> :End of /LINKS list"
 
                 - In replying to the LINKS message, a server must send
                   replies back using the RPL_LINKS numeric and mark the
                   end of the list using an RPL_ENDOFLINKS reply.
 
         367     RPL_BANLIST
-                        "&lt;channel&gt; &lt;banid&gt;"
+                        "<channel> <banid>"
         368     RPL_ENDOFBANLIST
 
-                        "&lt;channel&gt; :End of channel ban list"
+
+
+Oikarinen & Reed                                               [Page 51]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
+                        "<channel> :End of channel ban list"
 
                 - When listing the active 'bans' for a given channel,
                   a server is required to send the list back using the
@@ -2496,7 +2870,7 @@ USERS eff.org                   ; request a list of users logged in on
                   RPL_ENDOFBANLIST must be sent.
 
         371     RPL_INFO
-                        ":&lt;string&gt;"
+                        ":<string>"
         374     RPL_ENDOFINFO
                         ":End of /INFO list"
 
@@ -2506,9 +2880,9 @@ USERS eff.org                   ; request a list of users logged in on
                   replies.
 
         375     RPL_MOTDSTART
-                        ":- &lt;server&gt; Message of the day - "
+                        ":- <server> Message of the day - "
         372     RPL_MOTD
-                        ":- &lt;text&gt;"
+                        ":- <text>"
         376     RPL_ENDOFMOTD
                         ":End of /MOTD command"
 
@@ -2527,7 +2901,7 @@ USERS eff.org                   ; request a list of users logged in on
                   operator status.
 
         382     RPL_REHASHING
-                        "&lt;config file&gt; :Rehashing"
+                        "<config file> :Rehashing"
 
                 - If the REHASH option is used and an operator sends
                   a REHASH message, an RPL_REHASHING is sent back to
@@ -2535,7 +2909,14 @@ USERS eff.org                   ; request a list of users logged in on
 
         391     RPL_TIME
 
-                        "&lt;server&gt; :&lt;string showing server's local time&gt;"
+
+
+Oikarinen & Reed                                               [Page 52]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
+                        "<server> :<string showing server's local time>"
 
                 - When replying to the TIME message, a server must send
                   the reply using the RPL_TIME format above.  The string
@@ -2560,29 +2941,36 @@ USERS eff.org                   ; request a list of users logged in on
                   RPL_ENDOFUSERS.
 
         200     RPL_TRACELINK
-                        "Link &lt;version &amp; debug level&gt; &lt;destination&gt; \
-                         &lt;next server&gt;"
+                        "Link <version & debug level> <destination> \
+                         <next server>"
         201     RPL_TRACECONNECTING
-                        "Try. &lt;class&gt; &lt;server&gt;"
+                        "Try. <class> <server>"
         202     RPL_TRACEHANDSHAKE
-                        "H.S. &lt;class&gt; &lt;server&gt;"
+                        "H.S. <class> <server>"
         203     RPL_TRACEUNKNOWN
-                        "???? &lt;class&gt; [&lt;client IP address in dot form&gt;]"
+                        "???? <class> [<client IP address in dot form>]"
         204     RPL_TRACEOPERATOR
-                        "Oper &lt;class&gt; &lt;nick&gt;"
+                        "Oper <class> <nick>"
         205     RPL_TRACEUSER
-                        "User &lt;class&gt; &lt;nick&gt;"
+                        "User <class> <nick>"
         206     RPL_TRACESERVER
-                        "Serv &lt;class&gt; &lt;int&gt;S &lt;int&gt;C &lt;server&gt; \
-                         &lt;nick!user|*!*&gt;@&lt;host|server&gt;"
+                        "Serv <class> <int>S <int>C <server> \
+                         <nick!user|*!*>@<host|server>"
         208     RPL_TRACENEWTYPE
-                        "&lt;newtype&gt; 0 &lt;client name&gt;"
+                        "<newtype> 0 <client name>"
         261     RPL_TRACELOG
-                        "File &lt;logfile&gt; &lt;debug level&gt;"
+                        "File <logfile> <debug level>"
 
                 - The RPL_TRACE* are all returned by the server in
                   response to the TRACE message.  How many are
                   returned is dependent on the the TRACE message and
+
+
+
+Oikarinen & Reed                                               [Page 53]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                   whether it was sent by an operator or not.  There
                   is no predefined order for which occurs first.
@@ -2602,50 +2990,58 @@ USERS eff.org                   ; request a list of users logged in on
                   being displayed anyway.
 
         211     RPL_STATSLINKINFO
-                        "&lt;linkname&gt; &lt;sendq&gt; &lt;sent messages&gt; \
-                         &lt;sent bytes&gt; &lt;received messages&gt; \
-                         &lt;received bytes&gt; &lt;time open&gt;"
+                        "<linkname> <sendq> <sent messages> \
+                         <sent bytes> <received messages> \
+                         <received bytes> <time open>"
         212     RPL_STATSCOMMANDS
-                        "&lt;command&gt; &lt;count&gt;"
+                        "<command> <count>"
         213     RPL_STATSCLINE
-                        "C &lt;host&gt; * &lt;name&gt; &lt;port&gt; &lt;class&gt;"
+                        "C <host> * <name> <port> <class>"
         214     RPL_STATSNLINE
-                        "N &lt;host&gt; * &lt;name&gt; &lt;port&gt; &lt;class&gt;"
+                        "N <host> * <name> <port> <class>"
         215     RPL_STATSILINE
-                        "I &lt;host&gt; * &lt;host&gt; &lt;port&gt; &lt;class&gt;"
+                        "I <host> * <host> <port> <class>"
         216     RPL_STATSKLINE
-                        "K &lt;host&gt; * &lt;username&gt; &lt;port&gt; &lt;class&gt;"
+                        "K <host> * <username> <port> <class>"
         218     RPL_STATSYLINE
-                        "Y &lt;class&gt; &lt;ping frequency&gt; &lt;connect \
-                         frequency&gt; &lt;max sendq&gt;"
+                        "Y <class> <ping frequency> <connect \
+                         frequency> <max sendq>"
         219     RPL_ENDOFSTATS
-                        "&lt;stats letter&gt; :End of /STATS report"
+                        "<stats letter> :End of /STATS report"
         241     RPL_STATSLLINE
-                        "L &lt;hostmask&gt; * &lt;servername&gt; &lt;maxdepth&gt;"
+                        "L <hostmask> * <servername> <maxdepth>"
         242     RPL_STATSUPTIME
                         ":Server Up %d days %d:%02d:%02d"
         243     RPL_STATSOLINE
-                        "O &lt;hostmask&gt; * &lt;name&gt;"
+                        "O <hostmask> * <name>"
         244     RPL_STATSHLINE
-                        "H &lt;hostmask&gt; * &lt;servername&gt;"
+                        "H <hostmask> * <servername>"
 
         221     RPL_UMODEIS
-                        "&lt;user mode string&gt;"
+                        "<user mode string>"
+
+
+
+
+Oikarinen & Reed                                               [Page 54]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
                         - To answer a query about a client's own mode,
                           RPL_UMODEIS is sent back.
 
         251     RPL_LUSERCLIENT
-                        ":There are &lt;integer&gt; users and &lt;integer&gt; \
-                         invisible on &lt;integer&gt; servers"
+                        ":There are <integer> users and <integer> \
+                         invisible on <integer> servers"
         252     RPL_LUSEROP
-                        "&lt;integer&gt; :operator(s) online"
+                        "<integer> :operator(s) online"
         253     RPL_LUSERUNKNOWN
-                        "&lt;integer&gt; :unknown connection(s)"
+                        "<integer> :unknown connection(s)"
         254     RPL_LUSERCHANNELS
-                        "&lt;integer&gt; :channels formed"
+                        "<integer> :channels formed"
         255     RPL_LUSERME
-                        ":I have &lt;integer&gt; clients and &lt;integer&gt; \
+                        ":I have <integer> clients and <integer> \
                           servers"
 
                         - In processing an LUSERS message, the server
@@ -2658,13 +3054,13 @@ USERS eff.org                   ; request a list of users logged in on
                           is found for them.
 
         256     RPL_ADMINME
-                        "&lt;server&gt; :Administrative info"
+                        "<server> :Administrative info"
         257     RPL_ADMINLOC1
-                        ":&lt;admin info&gt;"
+                        ":<admin info>"
         258     RPL_ADMINLOC2
-                        ":&lt;admin info&gt;"
+                        ":<admin info>"
         259     RPL_ADMINEMAIL
-                        ":&lt;admin info&gt;"
+                        ":<admin info>"
 
                         - When replying to an ADMIN message, a server
                           is expected to use replies RLP_ADMINME
@@ -2676,6 +3072,17 @@ USERS eff.org                   ; request a list of users logged in on
                           (RPL_ADMINLOC2) and finally the administrative
                           contact for the server (an email address here
                           is required) in RPL_ADMINEMAIL.
+
+
+
+
+
+
+
+Oikarinen & Reed                                               [Page 55]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 6.3 Reserved numerics.
 
@@ -2713,7 +3120,7 @@ USERS eff.org                   ; request a list of users logged in on
    of the username responsible for making the connection.  Finding the
    username of the other end of the connection typically involves
    connecting to an authentication server such as IDENT as described in
-   <a href="http://www.faqs.org/rfcs/rfc1413.html">RFC 1413</a>.
+   RFC 1413.
 
    Given that without passwords it is not easy to reliably determine who
    is on the other end of a network connection, use of passwords is
@@ -2725,6 +3132,13 @@ USERS eff.org                   ; request a list of users logged in on
    The only current implementation of this protocol is the IRC server,
    version 2.8. Earlier versions may implement some or all of the
    commands described by this document with NOTICE messages replacing
+
+
+
+Oikarinen & Reed                                               [Page 56]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
    many of the numeric replies.  Unfortunately, due to backward
    compatibility requirements, the implementation of some parts of this
@@ -2775,6 +3189,13 @@ USERS eff.org                   ; request a list of users logged in on
    often has large amounts of data to send (especially when a new
    server-server link forms) and the small buffers provided in the
 
+
+
+Oikarinen & Reed                                               [Page 57]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    kernel are not enough for the outgoing queue.  To alleviate this
    problem, a "send queue" is used as a FIFO queue for data to be sent.
    A typical "send queue" may grow to 200 Kbytes on a large IRC network
@@ -2824,6 +3245,13 @@ USERS eff.org                   ; request a list of users logged in on
 
    When the initiating server receives a PASS/SERVER pair, it too then
 
+
+
+Oikarinen & Reed                                               [Page 58]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    checks that the server responding is authenticated properly before
    accepting the connection to be that server.
 
@@ -2868,6 +3296,17 @@ USERS eff.org                   ; request a list of users logged in on
    detected the closure.  The server then sends a list of SQUITs (one
    for each server behind that connection) and a list of QUITs (again,
    one for each client behind that connection).
+
+
+
+
+
+
+
+Oikarinen & Reed                                               [Page 59]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 8.9 Tracking nickname changes
 
@@ -2918,6 +3357,13 @@ USERS eff.org                   ; request a list of users logged in on
 
    which in essence means that the client may send 1 message every 2
 
+
+
+Oikarinen & Reed                                               [Page 60]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    seconds without being adversely affected.
 
 8.11 Non-blocking lookups
@@ -2966,6 +3412,13 @@ USERS eff.org                   ; request a list of users logged in on
           at which they can be contacted;
 
         * hostnames and passwords for clients which wish to be given
+
+
+
+Oikarinen & Reed                                               [Page 61]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
           access to restricted operator commands.
 
@@ -3016,6 +3469,13 @@ USERS eff.org                   ; request a list of users logged in on
    should also store the password and other characteristics of that
    link.
 
+
+
+Oikarinen & Reed                                               [Page 62]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
 8.12.4 Administrivia
 
    To provide accurate and valid replies to the ADMIN command (see
@@ -3065,6 +3525,13 @@ USERS eff.org                   ; request a list of users logged in on
    several people to want to use the same nick.  If a nickname is chosen
    by two people using this protocol, either one will not succeed or
 
+
+
+Oikarinen & Reed                                               [Page 63]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+
    both will removed by use of KILL (4.6.1).
 
 9.2.2 Channels
@@ -3103,15 +3570,23 @@ USERS eff.org                   ; request a list of users logged in on
 10. Current support and availability
 
            Mailing lists for IRC related discussion:
-                Future protocol: <a href="mailto:ircd-three-request@eff.org">ircd-three-request@eff.org</a>
-                General discussion: <a href="mailto:operlist-request@eff.org">operlist-request@eff.org</a>
+                Future protocol: ircd-three-request@eff.org
+                General discussion: operlist-request@eff.org
 
            Software implemenations
-                <a href="ftp://cs.bu.edu/irc">cs.bu.edu:/irc</a>
-                <a href="ftp://nic.funet.fi/pub/irc">nic.funet.fi:/pub/irc</a>
-                <a href="ftp://coombs.anu.edu.au/pub/irc">coombs.anu.edu.au:/pub/irc</a>
+                cs.bu.edu:/irc
+                nic.funet.fi:/pub/irc
+                coombs.anu.edu.au:/pub/irc
 
            Newsgroup: alt.irc
+
+
+
+
+Oikarinen & Reed                                               [Page 64]
+
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
 
 Security Considerations
 
@@ -3125,62 +3600,44 @@ Security Considerations
    90500 OULU
    FINLAND
 
-   Email: <a href="mailto:jto@tolsun.oulu.fi">jto@tolsun.oulu.fi</a>
+   Email: jto@tolsun.oulu.fi
+
 
    Darren Reed
    4 Pateman Street
    Watsonia, Victoria 3087
    Australia
 
-   Email: <a href="mailto:avalon@coombs.anu.edu.au">avalon@coombs.anu.edu.au</a>
+   Email: avalon@coombs.anu.edu.au
 
-</pre>
-<p align="center"><script language="JavaScript"><!--
-erfc("1459");
-// --></script><a href="http://www.faqs.org/rfccomment.php?rfcnum=1459" target="_blank" onclick="window.open('/rfccomment.php?rfcnum=1459','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;" )="">Comment on RFC 1459</a>
-</p>
-&nbsp;<br>
-<div align="center">
-<center>
-<table border="0" cellpadding="4" cellspacing="4" width="100%">
-<tbody><tr><td bgcolor="#d6d6c0" width="100%">
-<p><font face="Arial">Comments about this RFC:</font></p>
-<ul>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-207.html">RFC 1459: well, it seems that some raws (numeric response) are used by some servers...</a> by crazycat (9/30/2003)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-1804.html">RFC 1459: There are also some other (informative) RFC's (2810-2813) but these are writting...</a> by Syzop (3/14/2005)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-1566.html">RFC 1459: Not many of the 'protocol' has their example written on this page. I'm searching...</a> by Neo-S (1/3/2005)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-2171.html">RFC 1459: irc kreynet.be 6667 #e-chat.be </a> by transit (6/21/2005)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-741.html">RFC 1459: Please Remove It Thank`s
- 
- 
-   Your!
-            GABBER_MIX Here </a> by GABBER_MIX (4/7/2004)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-1874.html">RFC 1459: como se rouba nicks ou axim?
-   </a> by BOA-NOITE (4/9/2005)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-1053.html">RFC 1459: To those wondering about the gaps in this RFC: there is an updated version to...</a> by quietbritishjim (7/11/2004)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-2294.html">RFC 1459: Nice protocol, but lacking some fundamentals needs in comparison with HTTP.
- No...</a> by Capitaine (7/28/2005)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-721.html">RFC 1459: RFC1459 was created many years before Unreal IRCd was thought of.
-   </a> by katsklaw (4/2/2004)</font></li>
-<li><font face="Arial"><a href="http://www.faqs.org/qa/rfcc-1996.html">RFC 1459: Excellent protocol. It can be used well with C/C++ sockets or Visual Basic...</a> by python_kiss (5/10/2005)</font></li>
-</ul>
-</td></tr></tbody></table> <br></center></div>
-<div align="center">
-<table border="0" cellpadding="3" cellspacing="3" width="100%">
-<tbody><tr><td width="45%">
-<p align="left">Previous: <a href="http://www.faqs.org/rfcs/rfc1458.html">RFC 1458 - Requirements for Multicast Protocols</a>
-</p></td><td width="10%">&nbsp;</td><td width="45%">
-<p align="right">Next: <a href="http://www.faqs.org/rfcs/rfc1460.html">RFC 1460 - Post Office Protocol - Version 3</a>
-</p></td></tr></tbody></table></div><p align="right">&nbsp;</p>
-<hr noshade="noshade" size="2">
-<div align="center">[ <a href="http://www.faqs.org/rfcs/">RFC Index</a> | <a href="http://www.faqs.org/rfcs/rfcsearch.html">RFC Search</a> | <a href="http://www.faqs.org/faqs/">Usenet FAQs</a> | <a href="http://www.faqs.org/contrib/">Web FAQs</a> | <a href="http://www.faqs.org/docs/">Documents</a> | <a href="http://www.city-data.com/">Cities</a> ]
-<p>
-</p></div>
-<small>
-<address>
-<p align="center">
- 
-</p>
-</address>
-</small>
-</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Oikarinen & Reed                                               [Page 65]
+

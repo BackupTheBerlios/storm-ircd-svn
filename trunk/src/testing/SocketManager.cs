@@ -39,7 +39,7 @@ namespace Other
 	/// <summary>
 	/// Description of SocketManager.
 	/// </summary>
-	public class SocketManager : MarshalByRefObject, IDisposable
+	public class SocketManager : MarshalByRefObject, IDisposable // TODO: error handler für select()
 	{
 		private Hashtable listeners = Hashtable.Synchronized(new Hashtable());
 		private Hashtable workers = Hashtable.Synchronized(new Hashtable());
@@ -138,7 +138,7 @@ namespace Other
 
 		public void UpdateListener(IListener listener)
 		{
-			Debug.WriteLine(this +".UpdateListnerner("+listener.GetType()+")");
+			Debug.WriteLine(this +".UpdateListerner("+listener.GetType()+")");
 			lock (this.listeners)
 			{
 				foreach (Socket sock in listener.Listeners)
@@ -236,20 +236,45 @@ namespace Other
 			if (worker == null)
 				throw new ArgumentNullException("worker");
 
-			HandleData data = new HandleData(worker, text);
-			((Queue)this.writer_thread.SendBuffer[priority]).Enqueue(data);
-/*
-			lock (this.writerstate)
+			byte[] data = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.Encoding.GetBytes(text);
+			this.Send(worker, data, priority);
+		}
+
+		public void Send(IWorker worker, byte[] data, MessagePriority priority)
+		{
+			if (priority == MessagePriority.RealTime)
 			{
-				Monitor.Pulse(this.writerstate);
-				Monitor.Wait(this.writerstate);
-				Monitor.Pulse(this.writerstate);
-			}*/
-			lock (this.writer_thread.SendBuffer)
+				this.InternalSend(worker, data);
+			}
+			else
 			{
-				Monitor.Pulse(this.writer_thread.SendBuffer);
-				Monitor.Wait(this.writer_thread.SendBuffer);
-				Monitor.Pulse(this.writer_thread.SendBuffer);
+				HandleData handledata = new HandleData(worker, data);
+				((Queue)this.writer_thread.SendBuffer[priority]).Enqueue(handledata);
+
+				lock (this.writer_thread.SendBuffer)
+				{
+					Monitor.Pulse(this.writer_thread.SendBuffer);
+					Monitor.Wait(this.writer_thread.SendBuffer);
+					Monitor.Pulse(this.writer_thread.SendBuffer);
+				}
+			}
+		}
+
+		private void InternalSend(IWorker worker, byte[] data)
+		{
+			try
+			{
+				// statistics
+				stat.traffic += data.Length;
+				//
+
+				worker.Socket.Send(data);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(this + ": Exception! : " + e.ToString());
+				// TODO: close link
+				// OnError(worker) eg
 			}
 		}
 
@@ -525,7 +550,10 @@ namespace Other
 
 						IListener lt = this.socketManager.GetListener(sock);
 						if (lt != null)
+						{
 							lt.RemoveConnection(sock);
+							((IWorker)this.socketManager.workers[sock]).Dispose();
+						}
 						else
 						{
 							this.socketManager.workers.Remove(sock);
@@ -547,11 +575,6 @@ namespace Other
 			Thread thread;
 
 			internal Hashtable SendBuffer = Hashtable.Synchronized(new Hashtable());
-/*
-			int highcount = 0;
-			int lowcount = 0;
-			int normalcount = 0;
-*/
 			bool started = false;
 			bool run = true;
 
@@ -641,9 +664,10 @@ namespace Other
 					this.SendQueue((Queue)this.SendBuffer[MessagePriority.Low]);
 			}
 
-			private void InternalSend(IWorker worker, string text)
+#if false
+			private void InternalSend(IWorker worker, string text) // obsolete
 			{
-				Trace.WriteLine(this + ".InternalSendLine: " + text);
+//				Trace.WriteLine(this + ".InternalSendLine: " + text);
 				try
 				{
  					byte[] data = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.Encoding.GetBytes(text);
@@ -659,13 +683,15 @@ namespace Other
 					Console.WriteLine(this + ": Exception! : " + e.ToString());
 				}
 			}
+#endif
 
 			private void SendQueue(Queue queue)
 			{
 				while (queue.Count > 0)
 				{
-					HandleData data = (HandleData)queue.Dequeue();
-					this.InternalSend(data.worker, data.text);
+					HandleData handledata = (HandleData)queue.Dequeue();
+					//this.InternalSend(data.worker, data.text);
+					this.socketManager.InternalSend(handledata.worker, handledata.data);
 				}
 			}
 		}

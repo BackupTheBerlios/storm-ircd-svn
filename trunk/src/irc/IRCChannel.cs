@@ -17,41 +17,34 @@ using System;
 using System.Collections;
 
 using Network;
-// todo: nur noch IRCConnection.SendLine() nutzen !
-// BUGFIX: lock (members)
+
 namespace IRC
 {
-	internal class ChannelState
+/*	internal class ChannelState
 	{
 		public IRCConnection connection;
 		public Privilegs privilegs;
 	}
+*/
+	public enum ExitType {Quit, Part, Kick}
 
-	/// <summary>
-	/// Class for Channels
-	/// </summary>
-	/// <remarks>
-	/// 	created by - Josef Schmeisser
-	/// 	created on - 06.03.2004 22:39:45
-	/// </remarks>
 	public class Channel
 	{
 		private bool disposed = false;
 		private string _name;
-		///////////////////new
+
+		// new
 		private string _topic;
 		private string _topicnick;
 		private DateTime _topicset;
-		///////////////////////
+		//
 
-		private Hashtable _members;// todo: soll _nicks ersetzen
-		/////////
-//		private IRCConnection chatMaster = null;
-		private IRCServer _ircServer = null;
-///		private Configuration _config;
+		private ArrayList _members; // IRCConnection objects
+		private ArrayList _users; // SimpleUser objects
+		private IRCServer _server = null;
 
 		// new
-		private IRCChannelModes _modes;
+		private IRCChannelMode _modes;
 		// end
 
 		private ArrayList _channeloperators;
@@ -59,28 +52,22 @@ namespace IRC
 		/// <summary>
 		/// Create a new Channel
 		/// </summary>
-		public Channel(string name, /*Configuration config,*/
-		               IRCServer server, IRCConnection chatMaster)
+		public Channel(string name, IRCServer server, SimpleUser op)
 		{
-///			this._config = config;
+			Console.WriteLine("new {0} with name: {1}, is available", this, name);
+			this._modes = new IRCChannelMode();
 			this._name = name;
 			this._topic = String.Empty;
-//			this.chatMaster = chatMaster;
-
-			this._members = new Hashtable();
-//			ChannelState state = new ChannelState();
-//			state.connection = chatMaster;
-//			state.privilegs = Privilegs.Master;
-//			this._nicks.Add(chatMaster.ID, state);
-
-			this._ircServer = server;
+			this._members = new ArrayList();
+			this._users = new ArrayList();
+			this._server = server;
 		}
 
 		/// <summary>
 		/// </summary>
 		~Channel()
 		{
-			Console.WriteLine("Channel: Destrukor [ OK ]");
+			Console.WriteLine("{0}<{1}> Destrukor", this, this.Name);
 		}
 
 		/// <summary>
@@ -100,33 +87,27 @@ namespace IRC
 		/// </summary>
 		public virtual void Dispose()
 		{
-			Console.WriteLine("Channel: Pre-Destrukor1");
+			Console.WriteLine("{0}<{1}>.Dispose()", this, this.Name);
 			this.Dispose(true);
 
 			GC.Collect();
 		}
 
 		/// <summary>
-		/// Dispose object internal
+		/// 
 		/// </summary>
 		/// <param name="disposing"></param>
 		private void Dispose(bool disposing)
 		{
-//			lock (this)
-//			{
-				if (!this.disposed)
-				{
-//					if (disposing)
-//					{
-//						this.Send("left");
-//						this.Socket.Close();
-//					}
-					// TO/DO: Channle add dispose code
-					Console.WriteLine("Channel: Pre-Destrukor");
-					this.disposed = true;
-				}
-//			}
+			if (!this.disposed)
+			{
+//				if (disposing)
+//				{
+//				}
+				this.disposed = true;
+			}
 		}
+
 //		/// <summary>
 //		/// Kick user from channel
 //		/// </summary>
@@ -169,7 +150,7 @@ namespace IRC
 		//	if (this.
 		}
 		
-		public virtual bool CanJoin(IRCConnection connection)
+		public virtual bool CanJoin(IRCUserConnection usr)
 		{
 		// if (connection.Channels.Contains(this))
 		//  return false;
@@ -185,66 +166,106 @@ namespace IRC
 			return true;
 		}
 
+		private void AddUser(SimpleUser usr)
+		{
+			lock (this._users)
+			{
+				if (this._users.Contains(usr))
+				{
+					return;
+				}
+				this._users.Add(usr);
+				this._members.Add(usr.UpLink);
+				usr.UpLink.Channels.Add(this.Name, this); // TODO: wird auch von server benutzt um bei einen netspliet schneller zu aggieren
+			}
+		}
+
+		public void RemoveUser(SimpleUser usr, ExitType type) // TODO
+		{
+			if (usr == null)
+				throw new ArgumentNullException("usr");
+
+			lock (this._users)
+			{
+				if (this._users.Contains(usr))
+				{
+					this._users.Remove(usr);
+					this._members.Remove(usr.UpLink);
+					usr.UpLink.Channels.Remove(this.Name);
+/* TODO: nachrichten senden
+					switch (type)
+					{
+						case ExitType.Quit:
+						case ExitType.Kick:
+						case ExitType.Part:
+							/*
+							* Server informieren <-- nicht notwendig, sieht Part()
+							*
+					}*/
+				}
+			}
+
+			if (this.HasMode('P')) // pre-defined channel
+				return;
+
+			if (this.MemberCount == 0)
+			{
+				this._server.RemoveChannel(this);
+				this.Dispose();
+			}
+		}
+
 		public virtual void do_join(IRCUserConnection connection, bool confirmation)
 		{
 			Console.WriteLine("do_join() new; id: {0}", connection.ID);
-			lock (this._members)
+			lock (connection)
 			{
-				lock (connection)
+				if (this.CanJoin(connection))
 				{
-					if (this.CanJoin(connection))
-					{
-						this._members.Add(connection.ID, connection);
-
-						if (confirmation)
-						{
-							Console.WriteLine("Send Join command to client");
-							// TODO: SendCommand auch in do_part
-							connection.SendLine(":" + connection.NickName + "!~" + connection.ClientName + "@" +
-					      	          connection.HostName + " JOIN :" + this.Name);
-
-							//connection.Names(this.Name); // TODO
-						}
-					}
-				}
-			}
-		}
-
-		public virtual void do_part(IRCUserConnection connection, bool confirmation)
-		{
-			lock (this._members)
-			{
-				lock (connection)
-				{
-					this._members.Remove(connection.ID);
-					Console.WriteLine("Count nicks: " + this._members.Count);
+					this.AddUser(connection.SimpleUser);
 
 					if (confirmation)
 					{
-						connection.SendLine(":" + connection.NickName + "!~" +
-						                connection.ClientName + "@" +
-						                connection.HostName + " PART " + this.Name);
-
-						this.SendChat(connection, "left"); // wird übersprungne -> da nicht im channel
+						Console.WriteLine("Send Join command to client");
+						// TODO: SendCommand auch in do_part
+						connection.SendLine(":" + connection.NickName + "!" + connection.UserName + "@" +
+				      	        connection.HostName + " JOIN :" + this.Name);
+						this.SendNames(connection);
 					}
 				}
 			}
 		}
 
+		public virtual void Part(SimpleUser usr, string message) // TODO: SimpleUser
+		{
+			if (usr == null)
+				throw new ArgumentNullException("usr");
+
+			this.RemoveUser(usr, ExitType.Part);
+			// TODO: server informieren
+#if false
+			//connection.SendLine(":" + connection.NickName +
+			//			"!" + connection.UserName +
+			//			"@" + connection.HostName + " PART " + this.Name);
+
+//			if( ! Remove_Client( REMOVE_PART, chan, Client, Origin, Reason, true)) return false;
+//				else return true;
+#endif
+		}
+
 		/// <summary>
-		/// Is parameter nick in channel?
+		/// Is "nick" in channel?
 		/// </summary>
 		/// <param name="nick"></param>
 		/// <returns>True if the user in channel</returns>
-		public virtual bool HasNick(string nick) // TODO: auch bei anderen servern anfragen
+		public virtual bool HasNick(string nick)
 		{
 			nick = nick.ToLower();
-			lock (this._members)
+			lock (this._users)
 			{
-				foreach (DictionaryEntry myDE in this._members)
+				foreach (SimpleUser usr in this._users)
 				{
-					IRCUserConnection irccon = (IRCUserConnection)myDE.Value;
-					if (irccon.NickName == nick)
+					if (usr.NickName.ToLower() == nick)
 					{
 						return true;
 					}
@@ -253,11 +274,18 @@ namespace IRC
 			return false;
 		}
 
-		public virtual bool HasConnection(IConnection connection) // TODO: auch bei anderen servern anfragen
+		public virtual bool HasConnection(IRCConnection connection)
 		{
-			if (this._members.Contains(connection.ID))
+			if (this._members.Contains(connection))
 				return true;
-			return true;
+			return false;
+		}
+
+		public virtual bool HasUser(SimpleUser usr)
+		{
+			if (this._users.Contains(usr))
+				return true;
+			return false;
 		}
 /*
 		/// <summary>
@@ -292,23 +320,30 @@ namespace IRC
 			}
 		}
 		*/
-		public virtual void SendChat(IRCUserConnection sender, string text)
+
+		public virtual void SendChat(IRCConnection sender, SimpleUser usr, string text)
 		{
-			// TODO: wenn eine object (Socket) nicht zugreifbar ist --> absturz
+			if (sender == null)
+				throw new ArgumentNullException("sender");
+
+			if (usr == null)
+				throw new ArgumentNullException("usr");
+
 			if (this.HasConnection(sender))
 			{
-				foreach (DictionaryEntry myDE in this._members)
+				foreach (IRCConnection connection in this._members)
 				{
-					if (myDE.Value == sender)
-						continue;
+//					if (myDE.Value == sender)
+//						continue;
 
-					IRCUserConnection connection = (IRCUserConnection)myDE.Value;
+//					IRCUserConnection connection = (IRCUserConnection)myDE.Value;
 					// TODO: SendCommand
-					connection.SendLine(":" + sender.NickName + // BUGFIX: SendLine
-						                "!~" + connection.ClientName +
-						                "@" + connection.HostName + " " +
+// :igraltist!n=igraltis@p54A15473.dip.t-dialin.net PRIVMSG #gentoo.de :-kein probelm das tut meine auchohne arts
+					connection.SendLine(":" + usr.NickName + // TODO: usr.SendCommand(); sender findet dann keine verwengung mehr
+						                "!" + usr.UserName +
+						                "@" + usr.HostName + " " +
 						                "PRIVMSG " + this.Name + " " + text);
-					// connection.Commamd("Primsg" + this.Name + " " + text);
+					//connection.SendCommamd("Primsg" + this.Name + " " + text);
 				}
 			}
 			else
@@ -317,14 +352,78 @@ namespace IRC
 			}
 		}
 
+		public virtual void SendWho(IRCUserConnection client, bool only_ops)
+		{
+			Console.WriteLine(this + ".SendWho()");
+			bool is_member, is_visible;
+
+			if (!this.HasConnection(client))
+				is_member = false;
+			else
+				is_member = true;
+#if false
+			if (!is_member && this.HasMode('s')) // secret chan
+				return; // user is not in the channel -> return
+#endif
+			if (is_member || !this.HasMode('s'))
+			{
+				foreach (SimpleUser usr in this._users)
+				{
+//					IRCUserConnection usr = (IRCUserConnection)dict.Value; // TODO: MUSS mal ein SimpleUser sein
+				
+					if (usr.UserMode.HasMode(IRCUserModes.MODE_INVISIBLE))
+						is_visible = false;
+					else
+						is_visible = true;
+
+					if (is_visible || is_member)
+					{
+					//	if (only_ops && !usr.ChanUserMode.get(this, IRCUserModes.MODE_OP)) // TODO
+					//		continue;
+
+					//:irc.localhost 352 test #test ~aa localhost irc.localhost test H :0 aa
+//[channel] [user] [host] [server] [nick]( "H" / "G" > ["*"] [ ( "@" / "+" ) ] :[hopcount] [real name]
+//:amd                    352 blackdragon #test    aa    127.0.0.1      amd              blackdragon H :0 aa
+//:example.irc.org 352 blackdragon #test ~aa localhost.tux example.irc.org blackdragon H* :0 aa
+
+						client.SendCommand(ReplyCodes.RPL_WHOREPLY, client.NickName, this.Name, usr.UserName, "127.0.0.1" /*usr.HostName/*todo*/, this._server.ServerName, usr.NickName, "H"/*( "H" / "G" > ["*"] [ ( "@" / "+" ) ]*/, String.Format("{0} {1}", usr.HopCount, usr.RealName));//, true); // true ein ":" beim letzen parameter
+					}
+				}
+			}
+			client.SendCommand(ReplyCodes.RPL_ENDOFWHO, client.NickName, this.Name, ":End of /WHO list.");
+		}
+
+		public virtual void SendNames(IRCUserConnection client)
+		{
+			string line = ":";
+			string[] nicks = this.Nicks;
+			for (int j = 0; j < nicks.Length; j++)
+			{
+				if (j == nicks.Length-1)
+					line += nicks[j];
+				else
+					line += nicks[j] + ' ';
+			}
+
+			client.SendCommand(ReplyCodes.RPL_NAMREPLY, client.NickName, "=", this.Name, line); // TODO: liste kann zu lang werden
+			client.SendCommand(ReplyCodes.RPL_ENDOFNAMES, client.NickName, this.Name, ":End of NAMES list");
+		}
+
 		public int StringToChannelState(string state)
 		{
+			throw new NotImplementedException();
 			return 0;
 		}
 
 		public string CahnnelModesToString()
 		{
+			throw new NotImplementedException();
 			return "";
+		}
+
+		public bool HasMode(char mode)
+		{
+			return this._modes.HasMode(mode);
 		}
 
 		/// <summary>
@@ -366,38 +465,20 @@ namespace IRC
 		}
 
 		/// <summary>
-		/// String array of nick's
+		/// 
 		/// </summary>
-/*		public string[] Nicks
-		{
-			get
-			{
-				string[] nicks = new string[this._nicks.Count];
-				IDictionaryEnumerator enumerator = this._nicks.GetEnumerator();
-
-				int i = 0;
-				while (enumerator.MoveNext())
-				{
-					nicks[i] = (string)enumerator.Key;
-					i++;
-				}
-				return nicks;
-			}
-		}*/
-
 		public string[] Nicks
 		{
 			get
 			{
-				lock (this._members)
+				lock (this._users)
 				{
-					string[] nicks = new string[this._members.Count];
-					IDictionaryEnumerator enumerator = this._members.GetEnumerator();
+					string[] nicks = new string[this._users.Count];
 
 					int i = 0;
-					while (enumerator.MoveNext())
+					foreach (SimpleUser usr in this._users)
 					{
-						nicks[i] = ((IRCUserConnection)enumerator.Value).NickName;
+						nicks[i] = usr.NickName;
 						i++;
 					}
 					return nicks;

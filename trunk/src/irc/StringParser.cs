@@ -24,7 +24,6 @@ namespace IRC
 	/// </summary>
 	public class StringParser
 	{
-		// TO/DO: für server unterstüzung erweitern!
 		/// <summary>
 		/// Parse the CMD string
 		/// </summary>
@@ -101,15 +100,16 @@ namespace IRC
 
 				while (line.Length != 0)
 				{
+					if (line[0] == ':') // last parameter
+					{
+						line = line.Substring(1);
+						res.Add(line);
+						break;
+					}
+
 					int pos = line.IndexOf(' '); // space
 					if (pos != -1)
 					{
-						if (line[0] == ':') // last parameter
-						{
-							res.Add(line);
-							break;
-						}
-
 						string part = line.Substring(0, pos);
 
 						part = part.Trim();

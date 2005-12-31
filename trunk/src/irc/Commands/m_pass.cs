@@ -30,8 +30,7 @@ pass-msg: 0211000001
 pass-msg: IRC|aEFJKMRTu
 pass-msg: P
 */
-		// TODO: implementation nach RFC1459 soll nach RFC2813 erweitert werden
-		public virtual void m_pass(IConnection connection, string[] ar)
+		public virtual void m_pass(IRCConnection connection, string[] ar)
 		{
 			// TODO: pass ist auch vom clienten möglich!
 			Console.WriteLine(this + ": pass message");
@@ -54,7 +53,7 @@ pass-msg: P
 			if (false) // wenn passwort falsch
 			{
 				connection.SendLine("ERROR: Wrong Password, clossing link ...");
-				this.CloseLink(connection);
+				this.CloseLink(connection); // CloseLink() kümmert sich um alles
 				return;
 			}
 			((IRCConnection)connection).PassSet = true;

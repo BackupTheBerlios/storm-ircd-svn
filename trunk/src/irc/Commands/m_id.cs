@@ -22,10 +22,10 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_id(IConnection connection, string[] par)
+		private void m_id(IRCConnection connection, string[] par)
 		{
 			Console.WriteLine(this + ": TODO id message");
-#if DEC
+#if false
 			IRCConnection src = (IRCConnection)connection;
 
 			src.Notice(src.NickName, "your id is " + src.ID);

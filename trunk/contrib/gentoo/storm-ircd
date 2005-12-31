@@ -1,0 +1,19 @@
+#!/sbin/runscript
+# Copyright 2005 Josef Schmeisser
+# Distributed under the terms of the GNU General Public License v2
+
+depend() {
+	need net
+}
+
+start() {
+	ebegin "Starting storm-ircd"
+	/usr/sbin/storm-ircd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping storm-ircd"
+	/usr/sbin/storm-ircd -n
+	eend $?
+}

@@ -1,0 +1,155 @@
+// Copyright (c) 2005 Josef Schmeisser
+//
+// This program is free software; you can reditribute it and/or modify
+// it under the terms of the GNU General Public License Version 2 as published by
+// the Free Software Foundation.
+//
+// This program is distrubuted in the hope that it will be useful,
+// but WITHOUT ANY WRRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+using System;
+using System.IO;
+using System.Xml;
+using System.Text;
+using System.Reflection;
+using System.Diagnostics;
+
+using System.Net;
+using System.Net.Sockets;
+
+using System.Threading;
+
+using IRC;
+using Service;
+using Tools;
+using Other;
+
+public class MainClass
+{
+	private static ManualResetEvent _wait = new ManualResetEvent(false);	private static bool shutdownInProgress = false;
+
+	public static readonly string ProjectName = "storm-ircd";
+	public static readonly string BuildDate = "@DATE@";
+
+	private static void ParseArgs(string[] args)
+	{
+		int i = 0;
+		while (i < args.Length)
+		{
+			Console.WriteLine("args[{0}] = {1}", i, args[i]);
+			i++;
+		}
+	}
+
+	public static void PrintUsage()
+	{
+		string usage =	"storm-ircd: Copyright 2005 Josef Schmeisser\n" +
+				"Released WITHOUT ANY WARRANTY under the terms of the GNU General Public license.\n\n" +
+				"Usage: storm-ircd [OPTIONS]\n\n" +
+				"Options:\n" +
+				"  -c\tConfigfile.\n" +
+				"  -h\tPrint this help message.";
+		Console.WriteLine(usage);
+	}
+
+	public static void Initialize()
+	{
+		try
+		{
+			// Standard dienste starten
+			ServiceManager.Services.AddService(SettingsHost.Instance);
+			ServiceManager.Services.AddService(Logger.Instance);
+			ServiceManager.Services.AddService(Statistic.Instance);
+			ServiceManager.Services.AddService(IRCService.Instance); // load the server
+			((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Show();
+
+			// Application host set up
+			ServiceManager.Services.AddService(new ApplicationHost(((IRCService)ServiceManager.Services[typeof(IRCService)]).Server.SocketManager));
+
+			// Verbindung zu ApplicationHost aufbauen
+			ServiceManager.Services.AddService(new ConsoleInterface());
+
+			// DEBUG: ((IRCService)ServiceManager.Services[typeof(IRCService)]).Server.SocketManager.Dispose();
+
+			_wait.WaitOne();
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine("Initialize: " + e.ToString());
+			Logger.LogMsg(e.ToString());
+			Environment.Exit(1);
+		}
+	}
+
+	public static void Shutdown()
+	{
+		if (shutdownInProgress)
+			return;
+
+		shutdownInProgress = true;
+
+		// Unload all services
+		ServiceManager.Services[typeof(IRCService)].Unload(); // save
+		ServiceManager.Services.UnloadAll();
+
+		_wait.Set();
+	}
+
+	public static void Restart()
+	{
+		Shutdown();
+		Initialize();
+	}
+
+	public static void Main(string[] args)
+	{
+#if UNSTABLE
+		Console.WriteLine("storm-ircd: this build is only for testing!");
+#endif
+		Trace.Listeners.AddRange(new System.Diagnostics.TraceListener[] {
+			new TextWriterTraceListener(Console.Out)
+		});
+
+		Debug.AutoFlush = true;
+		Debug.WriteLine("Start debuging...");
+		Trace.WriteLine("Start tracing...");
+		Debug.Indent();
+		Debug.WriteLine("storm-ircd version: " + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString());
+
+		try
+		{
+			ParseArgs(args);
+
+			// Set up signal handlers
+			storm_signal.SetupHandlers();
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine("Main: " + e.ToString());
+			Logger.LogMsg(e.ToString());
+			Environment.Exit(1);
+		}
+
+		Initialize(); // startup
+
+		Debug.Unindent();
+		Trace.WriteLine(DateTime.Now + ":  Shutdown complete");
+		Console.WriteLine(@" ^__^
+ (xx)\_______
+ (__)\       )\/\
+  U  ||----w |
+     ||     ||");
+
+		Debug.Flush();
+		Debug.Close();
+		Trace.Flush();
+		Trace.Close();
+		Console.WriteLine("End Main ...");
+	}
+}

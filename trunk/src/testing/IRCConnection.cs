@@ -14,30 +14,34 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 using System;
-
 using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Collections;
+
 using Network;
+using Service;
 
 namespace IRC
 {
+/*
 	public enum MessageType
 	{
 		Server,
 		Client
 	}
-
+*/
 	public class IRCConnection : BaseConnection
 	{
-		protected object _simpleClient;
+		protected SimpleClient _simpleClient;
 
 		// real data
-		private string _realhostName;
-		private string[] _aliases;
-		private IPAddress _address;
+		protected string _realhostName;
+		protected string[] _aliases;
+		protected IPAddress _address;
 
 		private DateTime _lastping; // todo
+		private Hashtable _channels;
 
 		public IRCConnection(Socket sock, IServer server) : base(sock, server)
 		{
@@ -55,9 +59,9 @@ namespace IRC
 		public void LookupHostName()
 		{
 			this.NoticeAuth("Looking up your hostname...");
-			this.NoticeAuth("Checking ident...");
+			this.NoticeAuth("Checking ident..."); // TODO: ident sys ...
 
-			if (!this.gethost())
+			if (!this.ResolveHost())
 				this.NoticeAuth("Couldn't look up your hostname");
 			else
 				this.NoticeAuth("Found your hostname");
@@ -68,7 +72,7 @@ namespace IRC
 			this.SendLine("NOTICE AUTH :*** " + message);
 		}
 
-		private bool gethost()
+		private bool ResolveHost()
 		{
 			try
 			{
@@ -94,134 +98,139 @@ namespace IRC
 						Console.WriteLine(address.ToString());
 					}
 
-					// setze daten
+					// set data
 					this._realhostName = hostInfo.HostName;
 					this._address = ipendPoint.Address;
 					this._aliases = hostInfo.Aliases;
 
 					return true;
 				}
-				else
-				{
-					Console.WriteLine("???? this should never happen!!!!");
-				}
 				return false;
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("Problem during gethost(), use ip ...");
+				Console.WriteLine("Problem during ResolveHost(), use ip ...");
 				this._address = ((IPEndPoint)this.Socket.RemoteEndPoint).Address;
 				this._realhostName = this._address.ToString(); // notfallplan ;-)
 				return false;
 			}
 		}
-#if DEC
-		public string Ident(ISimpleClient client)
+
+		/// <summary>
+		///
+		/// </summary>
+		private string UserPrefix(SimpleUser usr)
 		{
-			return (":" + this._nickName + "!" +
-				this._clientName + "@" + this._realhostName + " ");
+			return (":" + usr.NickName + "!" +
+				usr.UserName + "@" + usr.HostName + " ");
 		}
 
-		public string ServerIdent()
+		/// <summary>
+		///
+		/// </summary>
+		private string ServerPrefix()
 		{
+			// prefix = servername
 			return (":" + ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.ServerName + " ");
 		}
 
-		public void SendCommand(string command, params string[] args)
+		/// <summary>
+		///
+		/// </summary>
+		public virtual void SendCommand(SimpleUser usr, string command, params string[] args)
 		{
-			Console.WriteLine(this + ": SendCommand warning use Client");
-			this.SendCommand(MessageType.Client, command, args);
+			if (usr == null)
+				throw new ArgumentNullException("usr");
+
+			this.SendCommand(this.UserPrefix(usr), command, args);
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		public virtual void SendCommand(string command, params string[] args)
+		{
+			//Console.WriteLine(this + ": SendCommand warning use Server");
+			this.SendCommand(this.ServerPrefix(), command, args);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="prefix"></param>
 		/// <param name="command"></param>
 		/// <param name="args"></param>
-		public void SendCommand(MessageType type, string command, params string[] args)
+		private void SendCommand(string prefix, string command, params string[] args)
 		{
-			string toSend = String.Empty;
-
-			if (type == MessageType.Client)
-				toSend = this.Ident() + command;
-			else
-				toSend = this.ServerIdent() + command;
+			string toSend;
+			toSend = prefix + command;
 
 			foreach (string arg in args)
 			{
 				toSend += " ";
-
-				if (arg == args[args.Length-1])
-					toSend += ":";
-
 				toSend += arg;
 			}
 
 			Console.WriteLine(this + ".SendCommand(): " + toSend);
 			this.SendLine(toSend);
 		}
-#endif
-		private string _clientName;
-		private string _hostName;
-		private string _nickName = string.Empty;
-		private string _realName;
 
 		public virtual void SetNick(string nick)
 		{
-			//this._nickName = nick;
+//			this.CreateSimpleUser();
 			if (this.SimpleClient is SimpleUser)
 			{
 				((SimpleUser)this.SimpleClient).NickName = nick;
 			}
 		}
 
-		public virtual void SetUser(string clientName, string host,
-		                         string host2, string realName)
+		/// <summary>
+		/// Fill the SimpleUser struct
+		/// </summary>
+		public virtual void SetUser(string user, string mode,
+		                         string something, string realname)
 		{
-/*
-			this._clientName = clientName;
-			this._realName = realName;
-			this._hostName = host;
-*/
+//			this.CreateSimpleUser();
 			if (this.SimpleClient is SimpleUser)
 			{
 				SimpleUser usr = (SimpleUser)this.SimpleClient;
-				usr.ClientName = clientName;
-				usr.HostName = host;
-				usr.RealName = realName;
+				usr.UserName = user;
+				usr.RealName = realname;
+
+				//usr.UserMode = new IRCUserMode(Convert.ToInt32(mode));
 			}
 		}
 
-#if DEC // old
-		public string ClientName
+		private void CreateSimpleUser()
 		{
-			get
+			if (this.SimpleClient == null)
 			{
-				return this._clientName;
+				this.SimpleClient = new SimpleUser(this);
 			}
 		}
 
-		public string HostName
+		public override string ToString()
 		{
-			get
-			{
-				return this._hostName;
-			}
+			return this.RealHostName;
 		}
 
-		public virtual string NickName
-		{
-			get
-			{
-				return this._nickName;
-			}
-		}
-#endif
+/*
 		public virtual string RealName
 		{
 			get
 			{
 				return this._realName;
+			}
+		}
+*/
+		public Hashtable Channels
+		{
+			get
+			{
+				if (this._channels == null)
+					this._channels = new Hashtable();
+
+				return this._channels;
 			}
 		}
 
@@ -237,7 +246,7 @@ namespace IRC
 			}
 		}
 
-		public object SimpleClient
+		public SimpleClient SimpleClient
 		{
 			get
 			{
@@ -254,6 +263,22 @@ namespace IRC
 			get
 			{
 				return this._realhostName;
+			}
+		}
+
+		public string[] Aliases
+		{
+			get
+			{
+				return this._aliases;
+			}
+		}
+
+		public IPAddress Address
+		{
+			get
+			{
+				return this._address;
 			}
 		}
 

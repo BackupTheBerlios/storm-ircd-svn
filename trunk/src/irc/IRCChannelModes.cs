@@ -52,7 +52,7 @@ namespace IRC
 			}
 		}
 
-		public bool get(char c)
+		public bool HasMode(char c)
 		{
 			if (this.mode.ContainsKey(c))
 			{
@@ -61,7 +61,7 @@ namespace IRC
 			return false;
 		}
 
-		public bool set(char c, bool state) // liefert false wenn die mode nicht vorhanden ist
+		public bool SetMode(char c, bool state) // liefert false wenn die mode nicht vorhanden ist
 		{
 			if (this.mode.ContainsKey(c))
 			{
@@ -75,7 +75,7 @@ namespace IRC
 		{
 			foreach (char c in modes)
 			{
-				if (!this.set(c, true))
+				if (!this.SetMode(c, true))
 					return false;
 			}
 			return true;
@@ -86,7 +86,7 @@ namespace IRC
 			string ret = String.Empty;
 			foreach (char c in IRCChannelModes.modes)
 			{
-				if (get(c))
+				if (HasMode(c))
 					ret += c;
 			}
 			return ret;

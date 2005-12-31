@@ -52,7 +52,7 @@ namespace Service
 				Debug.WriteLine(this + ": " + service + " konnte nicht geladen werden");
 				return false;
 			}
-			Debug.WriteLine(this + ": lade " + service.GetType());
+			Debug.WriteLine(this + ": loading " + service.GetType());
 /*			foreach (IService ser in this.services)
 			{
 				if ((ser).GetType() == service.GetType())

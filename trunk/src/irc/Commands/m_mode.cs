@@ -18,24 +18,33 @@ using System;
 using IRC;
 using Network;
 
-#if UNSTABLE
 namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_mode(IConnection connection, string[] par)
+// :example.irc.org 353 blackdragon = #d :blackdragon 
+// :example.irc.org 366 blackdragon #d :End of NAMES list.
+// :example.irc.org 324 blackdragon #d + 
+		private void m_mode(IRCConnection connection, string[] par)
 		{
-			System.Console.WriteLine("TODO mode dummy");
-#if DEC
+			//ar[0] =
+			//ar[1] = mode
+			//ar[2] = #test
+			if (connection.GetType() != typeof(IRCUserConnection))
+			{
+				// ERR
+				return;
+			}
+			IRCUserConnection src = (IRCUserConnection)connection;
+			src.SendCommand(ReplyCodes.RPL_CHANNELMODEIS, src.NickName, par[2], "+"); // TODO: ":" weglassen
+/*
 			IRCConnection src = (IRCConnection)connection;
 			foreach (string l in par)
 			{
 				Console.WriteLine(l);
 			}
 			Console.WriteLine("Umodes for "+src.ID+": "+src.UserMode);
-			//src.SendCommand("+"+src.UserModes.ToString())
-#endif
+*/
 		}
 	}
 }
-#endif

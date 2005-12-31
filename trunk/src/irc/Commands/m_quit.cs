@@ -18,19 +18,41 @@ using System;
 using IRC;
 using Network;
 
-#if UNSTABLE
 namespace IRC
 {
 	public partial class IRCServer
 	{
-		public virtual void m_quit(IConnection connection, string[] ar)
+		public virtual void m_quit(IRCConnection connection, string[] ar)
 		{
+			string quitMessage = "quit";
+			if (this.IsServer(connection))
+			{
+				throw new NotImplementedException("remote /quit");
+			}
+			else if (!this.IsUser(connection))
+			{
+				connection.SendLine("ERROR :Not allowed");
+				this.CloseLink(connection);
+				return;
+			}
+			else
+			{
+				IRCUserConnection src = (IRCUserConnection)connection;
+
+				if (ar.Length > 2)
+				{
+					quitMessage = ar[2];
+				}
+				this.RemoveFromChannels(src, quitMessage);
+				this.CloseLink(src);
+			}
+#if false
 			lock (connection)
 			{
 			// avaible auslesen
-				this.RemoveConnection(connection); // TODO
+				this.CloseLink(connection); // TODO
 			}
+#endif
 		}
 	}
 }
-#endif

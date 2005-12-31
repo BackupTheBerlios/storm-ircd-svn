@@ -21,7 +21,7 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_notice(IConnection connection, string[] par)
+		private void m_notice(IRCConnection src, string[] par)
 		{
 			System.Console.WriteLine("NOTICE dummy");
 			if (par[1] == "AUTH")

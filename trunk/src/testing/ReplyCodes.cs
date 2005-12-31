@@ -15,29 +15,29 @@
 
 namespace IRC
 {
-	public enum ReplyCodes : int
+	public static class ReplyCodes
 	{
 		/// <summary>
 		/// Welcome to the Internet Relay Network [nick]![user]@[host]
 		/// </summary>
-		RPL_WELCOME = 001,
+		public static string RPL_WELCOME = "001";
 
 		/// <summary>
 		/// Your host is [servername], running version [ver]
 		/// </summary>
-		RPL_YOURHOST = 002,
+		public static string RPL_YOURHOST = "002";
 
 		/// <summary>
 		/// This server was created [date]
 		/// </summary>
-		RPL_CREATED = 003,
+		public static string RPL_CREATED = "003";
 
 		/// <summary>
 		/// [servername] [version] [available user modes] [available channel modes]
 		///
 		/// des: The server sends Replies 001 to 004 to a user upon successful registration.
 		/// </summary>
-		RPL_MYINFO = 004,
+		public static string RPL_MYINFO = "004";
 
 		/// <summary>
 		/// Try server [server name], port [port number]
@@ -46,7 +46,7 @@ namespace IRC
 		/// server.  This is often used when the connection is
 		/// refused because the server is already full.
 		/// </summary>
-		RPL_BOUNCE = 005,
+		public static string RPL_BOUNCE = "005";
 
 		/// <summary>
 		/// :*1[reply] *( " " [reply] )
@@ -60,7 +60,7 @@ namespace IRC
 		/// whether the client has set an AWAY message or not
 		/// respectively.
 		/// </summary>
-		RPL_USERHOST = 302,
+		public static string RPL_USERHOST = "302";
 
 		/// <summary>
 		/// :*1[nick] *( " " [nick] )
@@ -68,17 +68,17 @@ namespace IRC
 		/// des: Reply format used by ISON to list replies to the
 		/// query list.
 		/// </summary>
-		RPL_ISON = 303,
+		public static string RPL_ISON = "303";
 
 		/// <summary>
 		/// "[nick] :[away message]"
 		/// </summary>
-		RPL_AWAY = 301,
+		public static string RPL_AWAY = "301";
 
 		/// <summary>
 		/// :You are no longer marked as being away
 		/// </summary>
-		RPL_UNAWAY = 305,
+		public static string RPL_UNAWAY = "305";
 
 		/// <summary>
 		/// :You have been marked as being away
@@ -90,32 +90,32 @@ namespace IRC
 		/// Replies RPL_UNAWAY and RPL_NOWAWAY are sent when the
 		/// client removes and sets an AWAY message.
 		/// </summary>
-		RPL_NOWAWAY = 306,
+		public static string RPL_NOWAWAY = "306";
 
 		/// <summary>
 		/// [nick] [user] [host] * :[real name]
 		/// </summary>
-		RPL_WHOISUSER = 311,
+		public static string RPL_WHOISUSER = "311";
 
 		/// <summary>
 		/// [nick] [server] :[server info]
 		/// </summary>
-		RPL_WHOISSERVER = 312,
+		public static string RPL_WHOISSERVER = "312";
 
 		/// <summary>
 		/// [nick] :is an IRC operator
 		/// </summary>
-		RPL_WHOISOPERATOR = 313,
+		public static string RPL_WHOISOPERATOR = "313";
 
 		/// <summary>
 		/// [nick] [integer] :seconds idle
 		/// </summary>
-		RPL_WHOISIDLE = 317,
+		public static string RPL_WHOISIDLE = "317";
 
 		/// <summary>
 		/// [nick] :End of WHOIS list
 		/// </summary>
-		RPL_ENDOFWHOIS = 318,
+		public static string RPL_ENDOFWHOIS = "318";
 
 		/// <summary>
 		/// [nick] :*( ( "@" / "+" ) [channel] " " )
@@ -135,12 +135,12 @@ namespace IRC
 		/// channel.  The RPL_ENDOFWHOIS reply is used to mark
 		/// the end of processing a WHOIS message.
 		/// </summary>
-		RPL_WHOISCHANNELS = 319,
+		public static string RPL_WHOISCHANNELS = "319";
 
 		/// <summary>
 		/// [nick] [user] [host] * :[real name]
 		/// </summary>
-		RPL_WHOWASUSER = 314,
+		public static string RPL_WHOWASUSER = "314";
 
 		/// <summary>
 		/// [nick] :End of WHOWAS
@@ -152,17 +152,17 @@ namespace IRC
 		/// be RPL_ENDOFWHOWAS (even if there was only one reply
 		/// and it was an error).
 		/// </summary>
-		RPL_ENDOFWHOWAS = 369,
+		public static string RPL_ENDOFWHOWAS = "369";
 
 		/// <summary>
 		/// Obsolete. Not used.
 		/// </summary>
-		RPL_LISTSTART = 321,
+		public static string RPL_LISTSTART = "321";
 
 		/// <summary>
 		/// [channel] [# visible] :[topic]
 		/// </summary>
-		RPL_LIST = 322,
+		public static string RPL_LIST = "322";
 
 		/// <summary>
 		/// :End of LIST
@@ -172,22 +172,22 @@ namespace IRC
 		/// command.  If there are no channels available to return,
 		/// only the end reply MUST be sent.
 		/// </summary>
-		RPL_LISTEND = 323,
+		public static string RPL_LISTEND = "323";
 
 		/// <summary>
 		/// [channel] [nickname]
 		/// </summary>
-		RPL_UNIQOPIS = 325,
+		public static string RPL_UNIQOPIS = "325";
 
 		/// <summary>
 		/// [channel] [mode] [mode params]
 		/// </summary>
-		RPL_CHANNELMODEIS = 324,
+		public static string RPL_CHANNELMODEIS = "324";
 
 		/// <summary>
 		/// [channel] :No topic is set
 		/// </summary>
-		RPL_NOTOPIC = 331,
+		public static string RPL_NOTOPIC = "331";
 
 		/// <summary>
 		/// [channel] :[topic]
@@ -197,7 +197,7 @@ namespace IRC
 		/// the topic is set, RPL_TOPIC is sent back else
 		/// RPL_NOTOPIC.
 		/// </summary>
-		RPL_TOPIC = 332,
+		public static string RPL_TOPIC = "332";
 
 		/// <summary>
 		/// [channel] [nick]
@@ -206,7 +206,7 @@ namespace IRC
 		/// attempted INVITE message was successful and is
 		/// being passed onto the end client.
 		/// </summary>
-		RPL_INVITING = 341,
+		public static string RPL_INVITING = "341";
 
 		/// <summary>
 		/// [user] :Summoning user to IRC
@@ -214,12 +214,12 @@ namespace IRC
 		/// des: Returned by a server answering a SUMMON message to
 		/// indicate that it is summoning that user.
 		/// </summary>
-		RPL_SUMMONING = 342,
+		public static string RPL_SUMMONING = "342";
 
 		/// <summary>
 		/// [channel] [invitemask]
 		/// </summary>
-		RPL_INVITELIST = 346,
+		public static string RPL_INVITELIST = "346";
 
 		/// <summary>
 		/// [channel] :End of channel invite list
@@ -231,12 +231,12 @@ namespace IRC
 		/// After the masks have been listed (or if none present) a
 		/// RPL_ENDOFINVITELIST MUST be sent.
 		/// </summary>
-		RPL_ENDOFINVITELIST = 347,
+		public static string RPL_ENDOFINVITELIST = "347";
 
 		/// <summary>
 		/// [channel] [exceptionmask]
 		/// </summary>
-		RPL_EXCEPTLIST = 348,
+		public static string RPL_EXCEPTLIST = "348";
 
 		/// <summary>
 		/// [channel] :End of channel exception list
@@ -248,7 +248,7 @@ namespace IRC
 		/// After the masks have been listed (or if none present)
 		/// a RPL_ENDOFEXCEPTLIST MUST be sent.
 		/// </summary>
-		RPL_ENDOFEXCEPTLIST = 349,
+		public static string RPL_ENDOFEXCEPTLIST = "349";
 
 		/// <summary>
 		/// [version].[debuglevel] [server] :[comments]
@@ -262,12 +262,12 @@ namespace IRC
 		/// The "comments" field may contain any comments about
 		/// the version or further version details.
 		/// </summary>
-		RPL_VERSION = 351,
+		public static string RPL_VERSION = "351";
 
 		/// <summary>
 		/// [channel] [user] [host] [server] [nick]( "H" / "G" > ["*"] [ ( "@" / "+" ) ] :[hopcount] [real name]
 		/// </summary>
-		RPL_WHOREPLY = 352,
+		public static string RPL_WHOREPLY = "352";
 
 		/// <summary>
 		/// [name] :End of WHO list
@@ -280,7 +280,7 @@ namespace IRC
 		/// after processing each list item with <name> being
 		/// the item.
 		/// </summary>
-		RPL_ENDOFWHO = 315,
+		public static string RPL_ENDOFWHO = "315";
 
 		/// <summary>
 		/// ( "=" / "*" / "@" ) [channel]:[ "@" / "+" ] [nick] *( " " [ "@" / "+" ] [nick] )
@@ -288,7 +288,7 @@ namespace IRC
 		/// des: "@" is used for secret channels, "*" for private
 		/// channels, and "=" for others (public channels).
 		/// </summary>
-		RPL_NAMREPLY = 353,
+		public static string RPL_NAMREPLY = "353";
 
 		/// <summary>
 		/// [channel] :End of NAMES list
@@ -304,12 +304,12 @@ namespace IRC
 		/// RPL_NAMEREPLY messages with a RPL_ENDOFNAMES to mark
 		/// the end.
 		/// </summary>
-		RPL_ENDOFNAMES = 366,
+		public static string RPL_ENDOFNAMES = "366";
 
 		/// <summary>
 		/// [mask] [server] :[hopcount] [server info]
 		/// </summary>
-		RPL_LINKS = 364,
+		public static string RPL_LINKS = "364";
 
 		/// <summary>
 		/// [mask] :End of LINKS list
@@ -318,12 +318,12 @@ namespace IRC
 		/// replies back using the RPL_LINKS numeric and mark the
 		/// end of the list using an RPL_ENDOFLINKS reply.
 		/// </summary>
-		RPL_ENDOFLINKS = 365,
+		public static string RPL_ENDOFLINKS = "365";
 
 		/// <summary>
 		/// [channel] [banmask]
 		/// </summary>
-		RPL_BANLIST = 367,
+		public static string RPL_BANLIST = "367";
 
 		/// <summary>
 		/// [channel] :End of channel ban list
@@ -335,12 +335,12 @@ namespace IRC
 		/// banmasks have been listed (or if none present) a
 		/// RPL_ENDOFBANLIST MUST be sent.
 		/// </summary>
-		RPL_ENDOFBANLIST = 368,
+		public static string RPL_ENDOFBANLIST = "368";
 
 		/// <summary>
 		/// :[string]
 		/// </summary>
-		RPL_INFO = 371,
+		public static string RPL_INFO = "371";
 
 		/// <summary>
 		/// :End of INFO list
@@ -350,17 +350,17 @@ namespace IRC
 		/// with a RPL_ENDOFINFO reply to indicate the end of the
 		/// replies.
 		/// </summary>
-		RPL_ENDOFINFO = 374,
+		public static string RPL_ENDOFINFO = "374";
 
 		/// <summary>
 		/// :- [server] Message of the day - 
 		/// </summary>
-		RPL_MOTDSTART = 375,
+		public static string RPL_MOTDSTART = "375";
 
 		/// <summary>
 		/// :- [text]
 		/// </summary>
-		RPL_MOTD = 372,
+		public static string RPL_MOTD = "372";
 
 		/// <summary>
 		/// :End of MOTD command
@@ -373,7 +373,7 @@ namespace IRC
 		/// by a RPL_MOTDSTART (before the RPL_MOTDs) and an
 		/// RPL_ENDOFMOTD (after).
 		/// </summary>
-		RPL_ENDOFMOTD = 376,
+		public static string RPL_ENDOFMOTD = "376";
 
 		/// <summary>
 		/// :You are now an IRC operator
@@ -382,7 +382,7 @@ namespace IRC
 		/// just successfully issued an OPER message and gained
 		/// operator status.
 		/// </summary>
-		RPL_YOUREOPER = 381,
+		public static string RPL_YOUREOPER = "381";
 
 		/// <summary>
 		/// [config file] :Rehashing
@@ -391,7 +391,7 @@ namespace IRC
 		/// a REHASH message, an RPL_REHASHING is sent back to
 		/// the operator.
 		/// </summary>
-		RPL_REHASHING = 382,
+		public static string RPL_REHASHING = "382";
 
 		/// <summary>
 		/// You are service <servicename>
@@ -399,7 +399,7 @@ namespace IRC
 		/// def: Sent by the server to a service upon successful
 		/// registration.
 		/// </summary>
-		RPL_YOURESERVICE = 383,
+		public static string RPL_YOURESERVICE = "383";
 
 		/// <summary>
 		/// [server] :[string showing server's local time]
@@ -410,22 +410,22 @@ namespace IRC
 		/// time there.  There is no further requirement for the
 		/// time string.
 		/// </summary>
-		RPL_TIME = 391,
+		public static string RPL_TIME = "391";
 
 		/// <summary>
 		/// :UserID   Terminal  Host
 		/// </summary>
-		RPL_USERSSTART = 392,
+		public static string RPL_USERSSTART = "392";
 
 		/// <summary>
 		/// :[username] [ttyline] [hostname]
 		/// </summary>
-		RPL_USERS = 393,
+		public static string RPL_USERS = "393";
 
 		/// <summary>
 		/// :End of users
 		/// </summary>
-		RPL_ENDOFUSERS = 394,
+		public static string RPL_ENDOFUSERS = "394";
 
 		/// <summary>
 		/// :Nobody logged in
@@ -437,67 +437,67 @@ namespace IRC
 		/// or a single RPL_NOUSER.  Following this is
 		/// RPL_ENDOFUSERS.
 		/// </summary>
-		RPL_NOUSERS = 395,
+		public static string RPL_NOUSERS = "395";
 
 		/// <summary>
 		/// Link [version & debug level] [destination [next server] V[protocol version [link uptime in seconds] [backstream sendq [upstream sendq]
 		/// </summary>
-		RPL_TRACELINK = 200,
+		public static string RPL_TRACELINK = "200";
 
 		/// <summary>
 		/// Try. [class] [server]
 		/// </summary>
-		RPL_TRACECONNECTING = 201,
+		public static string RPL_TRACECONNECTING = "201";
 
 		/// <summary>
 		/// H.S. [class] [server]
 		/// </summary>
-		RPL_TRACEHANDSHAKE = 202,
+		public static string RPL_TRACEHANDSHAKE = "202";
 
 		/// <summary>
 		/// ???? [class] [[client IP address in dot form]]
 		/// </summary>
-		RPL_TRACEUNKNOWN = 203,
+		public static string RPL_TRACEUNKNOWN = "203";
 
 		/// <summary>
 		/// Oper [class] [nick]
 		/// </summary>
-		RPL_TRACEOPERATOR = 204,
+		public static string RPL_TRACEOPERATOR = "204";
 
 		/// <summary>
 		/// User [class] [nick]
 		/// </summary>
-		RPL_TRACEUSER = 205,
+		public static string RPL_TRACEUSER = "205";
 
 		/// <summary>
 		/// Serv [class] [int]S [int]C [server [nick!user|*!*]@[host|server] V[protocol version]
 		/// </summary>
-		RPL_TRACESERVER = 206,
+		public static string RPL_TRACESERVER = "206";
 
 		/// <summary>
 		/// Service [class] [name] [type] [active type]
 		/// </summary>
-		RPL_TRACESERVICE = 207,
+		public static string RPL_TRACESERVICE = "207";
 
 		/// <summary>
 		/// [newtype] 0 [client name]
 		/// </summary>
-		RPL_TRACENEWTYPE = 208,
+		public static string RPL_TRACENEWTYPE = "208";
 
 		/// <summary>
 		/// Class [class] [count]
 		/// </summary>
-		RPL_TRACECLASS = 209,
+		public static string RPL_TRACECLASS = "209";
 
 		/// <summary>
 		/// Unused.
 		/// </summary>
-		RPL_TRACERECONNECT = 210,
+		public static string RPL_TRACERECONNECT = "210";
 
 		/// <summary>
 		/// File [logfile] [debug level]
 		/// </summary>
-		RPL_TRACELOG = 261,
+		public static string RPL_TRACELOG = "261";
 
 		/// <summary>
 		/// [server name] [version & debug level] :End of TRACE
@@ -524,7 +524,7 @@ namespace IRC
 		/// being displayed anyway.
 		/// RPL_TRACEEND is sent to indicate the end of the list.
 		/// </summary>
-		RPL_TRACEEND = 262,
+		public static string RPL_TRACEEND = "262";
 
 		/// <summary>
 		/// [linkname] [sendq] [sent messages] [sent Kbytes] [received messages] [received Kbytes] [time open]
@@ -540,26 +540,26 @@ namespace IRC
 		/// open] indicates how long ago the connection was
 		/// opened, in seconds.
 		/// </summary>
-		RPL_STATSLINKINFO = 211,
+		public static string RPL_STATSLINKINFO = "211";
 
 		/// <summary>
 		/// [command] [count] [byte count] [remote count]
 		///
 		/// des: reports statistics on commands usage.
 		/// </summary>
-		RPL_STATSCOMMANDS = 212,
+		public static string RPL_STATSCOMMANDS = "212";
 
 		/// <summary>
 		/// [stats letter] :End of STATS report
 		/// </summary>
-		RPL_ENDOFSTATS = 219,
+		public static string RPL_ENDOFSTATS = "219";
 
 		/// <summary>
 		/// :Server Up %d days %d:%02d:%02d
 		///
 		/// des: reports the server uptime.
 		/// </summary>
-		RPL_STATSUPTIME = 242,
+		public static string RPL_STATSUPTIME = "242";
 
 		/// <summary>
 		/// O [hostmask] * [name]
@@ -567,7 +567,7 @@ namespace IRC
 		/// def: reports the allowed hosts from where user may become IRC
 		/// operators.
 		/// </summary>
-		RPL_STATSOLINE = 243,
+		public static string RPL_STATSOLINE = "243";
 
 		/// <summary>
 		/// [user mode string]
@@ -575,12 +575,12 @@ namespace IRC
 		/// def: To answer a query about a client's own mode,
 		/// RPL_UMODEIS is sent back.
 		/// </summary>
-		RPL_UMODEIS = 221,
+		public static string RPL_UMODEIS = "221";
 
 		/// <summary>
 		/// [name] [server] [mask] [type] [hopcount] [info]
 		/// </summary>
-		RPL_SERVLIST = 234,
+		public static string RPL_SERVLIST = "234";
 
 		/// <summary>
 		/// [mask] [type] :End of service listing
@@ -592,27 +592,27 @@ namespace IRC
 		/// services have been listed (or if none present) a
 		/// RPL_SERVLISTEND MUST be sent.
 		/// </summary>
-		RPL_SERVLISTEND = 235,
+		public static string RPL_SERVLISTEND = "235";
 
 		/// <summary>
 		/// :There are [integer] users and [integer] services on [integer] servers
 		/// </summary>
-		RPL_LUSERCLIENT = 251,
+		public static string RPL_LUSERCLIENT = "251";
 
 		/// <summary>
 		/// [integer] :operator(s) online
 		/// </summary>
-		RPL_LUSEROP = 252,
+		public static string RPL_LUSEROP = "252";
 
 		/// <summary>
 		/// [integer] :unknown connection(s)
 		/// </summary>
-		RPL_LUSERUNKNOWN = 253,
+		public static string RPL_LUSERUNKNOWN = "253";
 
 		/// <summary>
 		/// [integer] :channels formed
 		/// </summary>
-		RPL_LUSERCHANNELS = 254,
+		public static string RPL_LUSERCHANNELS = "254";
 
 		/// <summary>
 		/// :I have [integer] clients and [integer] servers
@@ -626,22 +626,22 @@ namespace IRC
 		/// replies are only sent back if a non-zero count
 		/// is found for them.
 		/// </summary>
-		RPL_LUSERME = 255,
+		public static string RPL_LUSERME = "255";
 
 		/// <summary>
 		/// [server] :Administrative info
 		/// </summary>
-		RPL_ADMINME = 256,
+		public static string RPL_ADMINME = "256";
 
 		/// <summary>
 		/// :[admin info]
 		/// </summary>
-		RPL_ADMINLOC1 = 257,
+		public static string RPL_ADMINLOC1 = "257";
 
 		/// <summary>
 		/// :[admin info]
 		/// </summary>
-		RPL_ADMINLOC2 = 258,
+		public static string RPL_ADMINLOC2 = "258";
 
 		/// <summary>
 		/// :[admin info]
@@ -658,7 +658,7 @@ namespace IRC
 		/// server (an email address here is REQUIRED)
 		/// in RPL_ADMINEMAIL.
 		/// </summary>
-		RPL_ADMINEMAIL = 259,
+		public static string RPL_ADMINEMAIL = "259";
 
 		/// <summary>
 		/// [command] :Please wait a while and try again.
@@ -667,11 +667,11 @@ namespace IRC
 		/// it MUST use the reply RPL_TRYAGAIN to inform the
 		/// originating client.
 		/// </summary>
-		RPL_TRYAGAIN = 263,
+		public static string RPL_TRYAGAIN = "263";
 
-	/*
-	** Error Replies
-	*/
+		/*
+		** Error-replies
+		*/
 
 		/// <summary>
 		/// [nickname] :No such nick/channel
@@ -679,7 +679,7 @@ namespace IRC
 		/// des: Used to indicate the nickname parameter supplied to a
 		/// command is currently unused.
 		/// </summary>
-		ERR_NOSUCHNICK = 401,
+		public static string ERR_NOSUCHNICK = "401";
 
 		/// <summary>
 		/// [server name] :No such server
@@ -687,14 +687,14 @@ namespace IRC
 		/// des: Used to indicate the server name given currently
 		/// does not exist.
 		/// </summary>
-		ERR_NOSUCHSERVER = 402,
+		public static string ERR_NOSUCHSERVER = "402";
 
 		/// <summary>
 		/// [channel name] :No such channel
 		///
 		/// des: Used to indicate the given channel name is invalid.
 		/// </summary>
-		ERR_NOSUCHCHANNEL = 403,
+		public static string ERR_NOSUCHCHANNEL = "403";
 
 		/// <summary>
 		/// [channel name] :Cannot send to channel
@@ -705,7 +705,7 @@ namespace IRC
 		/// banned and is trying to send a PRIVMSG message to
 		/// that channel.
 		/// </summary>
-		ERR_CANNOTSENDTOCHAN = 404,
+		public static string ERR_CANNOTSENDTOCHAN = "404";
 
 		/// <summary>
 		/// [channel name] :You have joined too many channels
@@ -714,7 +714,7 @@ namespace IRC
 		/// number of allowed channels and they try to join
 		/// another channel.
 		/// </summary>
-		ERR_TOOMANYCHANNELS = 405,
+		public static string ERR_TOOMANYCHANNELS = "405";
 
 		/// <summary>
 		/// [nickname] :There was no such nickname
@@ -722,7 +722,7 @@ namespace IRC
 		/// des: Returned by WHOWAS to indicate there is no history
 		/// information for that nickname.
 		/// </summary>
-		ERR_WASNOSUCHNICK = 406,
+		public static string ERR_WASNOSUCHNICK = "406";
 
 		/// <summary>
 		/// [target] :[error code] recipients. [abort message]
@@ -738,7 +738,7 @@ namespace IRC
 		/// channel using the shortname when there are more than one
 		/// such channel.
 		/// </summary>
-		ERR_TOOMANYTARGETS = 407,
+		public static string ERR_TOOMANYTARGETS = "407";
 
 		/// <summary>
 		/// [service name] :No such service
@@ -746,34 +746,34 @@ namespace IRC
 		/// des: Returned to a client which is attempting to send a SQUERY
 		/// to a service which does not exist.
 		/// </summary>
-		ERR_NOSUCHSERVICE = 408,
+		public static string ERR_NOSUCHSERVICE = "408";
 
 		/// <summary>
 		/// :No origin specified
 		///
 		/// des: PING or PONG message missing the originator parameter.
 		/// </summary>
-		ERR_NOORIGIN = 409,
+		public static string ERR_NOORIGIN = "409";
 
 		/// <summary>
 		/// :No recipient given ([command])
 		/// </summary>
-		ERR_NORECIPIENT = 411,
+		public static string ERR_NORECIPIENT = "411";
 
 		/// <summary>
 		/// :No text to send
 		/// </summary>
-		ERR_NOTEXTTOSEND = 412,
+		public static string ERR_NOTEXTTOSEND = "412";
 
 		/// <summary>
 		/// [mask] :No toplevel domain specified
 		/// </summary>
-		ERR_NOTOPLEVEL = 413,
+		public static string ERR_NOTOPLEVEL = "413";
 
 		/// <summary>
 		/// [mask] :Wildcard in toplevel domain
 		/// </summary>
-		ERR_WILDTOPLEVEL = 414,
+		public static string ERR_WILDTOPLEVEL = "414";
 
 		/// <summary>
 		/// [mask] :Bad Server/host mask
@@ -784,7 +784,7 @@ namespace IRC
 		/// are returned when an invalid use of
 		/// "PRIVMSG $<server>" or "PRIVMSG #<host>" is attempted.
 		/// </summary>
-		ERR_BADMASK = 415,
+		public static string ERR_BADMASK = "415";
 
 		/// <summary>
 		/// [command] :Unknown command
@@ -792,14 +792,14 @@ namespace IRC
 		/// des: Returned to a registered client to indicate that the
 		/// command sent is unknown by the server.
 		/// </summary>
-		ERR_UNKNOWNCOMMAND = 421,
+		public static string ERR_UNKNOWNCOMMAND = "421";
 
 		/// <summary>
 		/// :MOTD File is missing
 		///
 		/// des: Server's MOTD file could not be opened by the server.
 		/// </summary>
-		ERR_NOMOTD = 422,
+		public static string ERR_NOMOTD = "422";
 
 		/// <summary>
 		/// [server] :No administrative info available
@@ -808,7 +808,7 @@ namespace IRC
 		/// when there is an error in finding the appropriate
 		/// information.
 		/// </summary>
-		ERR_NOADMININFO = 423,
+		public static string ERR_NOADMININFO = "423";
 
 		/// <summary>
 		/// :File error doing [file op] on [file]
@@ -816,7 +816,7 @@ namespace IRC
 		/// des: Generic error message used to report a failed file
 		/// operation during the processing of a message.
 		/// </summary>
-		ERR_FILEERROR = 424,
+		public static string ERR_FILEERROR = "424";
 
 		/// <summary>
 		/// :No nickname given
@@ -824,7 +824,7 @@ namespace IRC
 		/// des: Returned when a nickname parameter expected for a
 		/// command and isn't found.
 		/// </summary>
-		ERR_NONICKNAMEGIVEN = 431,
+		public static string ERR_NONICKNAMEGIVEN = "431";
 
 		/// <summary>
 		/// [nick] :Erroneous nickname
@@ -833,7 +833,7 @@ namespace IRC
 		/// characters which do not fall in the defined set. See
 		/// section 2.3.1 for details on valid nicknames.
 		/// </summary>
-		ERR_ERRONEUSNICKNAME = 432,
+		public static string ERR_ERRONEUSNICKNAME = "432";
 
 		/// <summary>
 		/// [nick] :Nickname is already in use
@@ -842,7 +842,7 @@ namespace IRC
 		/// in an attempt to change to a currently existing
 		/// nickname.
 		/// </summary>
-		ERR_NICKNAMEINUSE = 433,
+		public static string ERR_NICKNAMEINUSE = "433";
 
 		/// <summary>
 		/// [nick] :Nickname collision KILL from [user]@[host]
@@ -851,7 +851,7 @@ namespace IRC
 		/// nickname collision (registered of a NICK that
 		/// already exists by another server).
 		/// </summary>
-		ERR_NICKCOLLISION = 436,
+		public static string ERR_NICKCOLLISION = "436";
 
 		/// <summary>
 		/// [nick/channel] :Nick/channel is temporarily unavailable
@@ -863,7 +863,7 @@ namespace IRC
 		/// when the desired nickname is blocked by the nick delay
 		/// mechanism.
 		/// </summary>
-		ERR_UNAVAILRESOURCE = 437,
+		public static string ERR_UNAVAILRESOURCE = "437";
 
 		/// <summary>
 		/// [nick] [channel] :They aren't on that channel
@@ -871,7 +871,7 @@ namespace IRC
 		/// des: Returned by the server to indicate that the target
 		/// user of the command is not on the given channel.
 		/// </summary>
-		ERR_USERNOTINCHANNEL = 441,
+		public static string ERR_USERNOTINCHANNEL = "441";
 
 		/// <summary>
 		/// [channel] :You're not on that channel
@@ -880,7 +880,7 @@ namespace IRC
 		/// perform a channel affecting command for which the
 		/// client isn't a member.
 		/// </summary>
-		ERR_NOTONCHANNEL = 442,
+		public static string ERR_NOTONCHANNEL = "442";
 
 		/// <summary>
 		/// [user] [channel] :is already on channel
@@ -888,7 +888,7 @@ namespace IRC
 		/// des: Returned when a client tries to invite a user to a
 		/// channel they are already on.
 		/// </summary>
-		ERR_USERONCHANNEL = 443,
+		public static string ERR_USERONCHANNEL = "443";
 
 		/// <summary>
 		/// [user] :User not logged in
@@ -897,7 +897,7 @@ namespace IRC
 		/// user was unable to be performed since they were not
 		/// logged in.
 		/// </summary>
-		ERR_NOLOGIN = 444,
+		public static string ERR_NOLOGIN = "444";
 
 		/// <summary>
 		/// :SUMMON has been disabled
@@ -905,7 +905,7 @@ namespace IRC
 		/// des: Returned as a response to the SUMMON command.  MUST be
 		/// returned by any server which doesn't implement it.
 		/// </summary>
-		ERR_SUMMONDISABLED = 445,
+		public static string ERR_SUMMONDISABLED = "445";
 
 		/// <summary>
 		/// :USERS has been disabled
@@ -913,7 +913,7 @@ namespace IRC
 		/// des: Returned as a response to the USERS command.  MUST be
 		/// returned by any server which does not implement it.
 		/// </summary>
-		ERR_USERSDISABLED = 446,
+		public static string ERR_USERSDISABLED = "446";
 
 		/// <summary>
 		/// :You have not registered
@@ -922,7 +922,7 @@ namespace IRC
 		/// MUST be registered before the server will allow it
 		/// to be parsed in detail.
 		/// </summary>
-		ERR_NOTREGISTERED = 451,
+		public static string ERR_NOTREGISTERED = "451";
 
 		/// <summary>
 		/// [command] :Not enough parameters
@@ -931,7 +931,7 @@ namespace IRC
 		/// indicate to the client that it didn't supply enough
 		/// parameters.
 		/// </summary>
-		ERR_NEEDMOREPARAMS = 461,
+		public static string ERR_NEEDMOREPARAMS = "461";
 
 		/// <summary>
 		/// :Unauthorized command (already registered)
@@ -940,7 +940,7 @@ namespace IRC
 		/// change part of the registered details (such as
 		/// password or user details from second USER message).
 		/// </summary>
-		ERR_ALREADYREGISTRED = 462,
+		public static string ERR_ALREADYREGISTRED = "462";
 
 		/// <summary>
 		/// :Your host isn't among the privileged
@@ -950,7 +950,7 @@ namespace IRC
 		/// connections from the host the attempted connection
 		/// is tried.
 		/// </summary>
-		ERR_NOPERMFORHOST = 463,
+		public static string ERR_NOPERMFORHOST = "463";
 
 		/// <summary>
 		/// :Password incorrect
@@ -959,7 +959,7 @@ namespace IRC
 		/// a connection for which a password was required and
 		/// was either not given or incorrect.
 		/// </summary>
-		ERR_PASSWDMISMATCH = 464,
+		public static string ERR_PASSWDMISMATCH = "464";
 
 		/// <summary>
 		/// :You are banned from this server
@@ -968,58 +968,58 @@ namespace IRC
 		/// yourself with a server which has been setup to
 		/// explicitly deny connections to you.
 		/// </summary>
-		ERR_YOUREBANNEDCREEP = 465,
+		public static string ERR_YOUREBANNEDCREEP = "465";
 
 		/// <summary>
 		/// des: Sent by a server to a user to inform that access to the
 		/// server will soon be denied.
 		/// </summary>
-		ERR_YOUWILLBEBANNED = 466,
+		public static string ERR_YOUWILLBEBANNED = "466";
 
 		/// <summary>
 		/// [channel] :Channel key already set
 		/// </summary>
-		ERR_KEYSET = 467,
+		public static string ERR_KEYSET = "467";
 
 		/// <summary>
 		/// [channel] :Cannot join channel (+l)
 		/// </summary>
-		ERR_CHANNELISFULL = 471,
+		public static string ERR_CHANNELISFULL = "471";
 
 		/// <summary>
 		/// [char] :is unknown mode char to me for [channel]
 		/// </summary>
-		ERR_UNKNOWNMODE = 472,
+		public static string ERR_UNKNOWNMODE = "472";
 
 		/// <summary>
 		/// [channel] :Cannot join channel (+i)
 		/// </summary>
-		ERR_INVITEONLYCHAN = 473,
+		public static string ERR_INVITEONLYCHAN = "473";
 
 		/// <summary>
 		/// [channel] :Cannot join channel (+b)
 		/// </summary>
-		ERR_BANNEDFROMCHAN = 474,
+		public static string ERR_BANNEDFROMCHAN = "474";
 
 		/// <summary>
 		/// [channel] :Cannot join channel (+k)
 		/// </summary>
-		ERR_BADCHANNELKEY = 475,
+		public static string ERR_BADCHANNELKEY = "475";
 
 		/// <summary>
 		/// [channel] :Bad Channel Mask
 		/// </summary>
-		ERR_BADCHANMASK = 476,
+		public static string ERR_BADCHANMASK = "476";
 
 		/// <summary>
 		/// <channel> :Channel doesn't support modes
 		/// </summary>
-		ERR_NOCHANMODES = 477,
+		public static string ERR_NOCHANMODES = "477";
 
 		/// <summary>
 		/// <channel> <char> :Channel list is full
 		/// </summary>
-		ERR_BANLISTFULL = 478,
+		public static string ERR_BANLISTFULL = "478";
 
 		/// <summary>
 		/// :Permission Denied- You're not an IRC operator
@@ -1028,7 +1028,7 @@ namespace IRC
 		/// MUST return this error to indicate the attempt was
 		/// unsuccessful.
 		/// </summary>
-		ERR_NOPRIVILEGES = 481,
+		public static string ERR_NOPRIVILEGES = "481";
 
 		/// <summary>
 		/// [channel] :You're not channel operator
@@ -1038,7 +1038,7 @@ namespace IRC
 		/// making the attempt is not a chanop on the specified
 		/// channel.
 		/// </summary>
-		ERR_CHANOPRIVSNEEDED = 482,
+		public static string ERR_CHANOPRIVSNEEDED = "482";
 
 		/// <summary>
 		/// :You can't kill a server!
@@ -1047,7 +1047,7 @@ namespace IRC
 		/// are to be refused and this error returned directly
 		/// to the client.
 		/// </summary>
-		ERR_CANTKILLSERVER = 483,
+		public static string ERR_CANTKILLSERVER = "483";
 
 		/// <summary>
 		/// :Your connection is restricted!
@@ -1055,7 +1055,7 @@ namespace IRC
 		/// des: Sent by the server to a user upon connection to indicate
 		/// the restricted nature of the connection (user mode "+r").
 		/// </summary>
-		ERR_RESTRICTED = 484,
+		public static string ERR_RESTRICTED = "484";
 
 		/// <summary>
 		/// :You're not the original channel operator
@@ -1064,7 +1064,7 @@ namespace IRC
 		/// return this error if the client making the attempt is not
 		/// a chanop on the specified channel.
 		/// </summary>
-		ERR_UNIQOPPRIVSNEEDED = 485,
+		public static string ERR_UNIQOPPRIVSNEEDED = "485";
 
 		/// <summary>
 		/// :No O-lines for your host
@@ -1074,7 +1074,7 @@ namespace IRC
 		/// client's host as an operator, this error MUST be
 		/// returned.
 		/// </summary>
-		ERR_NOOPERHOST = 491,
+		public static string ERR_NOOPERHOST = "491";
 
 		/// <summary>
 		/// :Unknown MODE flag
@@ -1083,7 +1083,7 @@ namespace IRC
 		/// message was sent with a nickname parameter and that
 		/// the a mode flag sent was not recognized.
 		/// </summary>
-		ERR_UMODEUNKNOWNFLAG = 501,
+		public static string ERR_UMODEUNKNOWNFLAG = "501";
 
 		/// <summary>
 		/// :Cannot change mode for other users
@@ -1091,7 +1091,7 @@ namespace IRC
 		/// des: Error sent to any user trying to view or change the
 		/// user mode for a user other than themselves.
 		/// </summary>
-		ERR_USERSDONTMATCH = 502
+		public static string ERR_USERSDONTMATCH = "502";
 	}
 }
 

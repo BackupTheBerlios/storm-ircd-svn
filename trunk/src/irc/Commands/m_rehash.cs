@@ -14,21 +14,33 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 using IRC;
+using Service;
 using Network;
 
 namespace IRC
 {
 	public partial class IRCServer
 	{
-		public virtual void m_rehash(IConnection connection, string[] ar)
+		/*
+		* m_rehash:
+		*/
+		public virtual void m_rehash(IRCConnection src, string[] ar)
 		{
-#if DEC
-			IRCConnection src = (IRCConnection)connetion;
-			if (src.UserMode.get(IRCUserModes.MODE_REHASH))
+			if (!this.IsUser(src) || !((IRCUserConnection)src).UserMode.HasMode(IRCUserModes.MODE_OP))
 			{
-				((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Reload();
+				src.SendCommand(ReplyCodes.ERR_NOPRIVILEGES,
+						((IRCUserConnection)src).NickName,
+						":Permission Denied- You're not an IRC operator");
+				return;
 			}
-#endif
+
+			Logger.LogMsg("REHASH command from " + src);
+			SettingsHost settingsHost = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]);
+			// <config file> :Rehashing
+			src.SendCommand(ReplyCodes.ERR_NOPRIVILEGES, ((IRCUserConnection)src).NickName,
+					settingsHost.ConfigFile, ":Rehashing");
+			// Rehash
+			settingsHost.Reload();
 		}
 	}
 }

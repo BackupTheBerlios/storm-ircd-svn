@@ -15,14 +15,26 @@
 
 namespace IRC
 {
-	public class SimpleServer
+	public class SimpleServer : SimpleClient
 	{
 		public string ServerName;
-		public int HopeCount;
+		private int _hopCount;
 		private IRCServerConnection _upLink;
 
 		public SimpleServer()
 		{
+		}
+
+		public int HopCount
+		{
+			get
+			{
+				return _hopCount;
+			}
+			set
+			{
+				this._hopCount = value;
+			}
 		}
 
 		public IRCServerConnection UpLink

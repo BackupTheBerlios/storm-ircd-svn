@@ -13,7 +13,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-#if UNSTABLE
 using System;
 using System.Net;
 using System.Text;
@@ -39,10 +38,13 @@ namespace Service
 
 			this._loaded = true;
 
-			ThreadStart myThreadDelegate = new ThreadStart(this.loop);
-			this._thread = new Thread(myThreadDelegate);
-			this._thread.IsBackground = true;
-			this._thread.Start();
+			if (SettingsHost.Instance.Settings.UseConsoleInterface)
+			{
+				ThreadStart myThreadDelegate = new ThreadStart(this.loop);
+				this._thread = new Thread(myThreadDelegate);
+				this._thread.IsBackground = true;
+				this._thread.Start();
+			}
 		}
 
 		public void Unload()
@@ -52,20 +54,20 @@ namespace Service
 
 			this._loaded = false;
 
-			//this._thread.Abort();
+			this._thread.Abort();
 			Debug.WriteLine(this + ".Unload()");
 		}
 
 		private Socket sock;
 		private void loop()
 		{
-#if MONO
+#if UNIX
 			Debug.WriteLine(this + ": starting ConsoleInterface ...");
 			string name = System.Net.Dns.GetHostName();
 
 			try
 			{
-				EndPoint endPoint = new Mono.Unix.UnixEndPoint("storm-interface"); // todo: von settings
+				EndPoint endPoint = new Mono.Unix.UnixEndPoint(((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.SocketFile);
 				Socket sock = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
 				sock.Connect(endPoint);
 
@@ -103,7 +105,7 @@ namespace Service
 		{
 			get
 			{
-				return null;
+				return new Type[]{typeof(SettingsHost), typeof(ApplicationHost)};
 			}
 		}
 
@@ -116,4 +118,3 @@ namespace Service
 		}
 	}
 }
-#endif

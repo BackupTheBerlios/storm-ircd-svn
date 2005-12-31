@@ -1,25 +1,27 @@
 #!/bin/sh
-# storm-IRCd
+# Copyright 2005 Josef Schmeisser
+# Distributed under the terms of the GNU General Public License v2
 
-PATH=/bin:/sbin:/home/josef/Projects/storm-IRCd/bin/Release
+PATH=/bin:/sbin:/usr/sbin
 NAME="storm-ircd"
 DESC="ircd"
 
 case "$1" in
   start)
     echo -n "Starting $DESC: "
-    #storm-IRCd.exe > /dev/null
+    storm-ircd
     echo "$NAME."
     ;;
   stop)
     echo -n "Stopping $DESC: "
-
+    storm-ircd -n
     echo "$NAME."
     ;;
   restart)
     echo -n "Restarting $DESC: "
-
+    storm-ircd -n
     sleep 1
+    storm-ircd
     echo "$NAME."
     ;;
   *)

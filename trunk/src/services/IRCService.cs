@@ -27,7 +27,9 @@ namespace Service
 	{
 		private static IRCService _instance;
 		private IRCServer _server;
-		private ArrayList _ports;
+//		private ArrayList _ports;
+		private ArrayList _bindObjects;
+
 		private bool _loaded = false;
 		private ArrayList _serversToConnect;
 
@@ -44,12 +46,23 @@ namespace Service
 
 		private IRCService()
 		{
-			ArrayList ports = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.IRCPorts;
-			this._ports = new ArrayList();
-//old:			this._serversToConnect = new ArrayList();
-
+// new
+			this._bindObjects = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.BindObjects;
 			this._serversToConnect = SettingsHost.Instance.Settings.ServerLines.GetServerList();
+//			this._ports = new ArrayList();
 
+			if (this._bindObjects.Count == 0)
+			{
+				this._bindObjects.Add(new BindObject());
+			}
+/*			foreach (BindObject obj in this._bindObjects)
+			{
+//				this._ports.Add(obj.Port);
+			}
+// old
+/*			ArrayList ports = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.IRCPorts;
+			this._ports = new ArrayList();
+			this._serversToConnect = SettingsHost.Instance.Settings.ServerLines.GetServerList();
 
 			if (ports != null)
 			{
@@ -66,7 +79,7 @@ namespace Service
 			if (this._ports.Count == 0)
 			{
 				this._ports.Add(6667);
-			}
+			}*/
 		}
 
 		// get the list of "ConnectLines" and connect to every server 
@@ -109,17 +122,25 @@ namespace Service
 
 				this._server = new IRCServer();
 				this._loaded = true;
-
+/*
 				foreach (int port in this._ports)
 				{
-					_server.StartListening(new IPEndPoint(IPAddress.Parse("127.0.0.1"/*"10.0.1.1"*/),port)); // <-- hack
+					_server.StartListening(new IPEndPoint(IPAddress.Parse("127.0.0.1"),port)); // <-- hack
+				}
+*/
+				foreach (BindObject obj in this._bindObjects)
+				{
+					IPHostEntry hostInfo = Dns.Resolve(obj.HostName);
+					IPAddress[] addresses = hostInfo.AddressList;
+
+					this._server.StartListening(new IPEndPoint(addresses[0], obj.Port));
 				}
 				this.ConnectToServers();
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine("fatal error in "+ this +" :" + e.ToString() + "\n\naborting ...");
-				// todo: killall
+				Environment.Exit(1);
 			}
 		}
 
@@ -129,14 +150,15 @@ namespace Service
 				return;
 
 			this._loaded = false;
-
+/*
 			foreach (int port in this._ports)
 			{
 				_server.StopListening(port); // TODO auch auf EndPoint umschreiben
 			}
-			_server.Dispose();
+*/
+			this._server.Dispose();
 
-			((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.IRCPorts = this._ports;
+//			((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.IRCPorts = this._ports;
 			Debug.WriteLine(this + ".Unload()");
 		}
 

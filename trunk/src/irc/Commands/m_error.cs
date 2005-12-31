@@ -22,12 +22,12 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		public virtual void m_error(IConnection connection, string[] ar)
+		public virtual void m_error(IRCConnection connection, string[] ar)
 		{
 			string msg = string.Empty;
 			if (ar.Length > 1)
 				msg = ar[2];
-			
+
 			Logger.LogMsg("ERROR from ", Convert.ToString(connection.ID), msg);
 		}
 	}

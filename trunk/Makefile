@@ -1,3 +1,0 @@
-# storm-ircd Makefile
-
-all: 

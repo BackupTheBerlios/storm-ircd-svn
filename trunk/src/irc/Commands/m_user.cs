@@ -18,51 +18,53 @@ using System;
 using IRC;
 using Network;
 
-#if UNSTABLE
 namespace IRC
 {
 	public partial class IRCServer
 	{
-/* alte version		public virtual void m_user(IConnection connection, string[] par)
+		/*
+		* m_user:
+		*  ar[0] = prefix
+		*  ar[1] = command
+		*  ar[2] = username
+		*  ar[3] = user modes
+		*  ar[4] = unused
+		*  ar[5] = real name
+		*/
+		public virtual void m_user(IRCConnection src, string[] ar)
 		{
-
-			if (connection.GetType().Equals(typeof(IRCConnection)))
+			if (this.IsUser(src))
 			{
-				if (par.Length == 5)
+				if (((IRCUserConnection)src).IsRegistered())
 				{
-					((IRCConnection)connection).SetUser(par[1], par[2], par[3], par[4]);
+					src.SendCommand(ReplyCodes.ERR_ALREADYREGISTRED, ":Unauthorized command (already registered)");
+					return;
 				}
 			}
-		}
-*/
-		public virtual void m_user(IConnection connection, string[] par)
-		{
-			// TODO: H.P.
-			Console.WriteLine(this + ": user message");
-			if (!((connection is IRCConnection) || (connection is IRCUserConnection)))
-			{
-				connection.SendLine("ERROR: connetion type must be client!");
-				this.CloseLink(connection);
-				return;
-			}
 
-			IRCConnection src = (IRCConnection)connection;
 			if (!(src.SimpleClient is SimpleUser))
 			{
-				src.SendLine("ERROR: internal error, drop connection");
+				src.SendCommand("ERROR", ":Internal error");
 				this.CloseLink(src);
 				return;
 			}
-			//if (RFC2812.IsValidUser());
-			if (par.Length == 6)
+
+			if (!RFC2812.IsValidUserName(ar[2]))
 			{
-				src.SetUser(par[1], par[2], par[3], par[4]);
+				return; // ignore message
+			}
+			if (ar.Length > 5)
+			{
+				src.SetUser(ar[2], ar[3], ar[4], ar[5]);
+				Logger.LogMsg("Got valid USER command from " + src);
 				if (((SimpleUser)src.SimpleClient).NickName != string.Empty)
 					this.RegisterUser(src);
 			}
 			else
-				src.SendLine("ERROR: not enough parameters");
+			{
+				// <command> :Not enough parameters
+				src.SendCommand(ReplyCodes.ERR_NEEDMOREPARAMS, ar[1], ":Not enough parameters");
+			}
 		}
 	}
 }
-#endif

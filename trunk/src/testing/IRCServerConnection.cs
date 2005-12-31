@@ -40,6 +40,12 @@ namespace IRC
 			this.SimpleServer.UpLink = this;
 		}
 
+		public override void Dispose()
+		{
+			((IRCServer)this.Server).RemoveServer(this.SimpleServer);
+			base.Dispose();
+		}
+
 		// HACK: minimaler code zum testen
 		public static bool ConnectToServer(IRCServer server, IPEndPoint ep) // todo. parsen
 		{
@@ -61,7 +67,21 @@ namespace IRC
 			IRCServerConnection.SendServer(tmp);
 			return true;
 		}
+/*
+		private string UserPrefix(SimpleUser usr)
+		{
+			return (":" + usr.NickName + "!" +
+				usr.UserName + "@" + usr.??? + " "); // TODO
+		}
 
+		public void SendCommand(SimpleUser usr, string command, params string[] args)
+		{
+			if (sender == null)
+				throw new ArgumentNullException("sender");
+
+			this.SendCommand(this.UserPrefix(usr), command, args);
+		}
+*/
 		// registrierungsmethoden
 		public static void SendChall()
 		{
@@ -71,7 +91,7 @@ namespace IRC
 		{
 			// only for testing
 			Console.WriteLine("SEND SERVER COMMAND");
-			con.SendLine("PASS password 0211000001 IRC|aEFJKMRTu P");
+			con.SendLine("PASS password 0211010001 IRC|aEFJKMRTu P");
 			con.SendLine("SERVER host3.irc.org 1 000C :Example Geographic L");
 		}
 
@@ -86,7 +106,7 @@ namespace IRC
 				if (value == null)
 					throw new ArgumentNullException("SimpleServer can't be null");
 				if (value.UpLink != this)
-					throw new ArgumentException("SimpleServer.UpLink must be this");
+					throw new ArgumentException("SimpleServer.UpLink must be \"this\"");
 
 				this.SimpleClient = value;
 			}

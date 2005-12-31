@@ -23,9 +23,9 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_resp(IConnection connection, string[] par)
+		private void m_resp(IRCConnection connection, string[] par)
 		{
-#if DEC // TODO: look at m_chall
+#if false
 			Console.WriteLine(this + ": resp message");
 			IRCConnection src = (IRCConnection)connection;
 			if (src.IsPerson())
@@ -39,7 +39,7 @@ namespace IRC
 					src.SendLine(":ERROR");//Command("error");
 				}
 			}
-			// TODO: hauptaugenmerk ist die serverunterstüzung!
+
 //			if (this.HasServer(src.HostName))
 //			{
 //				src.SendLine(":ERROR");//Command("error");

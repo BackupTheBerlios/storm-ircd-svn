@@ -14,8 +14,6 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 using System;
-
-
 using System.Reflection;
 
 using Network;
@@ -50,12 +48,11 @@ namespace IRC
 			this._server = server;
 		}
 
-#if UNSTABLE
 		// TODO: support für server strings
 		// der erste parameter ist _immer_ das prefix fals keines vorhanden bleit der platz frei
 		public override bool ProcessCommand(IConnection connection, string cmd)
 		{
-			if (cmd.Length == 0) // BUFIX: 1.04.05: "methode kann nicht in IRCServer gefunden werden"
+			if (cmd.Length == 0)
 			{
 				Console.WriteLine(this + ": " + connection.ID + " has sent an null request, cmd.Length: " + cmd.Length);
 
@@ -79,26 +76,36 @@ namespace IRC
 					if (ar.Length <= 1) // nur das prefix ist vorhanden
 					{
 						Console.WriteLine("drop invalide server message and sent an error");
-						connection.SendLine(":ERROR invalide message");
+						connection.SendLine("ERROR :Invalide message");
 						return true; // drop
 					}
-
 					ar[1] = ar[1].ToLower(); // neu für server
 
-//					Console.WriteLine(this + ": browse: " + ar[0]);
-/* TODO: to implement
-if (ar[0] != String.Empty)
-{
-	if (connection.IsServer())
-}
+					if ((ar[0] != string.Empty) && (!this._server.IsServer((IRCConnection)connection)))
+					{
+						connection.SendLine("ERROR :Not allowed from a client");
+					}
 
+					// security
+//					if (this._server.IsRegistred(connection)) // TODO
+//					{
+//					}
 
-// security
+					// debugging
+					this._server.WriteArgs(ar);
 
-if (isregiestred)
-{
-}
-*/
+					if (this.InvokeHandler(connection, ar))
+						continue;
+					if (this.CallHandler(connection, ar))
+						continue;
+
+					return false; // drop group
+				}
+			}
+			return true;
+#if false
+/*
+					string search = string.Empty;
 					try
 					{
 						object[] obj = new object[2];
@@ -107,7 +114,7 @@ if (isregiestred)
 
 						Type srv = this._server.GetType();
 
-						string search = "m";
+						search = "m";
 
 						// ar[0] enthält entweder das prefix oder das commando
 						// achtung prefix sample: ":krys NICK syrk"
@@ -123,8 +130,24 @@ if (isregiestred)
 					}
 					catch (MissingMethodException me)
 					{
-						Console.WriteLine(this + ": no match: " + me.Message);
-						return false;
+						Console.WriteLine(this + ": InvokeMember() no match: " + search);
+						try
+						{
+							CommandHandler handler = this._server.GetHandler(ar[0]);
+							if (handler != null)
+							{
+								handler(connection as IRCConnection, ar);
+							}
+							else
+							{
+								Console.WriteLine(this + ": GetHandler() no match: " + search + "\n: ");
+								return false;
+							}
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine("CommandHandler: " + e.ToString());
+						}
 					}
 					catch (TargetInvocationException ie)
 					{
@@ -137,67 +160,70 @@ if (isregiestred)
 					{
 						Console.WriteLine(this + "Fatal Error: " + e.ToString());
 					}
+					catch
+					{
+						Console.WriteLine("!!!!!!!!!!!!!!");
+					}
+
 				}
 			}
 			return true;
+*/
+#endif
 		}
-#else
-		public override void ProcessCommand(IConnection connection, string cmd)
+
+		private bool CallHandler(IConnection src, string[] ar)
 		{
-			if (cmd.Length == 0) // BUFIX: 1.04.05: "methode kann nicht in IRCServer gefunden werden"
+			try
 			{
-				Console.WriteLine(this + ": " + connection.ID + " has sent an null request, cmd.Length: " + cmd.Length);
-
-				return;
-			}
-
-			string[] lines = this._parser.ParseString(cmd);
-			foreach (string line in lines)
-			{
-				if (line.Length  == 0)
-					continue;
-
-				Console.WriteLine(this.GetType().ToString() + " bearbeite " + line + ", Lenght: " + line.Length);
-
-				if (RFC2812.IsValidCommand(line))
+				CommandHandler handler = this._server.GetHandler(ar[1]);
+				if (handler != null)
 				{
-					string[] ar = this._parser.ParseLine(line);
-
-					ar[0] = ar[0].ToLower();
-					Console.WriteLine(this + ": browse: " + ar[0]);
-
-					try
-					{
-						object[] obj = new object[2];
-						obj[0] = connection;
-						obj[1] = ar;
-
-						Type srv = this._server.GetType();
-
-						srv.InvokeMember("m_" + ar[0], // very fast
-							BindingFlags.DeclaredOnly |
-							BindingFlags.Public |
-							BindingFlags.Instance |
-							BindingFlags.InvokeMethod, null, this._server, obj);
-					}
-					catch (MissingMethodException me)
-					{
-						Console.WriteLine(this + ": no match: m_" + ar[0] + "\n: " + me.ToString());
-					}
-					catch (TargetInvocationException ie)
-					{
-						Console.WriteLine(this + ": An Invoke Exception has thrown; command: {0}\nStack:\n{1}", ar[0], ie.ToString());
-						///
-						stat.errors++;
-						///
-					}
-					catch (Exception e)
-					{
-						Console.WriteLine(e.ToString());
-					}
+					handler((IRCConnection)src, ar);
+				}
+				else
+				{
+					Console.WriteLine(this + ": GetHandler() no match: " + ar[1] + "\n: ");
+					return false;
 				}
 			}
+			catch (Exception e)
+			{
+				Console.WriteLine(this + ".CallHandler(): " + e.ToString());
+				stat.errors++;
+			}
+			return true;
 		}
-#endif
+
+		private bool InvokeHandler(IConnection src, string[] ar)
+		{
+			string search = string.Empty;
+			object[] obj = new object[2];
+			obj[0] = (IRCConnection)src;
+			obj[1] = ar;
+			Type srv = this._server.GetType();
+			search = "m_" + ar[1];
+
+			try
+			{
+				Console.WriteLine(this + ": invoke " + search);
+				srv.InvokeMember(search, // very fast
+					BindingFlags.DeclaredOnly |
+					BindingFlags.Public |
+					BindingFlags.NonPublic |
+					BindingFlags.Instance |
+					BindingFlags.InvokeMethod, null, this._server, obj);
+			}
+			catch (MissingMethodException me)
+			{
+				return false;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(this + ".InvokeHandler(): " + e.ToString());
+				stat.errors++;
+			}
+			return true;
+		}
 	}
 }

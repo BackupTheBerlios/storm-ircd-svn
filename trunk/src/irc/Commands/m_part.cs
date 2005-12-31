@@ -18,37 +18,77 @@ using System;
 using IRC;
 using Network;
 
-#if UNSTABLE
 namespace IRC
 {
 	public partial class IRCServer
 	{
-/* orginal m_part		public virtual void m_part(IConnection connection, string[] par)
-		{
-			// sampel: part #default :verlassend 
-			if (par.Length == 3)
-			{
-				Console.WriteLine("Call IRCServer.Part()");
-				this.Part(connection as IRCConnection, par[1]);
-			}
-		}
+/*
+           ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
+           ERR_NOTONCHANNEL
 */
-		private void m_part(IConnection connection, string[] par)
+		private void m_part(IRCConnection src, string[] ar)// TODO: SendCommand anpassen
 		{
-			Console.WriteLine("TO/DO: part message");
-			if (connection is IRCUserConnection)
+			SimpleUser usr = null; // TODO
+
+			if (this.IsServer(src))
 			{
-				// sampel: part #default :verlassend
-				// TODO: if (RFC2812.IsPartCommand);
-				if (par.Length == 4)
+				throw new NotImplementedException("remote /part");
+				//usr = this.Search(ar[0]); // TODO
+				if (usr == null)
 				{
-					Console.WriteLine("Call IRCServer.Part()");
-					this.Part((IRCUserConnection)connection, par[2]);
+					return;
 				}
 			}
+			else if (!this.IsUser(src))
+			{
+				// ERR
+				src.SendLine("ERROR");
+				return;
+			}
 			else
-				connection.SendLine("ERROR: type !IRCUserConnection");
+			{
+				usr = (SimpleUser)src.SimpleClient;
+			}
+
+#if false
+			if (ar.Length > 4) // zuviel parameter
+			{
+				src.SendLine("to much parameters");
+				return;
+			}
+#endif
+			if (ar.Length < 3)
+			{
+				// <command> :Not enough parameters
+				src.SendCommand(ReplyCodes.ERR_NEEDMOREPARAMS, usr.NickName, ar[1], ":Not enough parameters");
+				return;
+			}
+
+			Channel chan;
+			string msg = string.Empty;
+			if (ar.Length > 3)
+				msg = ar[3];
+			else
+				msg = usr.NickName;
+
+			string[] chans = ar[2].Split(new char[',']);
+			foreach (string schan in chans)
+			{
+				chan = this.GetChannel(schan);
+				if (chan == null)
+				{
+					// <channel name> :No such channel
+					src.SendCommand(ReplyCodes.ERR_NOSUCHCHANNEL, usr.NickName, chan.Name, ":No such channel"); 
+					continue;
+				}
+				else if (!chan.HasUser(usr))
+				{
+					// <channel> :You're not on that channel
+					src.SendCommand(ReplyCodes.ERR_NOTONCHANNEL, usr.NickName, chan.Name, ":You're not on that channel");
+					continue;
+				}
+				this.Part(usr, chan, msg);
+			}
 		}
 	}
 }
-#endif

@@ -19,11 +19,11 @@ using System.Collections;
 using IRC;
 using Network;
 
-#if UNSTABLE
 namespace IRC
 {
 	public partial class IRCServer
 	{
+#if false
 /*
 		client.Send(":" +  this.ServerName/* todo: this._config.ServerName*//* + " 321 " +
 			            client.NickName + " Channel :Users Name");
@@ -49,12 +49,57 @@ namespace IRC
 		client.Send(":" +  this.ServerName/*todo._config.ServerName + " 323 " +
 		            client.NickName + " :End of /LIST");
 */
-		private void m_list(IConnection connection, string[] par) // TODO
+#endif
+		private void m_list(IRCConnection connection, string[] par)
 		{
-			Console.WriteLine(this + ": TODO: list message");
-#if DEC
-			IRCConnection src = (IRCConnection)connection;
+			if (this.IsServer(connection))
+			{
+				throw new NotImplementedException("remote /list");
+			}
+			else if (!this.IsUser(connection))
+			{
+				// ERR
+				connection.SendLine("ERROR");
+				return;
+			}
 
+			if (par.Length > 4)
+			{
+				// error zuviel parameter
+			}
+
+			if (par.Length == 4)
+			{
+				// TODO: forward to another server
+			}
+
+			string pattern = "*";
+			if (par.Length == 3)
+			{
+				pattern = par[2];
+
+			}
+
+/*
+			if (par[2].IndexOf(',') != -1)
+			{
+				chan = this.GetChannel(par[2]);
+				if (chan != null)
+				{
+					chan.SendNames(src);
+				}
+			}
+			else
+			{
+				string[] chans = par[2].Split(new char[',']);
+				foreach (string schan in chans)
+*/
+			Channel[] chans = this.SearchChannel(pattern);
+			foreach (Channel chan in chans)
+			{
+			}
+
+#if false
 			if (par.Length == 2)
 			{
 				if (par[0] == String.Empty && src.IsPerson())
@@ -82,4 +127,4 @@ namespace IRC
 		}
 	}
 }
-#endif
+

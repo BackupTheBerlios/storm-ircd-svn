@@ -17,14 +17,17 @@ using System;
 
 namespace IRC
 {
-	public class SimpleUser
+	public class SimpleUser : SimpleClient
 	{
-		public string NickName = string.Empty;
-		public string HostName = string.Empty;
-		public string ClientName = string.Empty;
-		public string RealName = string.Empty;
+		public string NickName;
+		public string HostName;
+		public string UserName;
+		public string RealName;
 
+		private int _hopCount;
 		private IRCConnection _upLink;
+		private IRCUserMode _mode = new IRCUserMode();
+		private IRCUserMode _chanmode = new IRCUserMode(); // TODO: neue modedefinietion
 
 		public SimpleUser(IRCConnection uplink)
 		{
@@ -32,6 +35,23 @@ namespace IRC
 				throw new ArgumentNullException();
 
 			this._upLink = uplink;
+		}
+
+		public void SendCommand(string command, params string[] args)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int HopCount
+		{
+			get
+			{
+				return _hopCount;
+			}
+			set
+			{
+				this._hopCount = value;
+			}
 		}
 
 		public IRCConnection UpLink
@@ -43,6 +63,26 @@ namespace IRC
 			set
 			{
 				this._upLink = value;
+			}
+		}
+
+		public IRCUserMode UserMode
+		{
+			get
+			{
+				return this._mode;
+			}
+			set
+			{
+				this._mode = value;
+			}
+		}
+
+		public IRCUserMode ChanUserMode
+		{
+			get
+			{
+				return this._chanmode;
 			}
 		}
 	}

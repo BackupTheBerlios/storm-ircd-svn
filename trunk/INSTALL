@@ -1,1 +1,21 @@
-README
+storm-ircd INSTALL:
+
+1. Installation
+2. Configuration
+
+1. Compilation and Installation
+
+a. Requirements
+
+	To build storm-ircd, you will need the following components:
+		* Mono: http://www.mono-project.com
+
+		* SharpZipLib: included
+
+b. Building
+
+	cd nant
+	nant
+
+2. Configuration
+...

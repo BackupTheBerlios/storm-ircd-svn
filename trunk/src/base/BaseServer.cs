@@ -43,8 +43,7 @@ namespace Network
 	{
 		#region Fields
 		private ArrayList clientsToRemove = new ArrayList(); // TODO: entfernen
-		private ArrayList _clients; // all clients , server and user // TODO: soll mal eine binarylist sein
-// obsolete		private Encoding _encoding;
+		private ArrayList _clients; // all clients , servers and users 
 		private ManualResetEvent allDone = new ManualResetEvent(false);
 		private Timer checkTimer;
 		private bool disposed = false;
@@ -95,25 +94,8 @@ namespace Network
 #if UNSTABLE
 		private void InternalConstruct(SocketManager sm)
 		{
-
-//#if DEBUG
-//			System.Diagnostics.Debug.WriteLine("Warning! This is a unstable Debug build!\n");
-//#endif
-
-			System.Diagnostics.Debug.WriteLine("Version: "+System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.ToString());
 			this._clients = new ArrayList();
-
-			/// new
-			// gleiche instance -> schnellerer zugriff
-			
-			// to/do: reparieren
-//			this._encoding = ((Settings)ServiceManager.Services[typeof(Settings)]).Encoding;
-			///
-
-// obsolete			this._encoding = Encoding.GetEncoding(28591);// iso_8859-1 // move to Settings
-
-			this._socketManager = sm;//SocketPool(this);
-
+			this._socketManager = sm;
 			this._socketManager.AddListener(this);
 			this._socketManager.Received += new ReceivedEvent(this.HandleRecieved);
 		}
@@ -121,10 +103,7 @@ namespace Network
 
 		public virtual void HandleRecieved(IConnection connection, string text)
 		{
-		//this._interpretor.ProcessCommand(connection, text);
-
-		// neu jede IConnection kann einen eigenen IInterpretor haben
-		connection.Execute(text);
+			connection.Execute(text);
 		}
 
 		#if UNSTABLE
@@ -195,6 +174,7 @@ namespace Network
 				if (disposing)
 				{
 #if UNSTABLE
+					this.StopListening();
 					this._socketManager.Dispose();
 #endif
 				}
@@ -206,8 +186,8 @@ namespace Network
 		#region protected
 		protected virtual void AcceptCallback(IAsyncResult ar)
 		{
-			if (true)
-				;
+//			if (true)
+//				;
 			// todo
 			// it's a base implemtation and virtual
 			AcceptObject obj = ((AcceptObject)ar.AsyncState);
@@ -272,7 +252,9 @@ namespace Network
 					IEnumerator enumerator = ((ArrayList)this._clients.Clone()).GetEnumerator();
 					while (enumerator.MoveNext())
 					{
-						this.RemoveConnection(((IConnection)enumerator.Current));
+						IConnection con = (IConnection)enumerator.Current;
+						this.RemoveConnection(con);
+						con.Dispose();
 					}
 #if UNSTABLE
 					this._socketManager.RemoveListener(this);
@@ -285,7 +267,7 @@ namespace Network
 			}
 // TODO: überprüfen
 #if UNSTABLE
-				this.Dispose(true);
+			this.Dispose(true);
 #endif
 		}
 
@@ -402,33 +384,41 @@ namespace Network
 			}
 		}
 
-		public void StopListening(int port)
+		// Close all sockets in this._listeners
+		public void StopListening()
 		{
-#if UNSTABLE
+			lock (this._listeners)
+			{
+				foreach (Socket sock in this._listeners)
+				{
+					sock.Close();// TODO: Socket.Listener
+				}
+				this._listeners.Clear();
+				this._socketManager.UpdateListener(this);
+			}
+		}
+
+		public void StopListening(EndPoint ep)
+		{
 			lock (this._listeners)
 			{
 				foreach (Socket sock in ((ArrayList)this._listeners.Clone()))
 				{
-					IPEndPoint ep = (IPEndPoint)sock.LocalEndPoint; // Port aus LocalEndPoint
-
-					if (ep.Port == port)
+					if (ep == sock.LocalEndPoint)
 					{
-						// Aufräumen
+						// Cleanup
 						this._listeners.Remove(sock);
 						this._socketManager.UpdateListener(this);
-						sock.Close(); // TODO: BUG: Socket.Liseterner liefert einen fehler weil sock disposed ist
+						sock.Close(); // TODO: BUG: Socket.Listener liefert einen fehler weil sock disposed ist
 					}
 				}
 			}
-#else
-			throw new NotImplementedException();
-#endif
 		}
 		#endregion
 		#endregion
 
 		#region Properties
-		protected virtual ArrayList Clients // TO/DO: protected machen
+		protected virtual ArrayList Clients
 		{
 			get
 			{
@@ -465,7 +455,6 @@ namespace Network
 			}
 		}
 
-#if UNSTABLE
 		public SocketManager SocketManager
 		{
 			get
@@ -481,8 +470,7 @@ namespace Network
 				return this._listeners;
 			}
 		}
-#endif
-		// new
+
 		public virtual void AddConnection(Socket client)
 		{
 			// throw new NotImplementedException();
@@ -504,12 +492,11 @@ namespace Network
 
 		public virtual void AddConnection(IConnection connection)
 		{
-//			throw new NotImplementedException();
 			if (this._clients.Contains(connection))
 			{
 				throw new InvalidOperationException("connetion bereits vorhanden!");
 			}
-			// new
+
 			lock (this._clients)
 			{
 				if (!this.HasID(connection.ID))
@@ -526,7 +513,6 @@ namespace Network
 //
 		}
 
-#if UNSTABLE
 		public virtual void RemoveConnection(Socket client)
 		{
 			Console.WriteLine("BaseServer RemoveConnection(Socket)");
@@ -543,7 +529,6 @@ namespace Network
 				}
 			}
 		}
-#endif
 
 		public int[] IDSeed
 		{

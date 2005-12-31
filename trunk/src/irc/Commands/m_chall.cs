@@ -23,7 +23,7 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_chall(IConnection connection, string[] par)
+		private void m_chall(IRCConnection connection, string[] par)
 		{
 			Console.WriteLine(this + ": chall message; TODO");
 			foreach (string s in par)
@@ -61,7 +61,7 @@ namespace IRC
 			{
 				src.SendLine("ERROR :I am " + this.ServerName + " not " + src.RealHostName);
 				//this.SendToOps(UMODE_SERVCONNECT)
-				this.RemoveConnection(src, "Sorry");
+				this.CloseLink(src, "Sorry");
 				return;
 			}
 
@@ -71,7 +71,7 @@ namespace IRC
 				if (src.UserMode.get(IRCUserModes.CAP_SERVICES))
 					this.send_ops_flag();
 
-				this.RemoveConnection(src, "Server already exists");
+				this.CloseLink(src, "Server already exists");
 				return;
 			}
 

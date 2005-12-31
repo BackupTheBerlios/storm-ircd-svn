@@ -34,11 +34,10 @@ namespace Service
 	public class SettingsHost : IService
 	{
 		private static SettingsHost _instance = new SettingsHost();
-		private readonly string configPath = "/etc/storm-ircd/";
-		private readonly string configFile = "storm-ircd.xml";
 
 		private Settings _settings;
 		private bool _loaded = false;
+		private string _configFile = "../etc/storm-ircd/storm-ircd.conf";
 
 		private SettingsHost()
 		{
@@ -69,12 +68,11 @@ namespace Service
 				return;
 
 			this._loaded = true;
-			/* TODO: Nachsehen ob schreibrecht im pfad vorhanden ist und
-			 * ob der pfad vorhanden ist, ob das file existiert etc.
-			 * abschließend deserialization der daten
-			 */
 
-			this.Deserialize();
+			if (File.Exists(this._configFile))
+			{
+				this.Deserialize();
+			}
 		}
 
 		public void Reload()
@@ -94,7 +92,7 @@ namespace Service
 			{
 				Debug.WriteLine(this + ": Serialize ...");
 
-	 			using (StreamWriter sw = new StreamWriter(configFile))
+	 			using (StreamWriter sw = new StreamWriter(this._configFile))
 	 			{
 	 				XmlSerializer serializer = new XmlSerializer(typeof(Settings));
 
@@ -116,10 +114,7 @@ namespace Service
 			{
 				Debug.WriteLine(this + ": Deserialize ...");
 
-				if (!File.Exists(configFile))
-					return;
-
-				using (StreamReader sr = new StreamReader(configFile))
+				using (StreamReader sr = new StreamReader(this._configFile))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(Settings));
 
@@ -168,8 +163,19 @@ namespace Service
 
 		public void Show()
 		{
-			Trace.WriteLine(this + ": configPath = " + this.configPath);
-			Trace.WriteLine(this + ": configFile = " + this.configFile);
+			Trace.WriteLine(this + ".ConfigFile = " + this._configFile);
+		}
+
+		public string ConfigFile
+		{
+			get
+			{
+				return this._configFile;
+			}
+			set
+			{
+				this._configFile = value;
+			}
 		}
 	}
 
@@ -180,19 +186,22 @@ namespace Service
 		// sollte aber _immer_ einen echten alias
 		// für diese maschine entsprechen!
 		private string _serverName;
-
+		private bool _useConsoleInterface = false;
 		private EOL _endOfLineFormat;
 		// xml stuff
 		private Encoding _encoding;
-		private ArrayList _ircports; // TODO alt
+//		private ArrayList _ircports; // TODO alt
 		private ServerLines _serverLines;
-		private ArrayList _bind; // TODO neu
+		private ArrayList _operLines;
+		private ArrayList _bind;
 		
 		// todo: ändern!!!
 		[XmlElement("Encoding")]
 		public int _codepage = 28591;
 
-		private string _logFile = "storm-ircd.log"; //TODO"/var/log/storm-ircd/ircd";
+		private string _logFile = "../var/log/storm-ircd.log";
+		private string _motdFile = "../etc/storm-ircd/storm-ircd.motd";
+		private string _socketFile = "../tmp/storm-interface";
 
 		public Settings()
 		{
@@ -203,14 +212,15 @@ namespace Service
 				this._encoding = Encoding.GetEncoding(28591);// iso_8859-1
 				this._serverName = Dns.GetHostName(); // auf "local host name" setzen
 				this._serverLines = new ServerLines();
+				this._operLines = new ArrayList();
 				this._endOfLineFormat = EOL.unix;
-				this._ircports = new ArrayList();
+//				this._ircports = new ArrayList();
 				this._bind = new ArrayList();
 				
 				// debug
-				BindObject t = new BindObject();
-				t.Port = 12;
-				this._bind.Add(t);
+//				BindObject t = new BindObject();
+//				t.Port = 12;
+//				this._bind.Add(t);
 			}
 			catch (Exception e)
 			{
@@ -228,6 +238,19 @@ namespace Service
 			set
 			{
 				this._serverLines = value;
+			}
+		}
+
+		[XmlArrayItem(typeof(OperData))]
+		public ArrayList OperLines
+		{
+			get
+			{
+				return this._operLines;
+			}
+			set
+			{
+				this._operLines = value;
 			}
 		}
 
@@ -274,18 +297,34 @@ namespace Service
 			}
 		}
 
+		[XmlElement("Socket")]
+		public string SocketFile
+		{
+			get
+			{
+				return this._socketFile;
+			}
+			set
+			{
+				this._socketFile = value;
+			}
+		}
+
 		[XmlElement("ConsoleInterface")]
 		public bool UseConsoleInterface
 		{
 			get
 			{
-				return true;
+				return this._useConsoleInterface;
 			}
 			set
 			{
+				this._useConsoleInterface = value;
 			}
 		}
 
+#if false
+// TODO: entfernen
 		[XmlElement("Language")]
 		public string Language // für fehlermeldung und motd etc.
 		{
@@ -295,6 +334,20 @@ namespace Service
 			}
 			set
 			{
+			}
+		}
+#endif
+
+		[XmlElement("Motd")]
+		public string MotdFile
+		{
+			get
+			{
+				return this._motdFile;
+			}
+			set
+			{
+				this._motdFile = value;
 			}
 		}
 
@@ -343,7 +396,7 @@ namespace Service
 		}
 
 		[XmlArrayItem(typeof(BindObject))]
-		public ArrayList EndPoints
+		public ArrayList BindObjects
 		{
 			get
 			{
@@ -354,7 +407,7 @@ namespace Service
 				this._bind = value;
 			}
 		}
-
+#if false
 		[XmlElement("ircports")]
 		public ArrayList IRCPorts
 		{
@@ -386,5 +439,6 @@ namespace Service
 				}
 			}
 		}
+#endif
 	}
 }

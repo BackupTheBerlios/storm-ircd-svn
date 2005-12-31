@@ -14,6 +14,7 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 using System;
+using System.Collections;
 
 using IRC;
 using Network;
@@ -24,52 +25,84 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_names(IConnection connection, string[] par)
+		// Command: NAMES
+		// Parameters: [ <channel> *( "," <channel> ) [ <target> ] ]
+		private void m_names(IRCConnection connection, string[] par)
 		{
-			System.Console.WriteLine("names handler");
-			if (connection.GetType() == typeof(IRCUserConnection))
+			if (connection.GetType() != typeof(IRCUserConnection))
 			{
-				string channelName = par[1];
-				for (int i = 0; i< 10;i++) // TODO: siehe RFC1459 /NAMES
+				// ERR
+				connection.SendLine("ERROR");
+				return;
+			}
+			if (par.Length > 4)
+			{
+				connection.SendLine("to much parameters"); // 
+				return;
+			}
+			IRCUserConnection src = (IRCUserConnection)connection;
+
+			if (par.Length == 4)
+			{
+				throw new NotImplementedException("NAMES forward");
+
+				// forward the request to another server
+				IRCServerConnection[] srvs = this.SearchServer(par[3]);
+				if (srvs.Length > 0)
 				{
-					if ((par.Length == 3))
+					// [server name] :No such server
+					src.SendCommand(ReplyCodes.ERR_NOSUCHSERVER, src.NickName, par[3], ":No such server");
+				}
+				else
+				{
+					//srvs[0].SendCommand(srvs.ServerName, src, "NAMES", par[2], par[3]);
+				}
+				return;
+			}
+			if (par.Length == 3)
+			{
+				Channel chan;
+				if (par[2].IndexOf(',') != -1)
+				{
+					chan = this.GetChannel(par[2]);
+					if (chan != null)
 					{
-						connection.SendLine("ERROR");
-						return;
+						chan.SendNames(src);
 					}
-						
-					IRCUserConnection src = (IRCUserConnection)connection;
-					Channel channel = this.GetChannel(channelName);
-					if (channel == null)
+				}
+				else
+				{
+					string[] chans = par[2].Split(new char[',']);
+					foreach (string schan in chans)
 					{
-						src.SendLine("Error not found" +channelName);
-						return;
+						chan = this.GetChannel(schan);
+						if (chan == null)
+						{
+							continue;
+						}
+						chan.SendNames(src);
+#if false
+						src.SendCommand(ReplyCodes.RPL_NAMREPLY, src.NickName, "=", channel.Name, line);
+						src.SendCommand(ReplyCodes.RPL_ENDOFNAMES, src.NickName, channel.Name, ":End of NAMES list");
+#endif
 					}
-					string server = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.ServerName;
-
-					//src.SendCommand(MessageType.Server, "324",
-					//	new string[]{src.NickName, channel, '+'});
-					src.SendLine(":" + server + " 324 " +
-	              		src.NickName + " " + channel + "+");
-
-					string command = string.Empty;
-					string[] nicks = channel.Nicks;
-					for (int j = 0; j < nicks.Length; j++)
-					{
-						if (j == nicks.Length-1)
-							command += nicks[j];
-						command += nicks[j] + ' ';
-					}
-
-					src.SendCommand(MessageType.Server, "353",
-						new string[]{src.NickName, channel.Name, command});
-
-					src.SendCommand(MessageType.Server, "366",
-						new string[]{src.NickName, channel.Name, "end of /NAMES list"});
 				}
 			}
 			else
-				connection.Send("ERROR");
+			{
+				foreach (DictionaryEntry entry in this._channels)
+				{
+					Channel chan = (Channel)entry.Value;
+					chan.SendNames(src);
+				}
+
+#if false
+				// TODO: Nun noch alle Clients ausgeben, die in keinem Channel sind 
+				//////
+				src.SimpleClient.disadvantage++;
+				src.SendCommand(ReplyCode.RPL_ENDOFNAMES, src.NickName, "*", ":End of NAMES list");
+#endif
+			}
 		}
 	}
 }

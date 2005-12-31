@@ -1,34 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html><head>
 
-<title>RFC 2813 (rfc2813) - Internet Relay Chat: Server Protocol</title><meta name="description" content="RFC 2813 - Internet Relay Chat: Server Protocol">
-<script language="JavaScript1.2">
-function erfc(s)
-{document.write("<A href=\"/rfccomment.php?rfcnum="+s+"\" target=\"_blank\" onclick=\"window.open('/rfccomment.php?rfcnum="+s+"','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;\")>Comment on RFC "+s+"</A>\n");}
-//-->
-</script></head>
 
-<body bgcolor="#ffffff" text="#000000">
-<p align="center"><img src="rfc2813_dateien/library.jpg" alt="" align="middle" border="0" height="62" width="150"></p>
-<h1 align="center">RFC 2813 (RFC2813)</h1>
-<p align="center">Internet RFC/STD/FYI/BCP Archives</p>
 
-<div align="center">[ <a href="http://www.faqs.org/rfcs/">RFC Index</a> | <a href="http://www.faqs.org/rfcs/rfcsearch.html">RFC Search</a> | <a href="http://www.faqs.org/faqs/">Usenet FAQs</a> | <a href="http://www.faqs.org/contrib/">Web FAQs</a> | <a href="http://www.faqs.org/docs/">Documents</a> | <a href="http://www.city-data.com/">Cities</a> ]
-<p>
-<strong>Alternate Formats:</strong>
- <a href="http://www.faqs.org/ftp/rfc/rfc2813.txt">rfc2813.txt</a> |
- <a href="http://www.faqs.org/ftp/rfc/pdf/rfc2813.txt.pdf">rfc2813.txt.pdf</a></p></div>
-<p align="center"><script language="JavaScript"><!--
-erfc("2813");
-// --></script><a href="http://www.faqs.org/rfccomment.php?rfcnum=2813" target="_blank" onclick="window.open('/rfccomment.php?rfcnum=2813','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;" )="">Comment on RFC 2813</a>
-</p>
-<h3 align="center">RFC 2813 - Internet Relay Chat: Server Protocol</h3>
-<hr noshade="noshade" size="2">
-<pre>
+
+
+
 Network Working Group                                           C. Kalt
 Request for Comments: 2813                                   April 2000
 Updates: 1459
 Category: Informational
+
 
                   Internet Relay Chat: Server Protocol
 
@@ -52,11 +32,33 @@ Abstract
    other.  It was originally a superset of the client protocol but has
    evolved differently.
 
-   First formally documented in May 1993 as part of <a href="http://www.faqs.org/rfcs/rfc1459.html">RFC 1459</a> [IRC], most
+   First formally documented in May 1993 as part of RFC 1459 [IRC], most
    of the changes brought since then can be found in this document as
    development was focused on making the protocol scale better.  Better
    scalability has allowed existing world-wide networks to keep growing
    and reach sizes which defy the old specification.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                      [Page 1]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
 Table of Contents
 
@@ -107,6 +109,13 @@ Table of Contents
       6.1  Scalability ............................................  21
       6.2  Labels .................................................  22
 
+
+
+Kalt                         Informational                      [Page 2]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
          6.2.1  Nicknames .........................................  22
          6.2.2  Channels ..........................................  22
          6.2.3  Servers ...........................................  22
@@ -155,6 +164,14 @@ Table of Contents
    instead they are presented with a virtual server which has the
    hostmask for name.
 
+
+
+
+Kalt                         Informational                      [Page 3]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
 2.2 Clients
 
    For each client, all servers MUST have the following information: a
@@ -196,6 +213,20 @@ Table of Contents
    necessarily known to all servers.  When a channel existence is known
    to a server, the server MUST keep track of the channel members, as
    well as the channel modes.
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                      [Page 4]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
 3. The IRC Server Specification
 
@@ -246,6 +277,13 @@ Table of Contents
    from themselves; if they use one, the only valid prefix is the
    registered nickname associated with the client.
 
+
+
+Kalt                         Informational                      [Page 5]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
    When a server receives a message, it MUST identify its source using
    the (eventually assumed) prefix.  If the prefix cannot be found in
    the server's internal database, it MUST be discarded, and if the
@@ -281,8 +319,8 @@ Table of Contents
    which permits use of the sequence CR-LF between messages without
    extra problems.
 
-   The extracted message is parsed into the components &lt;prefix&gt;,
-   &lt;command&gt; and list of parameters (&lt;params&gt;).
+   The extracted message is parsed into the components <prefix>,
+   <command> and list of parameters (<params>).
 
    The Augmented BNF representation for this is found in "IRC Client
    Protocol" [IRC-CLIENT].
@@ -291,6 +329,16 @@ Table of Contents
    to server communications and is only intended for server to client
    messages in order to provide clients with more useful information
    about who a message is from without the need for additional queries.
+
+
+
+
+
+
+Kalt                         Informational                      [Page 6]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
 3.4 Numeric replies
 
@@ -341,6 +389,13 @@ Table of Contents
    following pages apply to some of these messages, they are additions
    to the message specifications which are only relevant to server to
 
+
+
+Kalt                         Informational                      [Page 7]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
    server communication, or to the server implementation.  The messages
    which are introduced here are only used for server to server
    communication.
@@ -353,7 +408,7 @@ Table of Contents
 4.1.1 Password message
 
       Command: PASS
-   Parameters: &lt;password&gt; &lt;version&gt; &lt;flags&gt; [&lt;options&gt;]
+   Parameters: <password> <version> <flags> [<options>]
 
    The PASS command is used to set a 'connection password'.  The
    password MUST be set before any attempt to register the connection is
@@ -365,7 +420,7 @@ Table of Contents
    client (e.g. a user or a service).  They are only relevant when
    received from a server.
 
-   The &lt;version&gt; parameter is a string of at least four (4) characters,
+   The <version> parameter is a string of at least four (4) characters,
    and up to fourteen (14) characters.  The first four (4) characters
    MUST be digits and indicate the protocol version known by the server
    issuing the message.  The protocol described by this document is
@@ -373,7 +428,7 @@ Table of Contents
    characters are implementation dependent and should describe the
    software version number.
 
-   The &lt;flags&gt; parameter is a string of up to one hundred (100)
+   The <flags> parameter is a string of up to one hundred (100)
    characters.  It is composed of two substrings separated by the
    character "|" (%x7C).  If present, the first substring MUST be the
    name of the implementation.  The reference implementation (See
@@ -384,9 +439,18 @@ Table of Contents
    substrings are OPTIONAL, but the character "|" is REQUIRED.  The
    character "|" MUST NOT appear in either substring.
 
-   Finally, the last parameter, &lt;options&gt;, is used for link options.
+   Finally, the last parameter, <options>, is used for link options.
    The only options defined by the protocol are link compression (using
    the character "Z"), and an abuse protection flag (using the character
+
+
+
+
+
+Kalt                         Informational                      [Page 8]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    "P").  See sections 5.3.1.1 (Compressed server to server links) and
    5.3.1.2 (Anti abuse protections) respectively for more information on
@@ -403,7 +467,7 @@ Table of Contents
 4.1.2 Server message
 
       Command: SERVER
-   Parameters: &lt;servername&gt; &lt;hopcount&gt; &lt;token&gt; &lt;info&gt;
+   Parameters: <servername> <hopcount> <token> <info>
 
    The SERVER command is used to register a new server. A new connection
    introduces itself as a server to its peer.  This message is also used
@@ -411,15 +475,15 @@ Table of Contents
    to net, information about it MUST be broadcasted to the whole
    network.
 
-   The &lt;info&gt; parameter may contain space characters.
+   The <info> parameter may contain space characters.
 
-   &lt;hopcount&gt; is used to give all servers some internal information on
+   <hopcount> is used to give all servers some internal information on
    how far away each server is.  Local peers have a value of 0, and each
    passed server increments the value.  With a full server list, it
    would be possible to construct a map of the entire server tree, but
    hostmasks prevent this from being done.
 
-   The &lt;token&gt; parameter is an unsigned number used by servers as an
+   The <token> parameter is an unsigned number used by servers as an
    identifier.  This identifier is subsequently used to reference a
    server in the NICK and SERVICE messages sent between servers.  Server
    tokens only have a meaning for the point-to-point peering they are
@@ -435,6 +499,14 @@ Table of Contents
    the connection being terminated by the destination host (target
    SERVER).  Because of the severity of such event, error replies are
    usually sent using the "ERROR" command rather than a numeric.
+
+
+
+
+Kalt                         Informational                      [Page 9]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    If a SERVER message is parsed and it attempts to introduce a server
    which is already known to the receiving server, the connection, from
@@ -471,8 +543,8 @@ Table of Contents
 4.1.3 Nick
 
       Command: NICK
-   Parameters: &lt;nickname&gt; &lt;hopcount&gt; &lt;username&gt; &lt;host&gt; &lt;servertoken&gt;
-               &lt;umode&gt; &lt;realname&gt;
+   Parameters: <nickname> <hopcount> <username> <host> <servertoken>
+               <umode> <realname>
 
    This form of the NICK message MUST NOT be allowed from user
    connections. However, it MUST be used instead of the NICK/USER pair
@@ -481,11 +553,18 @@ Table of Contents
    This message is really the combination of three distinct messages:
    NICK, USER and MODE [IRC-CLIENT].
 
-   The &lt;hopcount&gt; parameter is used by servers to indicate how far away
+   The <hopcount> parameter is used by servers to indicate how far away
    a user is from its home server.  A local connection has a hopcount of
    0.  The hopcount value is incremented by each passed server.
 
-   The &lt;servertoken&gt; parameter replaces the &lt;servername&gt; parameter of
+
+
+Kalt                         Informational                     [Page 10]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
+   The <servertoken> parameter replaces the <servername> parameter of
    the USER (See section 4.1.2 for more information on server tokens).
 
    Examples:
@@ -506,23 +585,23 @@ Table of Contents
 4.1.4 Service message
 
       Command: SERVICE
-   Parameters: &lt;servicename&gt; &lt;servertoken&gt; &lt;distribution&gt; &lt;type&gt;
-                &lt;hopcount&gt; &lt;info&gt;
+   Parameters: <servicename> <servertoken> <distribution> <type>
+                <hopcount> <info>
 
    The SERVICE command is used to introduce a new service.  This form of
    the SERVICE message SHOULD NOT be allowed from client (unregistered,
    or registered) connections.  However, it MUST be used between servers
    to notify other servers of new services joining the IRC network.
 
-   The &lt;servertoken&gt; is used to identify the server to which the service
+   The <servertoken> is used to identify the server to which the service
    is connected.  (See section 4.1.2 for more information on server
    tokens).
 
-   The &lt;hopcount&gt; parameter is used by servers to indicate how far away
+   The <hopcount> parameter is used by servers to indicate how far away
    a service is from its home server.  A local connection has a hopcount
    of 0.  The hopcount value is incremented by each passed server.
 
-   The &lt;distribution&gt; parameter is used to specify the visibility of a
+   The <distribution> parameter is used to specify the visibility of a
    service.  The service may only be known to servers which have a name
    matching the distribution.  For a matching server to have knowledge
    of the service, the network path between that server and the server
@@ -530,7 +609,16 @@ Table of Contents
    names all match the mask.  Plain "*" is used when no restriction is
    wished.
 
-   The &lt;type&gt; parameter is currently reserved for future usage.
+   The <type> parameter is currently reserved for future usage.
+
+
+
+
+
+Kalt                         Informational                     [Page 11]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    Numeric Replies:
 
@@ -541,7 +629,7 @@ Table of Contents
 
    Example:
 
-SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictionary r" registered on
+SERVICE dict@irc.fr 9 *.fr 0 1 :French Dictionary r" registered on
                                    server "9" is being announced to
                                    another server.  This service will
                                    only be available on servers whose
@@ -550,7 +638,7 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
 4.1.5 Quit
 
       Command: QUIT
-   Parameters: [&lt;Quit Message&gt;]
+   Parameters: [<Quit Message>]
 
    A client session ends with a quit message.  The server MUST close the
    connection to a client which sends a QUIT message. If a "Quit
@@ -564,10 +652,10 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    disconnected or that of the server to which the leaving client was
    connected:
 
-      &lt;Quit Message&gt; =  ":" servername SPACE servername
+      <Quit Message> =  ":" servername SPACE servername
 
    Because the "Quit Message" has a special meaning for "netsplits",
-   servers SHOULD NOT allow a client to use a &lt;Quit Message&gt; in the
+   servers SHOULD NOT allow a client to use a <Quit Message> in the
    format described above.
 
    If, for some other reason, a client connection is closed without the
@@ -581,6 +669,13 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
 
            None.
 
+
+
+Kalt                         Informational                     [Page 12]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
    Examples:
 
    :WiZ QUIT :Gone to have lunch   ; Preferred message format.
@@ -588,7 +683,7 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
 4.1.6 Server quit message
 
       Command: SQUIT
-   Parameters: &lt;server&gt; &lt;comment&gt;
+   Parameters: <server> <comment>
 
    The SQUIT message has two distinct uses.
 
@@ -605,7 +700,7 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    the server parameter, which then closes its connection to the
    quitting server.
 
-   The &lt;comment&gt; is filled in by servers which SHOULD place an error or
+   The <comment> is filled in by servers which SHOULD place an error or
    similar message here.
 
    Both of the servers which are on either side of the connection being
@@ -628,6 +723,14 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    When a client is removed as the result of a SQUIT message, the server
    SHOULD add the nickname to the list of temporarily unavailable
    nicknames in an attempt to prevent future nickname collisions. See
+
+
+
+
+Kalt                         Informational                     [Page 13]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    section 5.7 (Tracking recently used nicknames) for more information
    on this procedure.
@@ -655,14 +758,14 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    implementing these, a number of race conditions are inevitable when
    users at opposing ends of a network send commands which will
    ultimately clash.  It is also REQUIRED that servers keep a nickname
-   history to ensure that wherever a &lt;nick&gt; parameter is given, the
+   history to ensure that wherever a <nick> parameter is given, the
    server check its history in case it has recently been changed.
 
 4.2.1 Join message
 
       Command: JOIN
-   Parameters: &lt;channel&gt;[ %x7 &lt;modes&gt; ]
-               *( "," &lt;channel&gt;[ %x7 &lt;modes&gt; ] )
+   Parameters: <channel>[ %x7 <modes> ]
+               *( "," <channel>[ %x7 <modes> ] )
 
    The JOIN command is used by client to start listening a specific
    channel. Whether or not a client is allowed to join a channel is
@@ -675,6 +778,15 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    ASCII 7) as separator.  Such data MUST be ignored if the message
    wasn't received from a server.  This format MUST NOT be sent to
    clients, it can only be used between servers and SHOULD be avoided.
+
+
+
+
+
+Kalt                         Informational                     [Page 14]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    The JOIN command MUST be broadcast to all servers so that each server
    knows where to find the users who are on the channel.  This allows
@@ -696,8 +808,8 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
 4.2.2 Njoin message
 
       Command: NJOIN
-   Parameters: &lt;channel&gt; [ "@@" / "@" ] [ "+" ] &lt;nickname&gt;
-                         *( "," [ "@@" / "@" ] [ "+" ] &lt;nickname&gt; )
+   Parameters: <channel> [ "@@" / "@" ] [ "+" ] <nickname>
+                         *( "," [ "@@" / "@" ] [ "+" ] <nickname> )
 
    The NJOIN message is used between servers only.  If such a message is
    received from a client, it MUST be ignored.  It is used when two
@@ -724,6 +836,13 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
                                    channel operator status, syrk with
                                    voice privilege and avalon with no
                                    privilege.
+
+
+
+Kalt                         Informational                     [Page 15]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
 4.2.3 Mode message
 
@@ -774,6 +893,13 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    (RPL_CREATED), available user and channel modes (RPL_MYINFO), and it
    MAY send any introductory messages which may be deemed appropriate.
 
+
+
+Kalt                         Informational                     [Page 16]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
    In particular the server SHALL send the current user/service/server
    count (as per the LUSER reply) and finally the MOTD (if any, as per
    the MOTD reply).
@@ -820,6 +946,16 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    document) but a particular link MAY set specific options using the
    PASS message (See Section 4.1.1).
 
+
+
+
+
+
+Kalt                         Informational                     [Page 17]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
 5.3.1.1 Compressed server to server links
 
    If a server wishes to establish a compressed link with its peer, it
@@ -830,8 +966,8 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    the stream, it will send an uncompressed ERROR message to its peer
    and close the connection.
 
-   The data format used for the compression is described by <a href="http://www.faqs.org/rfcs/rfc1950.html">RFC 1950</a>
-   [ZLIB], <a href="http://www.faqs.org/rfcs/rfc1951.html">RFC 1951</a> [DEFLATE] and <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a> [GZIP].
+   The data format used for the compression is described by RFC 1950
+   [ZLIB], RFC 1951 [DEFLATE] and RFC 1952 [GZIP].
 
 5.3.1.2 Anti abuse protections
 
@@ -865,6 +1001,16 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    NOTE: channel topics SHOULD NOT be exchanged here because the TOPIC
    command overwrites any old topic information, so at best, the two
    sides of the connection would exchange topics.
+
+
+
+
+
+
+Kalt                         Informational                     [Page 18]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    By passing the state information about servers first, any collisions
    with servers that already exist occur before nickname collisions
@@ -911,6 +1057,16 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    affecting the wrong client.  When performing a change trace for an
    above command it is RECOMMENDED that a time range be given and
    entries which are too old ignored.
+
+
+
+
+
+
+Kalt                         Informational                     [Page 19]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    For a reasonable history, a server SHOULD be able to keep previous
    nickname for every client it knows about if they all decided to
@@ -960,6 +1116,14 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    two (2) seconds without being adversely affected.  Services MAY also
    be subject to this mechanism.
 
+
+
+
+Kalt                         Informational                     [Page 20]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
 5.9 Non-blocking lookups
 
    In a real-time environment, it is essential that a server process
@@ -1004,6 +1168,17 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    it changes.  It is also desirable to keep the number of servers low
    so that the path length between any two points is kept minimal and
    the spanning tree as strongly branched as possible.
+
+
+
+
+
+
+
+Kalt                         Informational                     [Page 21]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
 6.2 Labels
 
@@ -1051,6 +1226,16 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    avoid N^2 algorithms such as checking the channel list of a set of
    clients.
 
+
+
+
+
+
+Kalt                         Informational                     [Page 22]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
    In current server versions, there are only few database consistency
    checks, most of the time each server assumes that a neighbouring
    server is correct.  This opens the door to large problems if a
@@ -1096,22 +1281,33 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    clear text, a stream layer encryption mechanism (like "The TLS
    Protocol" [TLS]) could be used to protect these transactions.
 
+
+
+
+
+
+
+Kalt                         Informational                     [Page 23]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
+
 8. Current support and availability
 
       Mailing lists for IRC related discussion:
-        General discussion: <a href="mailto:ircd-users@irc.org">ircd-users@irc.org</a>
-        Protocol development: <a href="mailto:ircd-dev@irc.org">ircd-dev@irc.org</a>
+        General discussion: ircd-users@irc.org
+        Protocol development: ircd-dev@irc.org
 
       Software implementations:
-        <a href="ftp://ftp.irc.org/irc/server">ftp://ftp.irc.org/irc/server</a>
-        <a href="ftp://ftp.funet.fi/pub/unix/irc">ftp://ftp.funet.fi/pub/unix/irc</a>
-        <a href="ftp://coombs.anu.edu.au/pub/irc">ftp://coombs.anu.edu.au/pub/irc</a>
+        ftp://ftp.irc.org/irc/server
+        ftp://ftp.funet.fi/pub/unix/irc
+        ftp://coombs.anu.edu.au/pub/irc
 
       Newsgroup: alt.irc
 
 9. Acknowledgements
 
-   Parts of this document were copied from the <a href="http://www.faqs.org/rfcs/rfc1459.html">RFC 1459</a> [IRC] which
+   Parts of this document were copied from the RFC 1459 [IRC] which
    first formally documented the IRC Protocol.  It has also benefited
    from many rounds of review and comments.  In particular, the
    following people have made significant contributions to this
@@ -1123,36 +1319,45 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
 10. References
 
    [KEYWORDS]   Bradner, S., "Key words for use in RFCs to Indicate
-                Requirement Levels", BCP 14, <a href="http://www.faqs.org/rfcs/rfc2119.html">RFC 2119</a>, March 1997.
+                Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [ABNF]       Crocker, D. and P. Overell, "Augmented BNF for Syntax
-                Specifications: ABNF", <a href="http://www.faqs.org/rfcs/rfc2234.html">RFC 2234</a>, November 1997.
+                Specifications: ABNF", RFC 2234, November 1997.
 
    [IRC]        Oikarinen, J. and D. Reed, "Internet Relay Chat
-                Protocol", <a href="http://www.faqs.org/rfcs/rfc1459.html">RFC 1459</a>, May 1993.
+                Protocol", RFC 1459, May 1993.
 
-   [IRC-ARCH]   Kalt, C., "Internet Relay Chat: Architecture", <a href="http://www.faqs.org/rfcs/rfc2810.html">RFC 2810</a>,
+   [IRC-ARCH]   Kalt, C., "Internet Relay Chat: Architecture", RFC 2810,
                 April 2000.
 
    [IRC-CLIENT] Kalt, C., "Internet Relay Chat: Client Protocol", RFC
                 2812, April 2000.
 
+
    [IRC-CHAN]   Kalt, C., "Internet Relay Chat: Channel Management", RFC
                 2811, April 2000.
 
    [ZLIB]       Deutsch, P. and J-L. Gailly, "ZLIB Compressed Data
-                Format Specification version 3.3", <a href="http://www.faqs.org/rfcs/rfc1950.html">RFC 1950</a>, May 1996.
+                Format Specification version 3.3", RFC 1950, May 1996.
+
+
+
+
+Kalt                         Informational                     [Page 24]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
    [DEFLATE]    Deutsch, P., "DEFLATE Compressed Data Format
-                Specification version 1.3", <a href="http://www.faqs.org/rfcs/rfc1951.html">RFC 1951</a>, May 1996.
+                Specification version 1.3", RFC 1951, May 1996.
 
    [GZIP]       Deutsch, P., "GZIP file format specification version
-                4.3", <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, May 1996.
+                4.3", RFC 1952, May 1996.
 
-   [IDENT]      St. Johns, M., "The Identification Protocol", <a href="http://www.faqs.org/rfcs/rfc1413.html">RFC 1413</a>,
+   [IDENT]      St. Johns, M., "The Identification Protocol", RFC 1413,
                 February 1993.
 
-   [TLS]        Dierks, T. and C. Allen, "The TLS Protocol", <a href="http://www.faqs.org/rfcs/rfc2246.html">RFC 2246</a>,
+   [TLS]        Dierks, T. and C. Allen, "The TLS Protocol", RFC 2246,
                 January 1999.
 
 11. Author's Address
@@ -1162,7 +1367,42 @@ SERVICE <a href="mailto:dict@irc.fr">dict@irc.fr</a> 9 *.fr 0 1 :French Dictiona
    Ridgefield Park, NJ 07660
    USA
 
-   EMail: <a href="mailto:kalt@stealth.net">kalt@stealth.net</a>
+   EMail: kalt@stealth.net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                     [Page 25]
+
+RFC 2813          Internet Relay Chat: Server Protocol        April 2000
+
 
 12.  Full Copyright Statement
 
@@ -1197,28 +1437,23 @@ Acknowledgement
    Funding for the RFC Editor function is currently provided by the
    Internet Society.
 
-</pre>
-<p align="center"><script language="JavaScript"><!--
-erfc("2813");
-// --></script><a href="http://www.faqs.org/rfccomment.php?rfcnum=2813" target="_blank" onclick="window.open('/rfccomment.php?rfcnum=2813','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;" )="">Comment on RFC 2813</a>
-</p>
-&nbsp;<br>
-<div align="center">
-<table border="0" cellpadding="3" cellspacing="3" width="100%">
-<tbody><tr><td width="45%">
-<p align="left">Previous: <a href="http://www.faqs.org/rfcs/rfc2812.html">RFC 2812 - Internet Relay Chat: Client Protocol</a>
-</p></td><td width="10%">&nbsp;</td><td width="45%">
-<p align="right">Next: <a href="http://www.faqs.org/rfcs/rfc2814.html">RFC 2814 - SBM (Subnet Bandwidth Manager): A Protocol for RSVP-based Admission Control over IEEE 802-style networks</a>
-</p></td></tr></tbody></table></div><p align="right">&nbsp;</p>
-<hr noshade="noshade" size="2">
-<div align="center">[ <a href="http://www.faqs.org/rfcs/">RFC Index</a> | <a href="http://www.faqs.org/rfcs/rfcsearch.html">RFC Search</a> | <a href="http://www.faqs.org/faqs/">Usenet FAQs</a> | <a href="http://www.faqs.org/contrib/">Web FAQs</a> | <a href="http://www.faqs.org/docs/">Documents</a> | <a href="http://www.city-data.com/">Cities</a> ]
-<p>
-</p></div>
-<small>
-<address>
-<p align="center">
- 
-</p>
-</address>
-</small>
-</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                     [Page 26]
+

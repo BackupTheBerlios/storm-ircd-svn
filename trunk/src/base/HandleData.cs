@@ -21,11 +21,11 @@ namespace Network
 	{
 #if UNSTABLE
 		public IWorker worker;
-		public string text;
-		public HandleData(IWorker con, string t)
+		public byte[] data;
+		public HandleData(IWorker w, byte[] d)
 		{
-			this.worker = con;
-			this.text = t;
+			this.worker = w;
+			this.data = d;
 		}
 #else
 		public IConnection worker;

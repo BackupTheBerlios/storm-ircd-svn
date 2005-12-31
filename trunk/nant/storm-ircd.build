@@ -1,16 +1,24 @@
 <?xml version="1.0"?>
 <project name="storm-ircd" default="all" basedir="../src">
-  <property name="debug" value="True"/>
-  <property name="optimize" value="False"/>
+  <property name="debug" value="True" overwrite="False" />
+  <property name="optimize" value="False" overwrite="False" />
+
+  <!-- Platform -->
+  <property name="defines" value=";UNIX" if="${platform::is-unix()}" />
+
+  <!-- Building -->
   <target name="all">
     <nant buildfile="../lib/SharpZipLib/SharpZlib.build" />
     <echo message="Building storm-ircd..." />
     <csc target="exe"
-         define="UNSTABLE"
-         nowarn="0169"
-         output="../bin/storm-ircd.exe"
+         define="UNSTABLE${defines}"
+         output="../bin/sbin/storm-ircd.exe"
          optimize="${optimize}"
 	 debug="${debug}">
+      <nowarn>
+        <warning number="0169" />
+        <warning number="0168" />
+      </nowarn>
       <sources>
 	<include name="Main.cs" />
         <include name="AssemblyInfo.cs" />
@@ -30,7 +38,7 @@
         <include name="testing/*.cs" />
       </sources>
       <references>
-        <include name="Mono.Posix.dll" />
+        <include name="Mono.Posix.dll" if="${platform::is-unix()}" />
         <include name="../lib/SharpZipLib/bin/ICSharpCode.SharpZipLib.dll" />
       </references>
     </csc>
@@ -38,7 +46,7 @@
   <target name="clean">
     <echo message="Cleaning storm-ircd..." />
     <delete verbose="true">
-      <fileset basedir="../bin/">
+      <fileset basedir="../bin/sbin/">
         <include name="storm-ircd.exe" />
         <include name="storm-ircd.exe.mdb" />
       </fileset>

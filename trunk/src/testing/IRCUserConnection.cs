@@ -29,9 +29,11 @@ namespace IRC
 	public class IRCUserConnection : IRCConnection
 	{
 		// nickset
-		bool nickset = false;
-		bool userset = false;
-		bool passset = false;
+		private bool nickset = false;
+		private bool userset = false;
+		private bool passset = false;
+
+		private int disadvantage = 0; // TODO
 /*
 		// client data
 		private string _clientName;
@@ -45,7 +47,6 @@ namespace IRC
 		private IPAddress _address;
 
 		// neu
-		private IRCUserMode _mode;
 		private DateTime _lastping; // todo
 		// end
 
@@ -54,26 +55,28 @@ namespace IRC
 		#region Construct
 		public IRCUserConnection(IRCConnection bas) : base(bas.Socket, bas.Server)
 		{
-			// TODO: sollte gleiche id haben: int id = bas.ID;
 			Socket handler = bas.Socket;
 			this._channels = new Hashtable();
 
-//			this.SetNick(bas.NickName);
-//			this.SetUser(bas.ClientName, bas.HostName, "", bas.RealName);
 			if (!(bas.SimpleClient is SimpleUser))
 				throw new ArgumentException("bas.SimpleClient musst be a SimpleUser");
 
 			this._simpleClient = bas.SimpleClient;
 			this.SimpleUser.UpLink = this;
 
-			// TODO: nachfolgendes ist noch nötig soll sich änder
+			// Host data
+			this._realhostName = bas.RealHostName;
+			this._aliases = bas.Aliases;
+			this._address = bas.Address;
+
 			this.SetNick(this.SimpleUser.NickName);
-			this.SetUser(this.SimpleUser.ClientName, this.SimpleUser.HostName,
+			this.SetUser(this.SimpleUser.UserName, this.SimpleUser.HostName,
 							"", this.SimpleUser.RealName);
 		}
 		#endregion // Construct
 
 		#region Methods
+#if false
 		/// <summary>
 		/// Does 
 		/// </summary>
@@ -135,7 +138,7 @@ namespace IRC
 			if ((name == "*") || (this.RealName == name)) // TODO: case-sens
 				bname = true;
 
-			if ((client == "*") || (this.ClientName == client))
+			if ((client == "*") || (this.UserName == client))
 				bclient = true;
 
 //TODO			if (hnm == '*' || this.???)
@@ -148,13 +151,14 @@ namespace IRC
 			Debug.WriteLine(this+": match 1="+bname+" 2="+bclient+" 3="+bother+" 4="+bhost+" ret="+ret);
 			return ret;
 		}
-
+#endif
 		public void Join(Channel chan)
 		{
 			chan.do_join(this, true);
 			this._channels.Add(chan.Name, chan);
 		}
 
+#if false
 		public void Part(Channel chan)
 		{
 			chan.do_part(this, true);
@@ -164,90 +168,88 @@ namespace IRC
 		{
 			chan.do_part(this, confirmation);
 		}
+#endif
 
-		public virtual void Notice(string nick, string message)
+		public virtual void Notice(string message)
 		{
 			// :blackdragon!~aa@127.0.0.1 NOTICE blackdragon :message
 			// old: this.SendLine(this.Ident() + "NOTICE " + nick + " :" + message);
 			// new:
-			this.SendCommand("NOTICE", new string[] {nick, message});
+			this.SendCommand("NOTICE", this.NickName, ":" + message);
 		}
 
-		private void Intro()
+		private void Intro() // TODO: rewrite
 		{
 			lock (this)
 			{
-			string server = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.ServerName;
+				string server = ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.ServerName;
+				string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+				this.SendCommand(ReplyCodes.RPL_WELCOME, this.NickName, String.Format(":Welcome to the Internet Relay Network {0}", this));
+				this.SendCommand(ReplyCodes.RPL_YOURHOST, this.NickName, String.Format(":Your host is {0}, running version {1}",
+						server, String.Format("{0}-{1}", MainClass.ProjectName, version)));
+				this.SendCommand(ReplyCodes.RPL_CREATED, this.NickName, String.Format(":This server was created {0}", MainClass.BuildDate));
+				this.SendCommand(ReplyCodes.RPL_MYINFO, this.NickName, ":TODO");
+
+#if false
+				/* nachfolgendes kommt dann in das default-motd */
 				this.SendLine(":" + server + " 001 " +
-				              this.NickName + " :Welcome " + this.NickName);//, MessagePriority.RealTime);
+				              this.NickName + " :Welcome " + this.NickName);
 				this.SendLine(":" + server + " 002 " +
 				              this.NickName + " :Your host is " +
 				              server +
 				              ", running on " + ((IRCServer)this.Server).devName + ", version: " +
-				              Assembly.GetExecutingAssembly().GetName().Version.ToString());//, MessagePriority.RealTime);
+				              Assembly.GetExecutingAssembly().GetName().Version.ToString());
 				this.SendLine(":" + server + " 003 " +
 				              this.NickName + " :Platform: " +
 				              Environment.OSVersion.ToString() +
-				              ", CLR version: " + Environment.Version.ToString());//, MessagePriority.RealTime);
-#if UNSTABLE
+				              ", CLR version: " + Environment.Version.ToString());
+#if DEBUG
 				this.SendLine(":" + server + " 004 " +
-				              this.NickName + " :Warning: Debug Build");//, MessagePriority.RealTime);
+				              this.NickName + " :Warning: Debug Build");
 #else
 				this.SendLine(":" + server + " 004 " +
-				              this._nickName + " :mono: http://www.mono-project.com");//, MessagePriority.RealTime);
+				              this._nickName + " :mono: http://www.mono-project.com");
 #endif
 				this.SendLine(":" + server + " 005 " +
-				              this.NickName + " :Josef.Schmeisser@freenet.de");//, MessagePriority.RealTime);
+				              this.NickName + " :Ideas and proposals to blackdragon@bat.berlios.de");
+#endif
 			}
-// todo: implement			this.Motd();
-		}
-
-		public string Ident()
-		{
-			// :blackdragon!~aa@127.0.0.1
-			// TODO: this.SendLine(":" + this._nickName + "!~" + this._clientName + "@" + this._hostName + ); // TODO: ausbessern
-			return (":" + this.NickName + "!" +
-				this.ClientName + "@" + this.RealHostName + " ");
-		}
-
-		public string ServerIdent()
-		{
-			return (":" + ((SettingsHost)ServiceManager.Services[typeof(SettingsHost)]).Settings.ServerName + " ");
-		}
-
-		public void SendCommand(string command, string[] args)
-		{
-			Console.WriteLine(this + ": SendCommand warning use Client");
-			this.SendCommand(MessageType.Client, command, args);
+			this.SendMotd();
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
+		public string UserPrefix()
+		{
+			// :blackdragon!~aa@127.0.0.1
+			// prefix = nickname [ [ "!" user ] "@" host ]
+			return (":" + this.NickName + "!" +
+				this.UserName + "@" + this.RealHostName + " ");
+		}
+
+		private void SendMotd()
+		{
+			//throw new NotImplementedException();
+			Console.WriteLine("Implement SendMotd()");
+		}
+
+#if false
+// methode entfernen
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="sender">IRCUserConnection</param>
 		/// <param name="command"></param>
 		/// <param name="args"></param>
-		public void SendCommand(MessageType type, string command, string[] args)
+		public void SendCommand(IRCUserConnection sender, string command, params string[] args)
 		{
-			string toSend = String.Empty;
+			if (sender == null)
+				throw new ArgumentNullException("sender");
 
-			if (type == MessageType.Client)
-				toSend = this.Ident() + command;
-			else
-				toSend = this.ServerIdent() + command;
-
-			foreach (string arg in args)
-			{
-				toSend += " ";
-
-				if (arg == args[args.Length-1])
-					toSend += ":";
-
-				toSend += arg;
-			}
-
-			Console.WriteLine(this + ".SendCommand(): " + toSend);
-			this.SendLine(toSend);
+			base.SendCommand(sender.UserPrefix(), command, args);
 		}
+#endif
 
 		public override void SetNick(string newNick)
 		{
@@ -263,11 +265,11 @@ namespace IRC
 
 			if (this.nickset)
 			{
-				this.SendLine(":" + oldNick + "!~" + this.ClientName +
+				this.SendLine(":" + oldNick + "!" + this.UserName +
 					"@" + this.HostName + " NICK :" + newNick);
 			}
 
-#if DEC // erledigt jetzt m_nick
+#if false // erledigt jetzt m_nick
 			Console.WriteLine(this._channels.GetEnumerator().GetType().ToString());
 			foreach (DictionaryEntry entry in this._channels)
 			{
@@ -282,11 +284,13 @@ namespace IRC
 			Console.WriteLine("Nick set [ OK ]");
 		}
 
-		public override void SetUser(string clientName, string host,
-		                         string host2, string realName)
+		// Parameters: <user> <mode> <unused> <realname>
+		public override void SetUser(string user, string mode,
+		                         string something, string realname)
 		{
-			Console.WriteLine("SetUser({0},{1},{2},{3})", clientName, host, host2, realName);
-			base.SetUser(clientName, host, host2, realName);
+			// TODO: Parse <mode>
+			Console.WriteLine("SetUser({0},{1},{2},{3})", user, mode, something, realname);
+			base.SetUser(user, mode, something, realname);
 
 			if (this.nickset && !this.userset)
 				this.Intro();
@@ -298,30 +302,38 @@ namespace IRC
 		/// Is User in Channel...
 		/// </summary>
 		/// <param name="name">Name of Channel</param>
-		/// <returns>True if this user in channel "name".</returns>
-		public bool IsInChannel(string name)
+		/// <returns>True if this user in channel "chan".</returns>
+		public bool IsInChannel(Channel chan)
 		{
-			Console.WriteLine("TODO: impelement isinchannel");
-#if DEC
-			lock (this._channels)
+			return chan.HasConnection(this);
+		}
+
+		public bool IsRegistered()
+		{
+			return (this.userset & this.nickset);
+		}
+
+		public override string ToString()
+		{
+			if (this._simpleClient != null)
 			{
-				if (this._channels.ContainsKey(name))
-					return true;
+				return (this.NickName + "!" + this.UserName + "@" + this.RealHostName);
 			}
-#endif
-			return false;
+			else
+			{
+				return base.ToString();
+			}
 		}
 		#endregion // Methods
 
 		#region Properities
 
-//#if DEC
 		/// Properities
-		public string ClientName
+		public string UserName
 		{
 			get
 			{
-				return this.SimpleUser.ClientName;
+				return this.SimpleUser.UserName;
 			}
 		}
 
@@ -340,7 +352,35 @@ namespace IRC
 				return this.SimpleUser.NickName;
 			}
 		}
-//#endif
+
+		public virtual string RealName
+		{
+			get
+			{
+				return this.SimpleUser.RealName;
+			}
+		}
+
+		public IRCUserMode UserMode
+		{
+			get
+			{
+				return this.SimpleUser.UserMode;
+			}
+			set
+			{
+				this.SimpleUser.UserMode = value;
+			}
+		}
+
+		public IRCUserMode ChanUserMode
+		{
+			get
+			{
+				return this.SimpleUser.ChanUserMode;
+			}
+		}
+
 		public SimpleUser SimpleUser
 		{
 			get
@@ -350,7 +390,7 @@ namespace IRC
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("SimpleUser can't be null");
+					throw new ArgumentNullException("SimpleUser can't be null!");
 				if (value.UpLink != this)
 					throw new ArgumentException("SimpleUser.UpLink must be this");
 

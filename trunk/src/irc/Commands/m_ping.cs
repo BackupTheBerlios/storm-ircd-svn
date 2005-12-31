@@ -25,7 +25,7 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_ping(IConnection connection, string[] par)
+		private void m_ping(IRCConnection connection, string[] par)
 		{
 			// :amd.tux PONG amd.tux :506855393
 			if (par.Length < 2)

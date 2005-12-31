@@ -12,23 +12,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-using System;
-using System.Collections;
 
-namespace Tools
+using System;
+
+using IRC;
+using Network;
+
+using Service;
+
+#if UNSTABLE
+namespace IRC
 {
-	[Serializable]
-	public class BinaryList //: IList, ICloneable, ICollection, IEnumerable 
+	public partial class IRCServer
 	{
-		#region Enumerator
-		#endregion
-		public BinaryList()
+		private void m_test(IRCConnection connection, string[] par)
 		{
-			
+			throw new Exception("Test-Exception");
 		}
-/*
-		public object this[int index]
-		{
-		}*/
 	}
 }
+#endif

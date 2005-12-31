@@ -23,12 +23,13 @@ namespace IRC
 {
 	public partial class IRCServer
 	{
-		private void m_privmsg(IConnection connection, string[] par)
+		private void m_privmsg(IRCConnection connection, string[] par)
 		{
 			Console.WriteLine("TODO privmsg");
-//#if DEC
-			par[2] = par[2].ToLower(); // bugfix
-			// Sample: PRIVMSG #emule :hallo
+			IRCConnection src = (IRCConnection)connection;
+//#if false
+			par[2] = par[2].ToLower();
+
 			if (par.Length == 4)
 			{
 				// channel prefixes
@@ -38,7 +39,7 @@ namespace IRC
 					Channel ch = this.GetChannel(par[2]);
 
 					if (ch != null)
-						ch.SendChat(connection as IRCUserConnection, par[3]);
+						ch.SendChat(src, ((SimpleUser)src.SimpleClient), par[3]);
 				}
 				else
 				{
@@ -48,7 +49,7 @@ namespace IRC
 						if (this.HasNick(par[2]))
 						{
 							this.SendTo(":" + irccon.NickName +
-										"!~" + irccon.ClientName +
+										"!" + irccon.UserName +
 										"@" + irccon.HostName + " " +
 										"PRIVMSG " + par[2] + " " + par[3], par[2]);
 						}

@@ -24,9 +24,6 @@ namespace IRC
 	public partial class IRCServer
 	{
 /*
-<< JOIN #test
->> :test!~aa@localhost JOIN :#test
-<< MODE #test
 << WHO #test
 >> :irc.localhost 353 test = #test :test blackdrag 
 >> :irc.localhost 366 test #test :End of NAMES list.
@@ -35,32 +32,72 @@ namespace IRC
 >> :irc.localhost 352 test #test ~aa localhost irc.localhost blackdrag H :0 aa
 >> :irc.localhost 315 test #test :End of WHO list.
 
-// zweiter:
 << WHO #test
 >> :irc.localhost 352 test #test ~aa localhost irc.localhost test H :0 aa
 >> :irc.localhost 352 test #test ~aa localhost irc.localhost blackdrag H :0 aa
 >> :irc.localhost 315 test #test :End of WHO list.
 */
 		private const int MAXWHOREPLIES = 10;
-		public virtual void m_who(IConnection connection, string[] ar)
+		public virtual void m_who(IRCConnection connection, string[] ar)
 		{
 			// 0 == prefix
 			// 1 == mask
 			// 2 == z.B nur ops anzeigen
-			Console.WriteLine("who dummy");
-			string channel;
-			IRCConnection src = (IRCConnection)connection;
-
-			if (false)//!this.IsMyClient(src)) // TODO: ismyclient implementieren
+			if (this.IsServer(connection))
 			{
+				throw new NotImplementedException("remote /who");
+			}
+			else if (!this.IsUser(connection))
+			{
+				// ERR
+				connection.SendLine("ERROR :Not registered");
 				return;
 			}
 
-			if (ar[1] != String.Empty)
+			if (ar.Length > 3) // zuviel parameter
 			{
+				connection.SendLine("ERROR :To much parameters");
+				return;
+			}
+
+			Channel chan = null;
+			bool onlyops = false;
+			IRCUserConnection src = (IRCUserConnection)connection;
+
+			if (ar.Length == 3)
+			{
+				// only ops
+				if (ar[2] == "o")
+					onlyops = true;
+//				else
+//					connection.SendLine("ERR_NEEDMOREPARAMS_MSG");
+
+			}
+			if (ar.Length >= 2)
+			{
+				// TO/DO: Search Channel
+				chan = GetChannel(ar[2]); // TODO: rfc
+				if (chan != null)
+				{
+					chan.SendWho(src, onlyops);
+
+					//src.SendCommand(ReplyCodes.RPL_ENDOFWHO, src.NickName, chan.Name, "End of /WHO list."); // jetzt in IRCChannel
+					return;
+				}
+			}
+
+			foreach (IRCConnection client in this.Clients)
+			{
+				throw new NotImplementedException();
+			}
+			if (ar.Length == 1)
+			{
+				//return "*"
 			}
 			else
-				channel = ar[0];
+			{
+				//return ar[1]
+			}
 		}
 	}
 }

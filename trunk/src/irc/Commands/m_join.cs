@@ -33,7 +33,7 @@ namespace IRC
 		}
 */
 
-		private void m_join(IConnection connection, string[] par)
+		private void m_join(IRCConnection connection, string[] par)
 		{
 			Console.WriteLine("TO/DO: join command");
 			if (connection is IRCUserConnection)

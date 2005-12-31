@@ -46,13 +46,11 @@ namespace IRC
 			}
 		}
 */
-		private void m_nick(IConnection connection, string[] par)
+		private void m_nick(IRCConnection connection, string[] par)
 		{
-			// TODO: H.P.
-			Console.WriteLine(this + ": nick message");
 			if (connection is IRCServerConnection) // server teilt uns mit das ein user seinen nick geändert hat
 			{
-				Console.WriteLine(this + ": remote nick message; TODO: IMPLEMENT");
+				throw new NotImplementedException("remote nick message; TODO: IMPLEMENT");
 				return;
 			}
 			else
@@ -68,7 +66,7 @@ namespace IRC
 					{
 						if (!(src.SimpleClient is SimpleUser))
 						{
-							src.SendLine("ERROR: illegal nick usage");
+							src.SendLine("ERROR :Illegal nick usage");
 							this.CloseLink(src);
 							return;
 						}
@@ -97,12 +95,12 @@ namespace IRC
 						}
 						else
 						{
-							usr.SendLine(":ERROR kein gültiger nick!");
+							usr.SendLine("ERROR :kein gültiger nick!");
 						}
 					}
 					else
 					{
-						usr.SendLine(":ERROR du bist kein server!");
+						usr.SendLine("ERROR :du bist kein server!");
 					}
 				}
 			}

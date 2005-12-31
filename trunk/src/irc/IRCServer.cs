@@ -29,7 +29,6 @@ using Service;
 
 namespace IRC
 {
-
 	/// <summary>
 	/// </summary>
 	public delegate void ClientConnectHandler(string nick);
@@ -37,14 +36,13 @@ namespace IRC
 	/// <summary>
 	/// Core server
 	/// </summary>
-	public partial class IRCServer : BaseServer // new partial
+	public partial class IRCServer : BaseServer
 	{
 		private int _SoftLimit;
 		private BlackList _blacklist;
 		private Hashtable _channels;
 
-		public readonly string devName = "storm-ircd";
-		private readonly char[] _nickPrefixes = {'@', '%', '+'}; // TODO: mit regex
+		private readonly char[] _nickPrefixes = {'@', '%', '+'}; // TODO: regex
 		private readonly char[] _channelPrefixes = {'#', '&'};
 
 		/// <summary>
@@ -56,6 +54,7 @@ namespace IRC
 			this._channels = new Hashtable();
 			base.Interpretor = new IRCInterpretor(this);
 
+			this.InitializeHandlers();
 			// TODO: ThreadPool.QueueUserWorkItem(new WaitCallback(this.pinger));
 		}
 
@@ -72,11 +71,13 @@ namespace IRC
 					this.RemoveConnection(con);
 					usr = new IRCUserConnection(con);
 					this.AddConnection(usr);
+					// TODO: if (this.IsFull)
 					// TODO: this.AddUser(usr.SimpleUser);
+					// send bounce 005
 				}
 				else
 				{
-					con.SendLine("ERROR: you could not register!: internal error");
+					con.SendLine("ERROR :You could not register! Internal error");
 				}
 			}
 		}
@@ -88,7 +89,7 @@ namespace IRC
 			if (ser == null)
 				throw new ArgumentNullException("ser");
 
-	// TODO: ircservice mitteilen das zu diesem server keine verbindung mehr hergestellt werden muss
+			// TODO: ircservice mitteilen das zu diesem server keine verbindung mehr hergestellt werden muss
 			lock (con)
 			{
 				if (con is IRCConnection)
@@ -98,7 +99,7 @@ namespace IRC
 					srv = new IRCServerConnection(con, ser);
 					this.AddConnection(srv);
 					// TODO: mal sehen evtl. simpleserver erzeugen und mit AddServer hinzufügen
-					//this.AddServer(ser);
+					this.AddServer(ser);
 					IRCServerConnection.SendServer(srv);
 				}
 				else
@@ -145,10 +146,8 @@ namespace IRC
 				{
 					if (connection is IRCConnection)
 					{
-						IRCConnection ic = (IRCConnection)connection;
-					//	ic.Quit();
-					//	this.RemoveConnection(ic);
-						this.CloseLink(ic);
+						IRCConnection con = (IRCConnection)connection;
+						// con.SendCommand(SQUIT); // TODO:
 					}
 				}
 			}
@@ -211,6 +210,7 @@ namespace IRC
 			return null;
 		}
 
+#if false
 		public virtual IRCConnection[] SearchPersons(string alias)
 		{
 		// für bann nick und whois etc.
@@ -221,6 +221,7 @@ namespace IRC
 		//	if 
 			return null;
 		}
+#endif
 
 		public bool HasNick(string nick)
 		{
@@ -238,9 +239,8 @@ namespace IRC
 			return false;
 		}
 
-// new !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		// HACK:
-		public bool HasServer(EndPoint ep)
+		public bool HasServer(EndPoint ep) // TODO: test
 		{
 			foreach (IRCConnection server in this._servers)
 			{
@@ -268,7 +268,7 @@ namespace IRC
 		/// Join a channel
 		/// </summary>
 		/// <param name="client">Connection</param>
-		/// <param name="channel">Name of channel to join</param>
+		/// <param name="channel">Name of the channel to join</param>
 		public virtual void Join(IRCUserConnection client, string channel)
 		{
 			lock (this._channels)
@@ -277,9 +277,7 @@ namespace IRC
 				{
 					if (RFC2812.IsValidChannelName(channel)) // channel prefix(&,#), lenght, etc.
 					{
-						Console.WriteLine("Create new Channel: {0}", channel);
-						Channel ch = new Channel(channel, this, null);
-						this._channels.Add(channel, ch);
+						this.CreateChannel(channel);
 						//connection.channel umode +creator
 					}
 				}
@@ -295,38 +293,33 @@ namespace IRC
 			}
 		}
 
-		public virtual void Part(IRCUserConnection client, string channel)
+		public virtual void Part(SimpleUser usr, Channel channel)
 		{
-			this.Part(client, channel, true);
+			this.Part(usr, channel, usr.NickName);
 		}
 
-		public virtual void Part(IRCUserConnection client, string channel, bool confirmation)
+		public virtual void Part(SimpleUser usr, Channel channel, string message)
 		{
-			Console.WriteLine("TO/DO: part");
-#if DEC
-			lock (client)
+			if (usr == null)
+				throw new ArgumentNullException("usr");
+
+			if (channel == null)
+				throw new ArgumentNullException("channel");
+
+			lock (channel)
 			{
-				if (client.IsInChannel(channel))
+				if (channel.HasUser(usr))
 				{
-					/// new
-					Channel ch = ((Channel)client.Channels[channel]);
-					client.Part(ch, confirmation);
-					//if (!ch.GetMode (/*unkaputbar*/)
-					if (ch.MemberCount == 0)
-					{
-						Console.WriteLine("Call Channel.Dispose()");
-						ch.Dispose();
-					}
+					channel.Part(usr, message);
 				}
-				Console.WriteLine("end part()");
 			}
-#endif
 		}
-
 
 // TODO:
-// new
-		public virtual IRCConnection[] get_servers(string ident)
+		/// <summary>
+		///
+		/// </summary>
+		public virtual IRCServerConnection[] SearchServer(string name) // Soll sich nicht selbst als match zurueckgeben
 		{
 			foreach (IRCConnection src in this._servers)
 			{
@@ -334,14 +327,14 @@ namespace IRC
 			return null;
 		}
 
-		public virtual IRCUserConnection[] get_services(string ident) // TODO
+		public virtual IRCUserConnection[] SearchServices(string ident) // TODO
 		{
 //			foreach (IRCConnection src in this._services)
 //			{}
 			return null;
 		}
 
-		public virtual IRCUserConnection[] get_persons(string ident)
+		public virtual IRCUserConnection[] SearchUsers(string ident) // TODO
 		{
 			// sample *!~*@host*
 			// *!~*@host.de
@@ -354,8 +347,8 @@ namespace IRC
 			// return null
 			foreach (IRCUserConnection src in this._users) // TODO: liste ist leer
 			{
-				if (src.Match(ident))
-					list.Add(src); // TODO: invisible system
+//				if (src.Match(ident))
+//					list.Add(src);
 			}
 
 			IRCUserConnection[] all = new IRCUserConnection[list.Count];
@@ -447,21 +440,45 @@ namespace IRC
 			{
 				client.Send(":" + client.RealHostName/*.NickName*/ + "a@b.c" + "@" + "Hostname" + "QUIT :quitter\n\n");
 
-				// TO/DO: RemoveConnection
-				//this.RemoveConnection(client);
 				this.CloseLink(client);
 			}
 		}
 
-		public virtual void CloseLink(IConnection con)
+		public virtual void CloseLink(IRCConnection con, string message)
 		{
-			Console.WriteLine(this+".CloseLink("+con.GetType()+")");
+			throw new NotImplementedException();
+			this.CloseLink(con);
+		}
+
+		public virtual void CloseLink(IRCConnection con)
+		{
 			this.RemoveConnection(con);
 			con.Dispose();
 		}
-		public virtual void RemoveConnection(IRCConnection connection, string msg) // TODO: msg senden
+
+#if false
+// entfernen		public virtual void RemoveConnection(IRCConnection connection, string msg) // TODO: msg senden
 		{
 			this.RemoveConnection(connection);
+		}
+#endif
+
+		/// <summary>
+		/// </summary>
+		public virtual void RemoveFromChannels(IRCUserConnection usr, string message)
+		{
+//			throw new NotImplementedException("Add support for IRCUserConnection.Channels");
+
+			Console.WriteLine("RemoveFromChannels()");
+			foreach (DictionaryEntry entry in (Hashtable)usr.Channels.Clone())
+			{
+				Channel chan = (Channel)entry.Value;
+				if (chan.HasConnection(usr))
+				{
+					Console.WriteLine("Remove connection from: {0}", chan.Name);
+					chan.RemoveUser(usr.SimpleUser, ExitType.Quit);
+				}
+			}
 		}
 
 		/// <summary>
@@ -470,7 +487,7 @@ namespace IRC
 		/// <param name="connection">Connection to remove</param>
 		public override void RemoveConnection(IConnection connection)
 		{
-			Console.WriteLine("IRCServer RemoveConnection()");
+			Console.WriteLine("TODO: IRCServer.RemoveConnection()");
 
 			lock (connection)
 			{				try
@@ -478,10 +495,15 @@ namespace IRC
 					if (connection is IRCUserConnection)
 					{
 						Console.WriteLine("Connection is a IRCUserConnction");
-						Console.WriteLine("TODO: remove von channels");
-#if DEC
-						IRCUserConnection irccon = (IRCUserConnection)connection;
-						if (!(irccon.Channels == null))
+//						Console.WriteLine("TODO: remove von channels");
+						IRCUserConnection con = (IRCUserConnection)connection;
+						if (con.Channels.Count > 0)
+						{
+							this.RemoveFromChannels((IRCUserConnection)connection, "quit");
+						}
+
+#if false
+// entfernen						if (!(irccon.Channels == null))
 						{
 							IDictionaryEnumerator enu = ((Hashtable)(irccon.Channels.Clone())).GetEnumerator(); // workaround to modify the Hashtable
 							while (enu.MoveNext())
@@ -490,10 +512,14 @@ namespace IRC
 
 								Console.WriteLine("remove connection from: {0}", ch.Name);
 
-								this.Part(irccon, ch.Name, false);
+								//this.Part(SimpleUser usr, Channel channel, string message)
 							}
 						}
 #endif
+					}
+					else if (connection is IRCServerConnection)
+					{
+						throw new NotImplementedException("RemoveConnection: Server");
 					}
 					base.RemoveConnection(connection);
 				}
@@ -534,7 +560,6 @@ namespace IRC
 		{
 			get
 			{
-				// BUGFIX: 1.04.05 -> invalide operation exception
 				string[] nicks = null;
 				lock (this.Clients)
 				{
@@ -546,7 +571,6 @@ namespace IRC
 					}
 				}
 				return nicks;
-			//	return (string[])base.Clients.ToArray(typeof(string));
 			}
 		}
 

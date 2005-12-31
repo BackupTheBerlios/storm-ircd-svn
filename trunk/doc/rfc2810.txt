@@ -1,34 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html><head><title>RFC 2810 (rfc2810) - Internet Relay Chat: Architecture</title>
 
-<meta name="description" content="RFC 2810 - Internet Relay Chat: Architecture">
-<script language="JavaScript1.2">
-function erfc(s)
-{document.write("<A href=\"/rfccomment.php?rfcnum="+s+"\" target=\"_blank\" onclick=\"window.open('/rfccomment.php?rfcnum="+s+"','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;\")>Comment on RFC "+s+"</A>\n");}
-//-->
-</script></head>
 
-<body bgcolor="#ffffff" text="#000000">
-<p align="center"><img src="rfc2810_dateien/library" alt="" align="middle" border="0" height="62" width="150"></p>
-<h1 align="center">RFC 2810 (RFC2810)</h1>
-<p align="center">Internet RFC/STD/FYI/BCP Archives</p>
 
-<div align="center">[ <a href="http://www.faqs.org/rfcs/">RFC Index</a> | <a href="http://www.faqs.org/rfcs/rfcsearch.html">RFC Search</a> | <a href="http://www.faqs.org/faqs/">Usenet FAQs</a> | <a href="http://www.faqs.org/contrib/">Web FAQs</a> | <a href="http://www.faqs.org/docs/">Documents</a> | <a href="http://www.city-data.com/">Cities</a> ]
-<p>
-<strong>Alternate Formats:</strong>
- <a href="http://www.faqs.org/ftp/rfc/rfc2810.txt">rfc2810.txt</a> |
- <a href="http://www.faqs.org/ftp/rfc/pdf/rfc2810.txt.pdf">rfc2810.txt.pdf</a></p></div>
-<p align="center"><script language="JavaScript"><!--
-erfc("2810");
-// --></script><a href="http://www.faqs.org/rfccomment.php?rfcnum=2810" target="_blank" onclick="window.open('/rfccomment.php?rfcnum=2810','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;" )="">Comment on RFC 2810</a>
-</p>
-<h3 align="center">RFC 2810 - Internet Relay Chat: Architecture</h3>
-<hr noshade="noshade" size="2">
-<pre>
+
+
+
 Network Working Group                                           C. Kalt
 Request for Comments: 2810                                   April 2000
 Updates: 1459
 Category: Informational
+
 
                    Internet Relay Chat: Architecture
 
@@ -48,7 +28,7 @@ Abstract
    conferencing. It has been developed since 1989 when it was originally
    implemented as a mean for users on a BBS to chat amongst themselves.
 
-   First formally documented in May 1993 by <a href="http://www.faqs.org/rfcs/rfc1459.html">RFC 1459</a> [IRC], the protocol
+   First formally documented in May 1993 by RFC 1459 [IRC], the protocol
    has kept evolving. This document is an update describing the
    architecture of the current IRC protocol and the role of its
    different components.  Other documents describe in detail the
@@ -72,6 +52,13 @@ Table of Contents
       5.2  One-To-Many ............................................   5
          5.2.1  To A Channel ......................................   5
          5.2.2  To A Host/Server Mask .............................   6
+
+
+
+Kalt                         Informational                      [Page 1]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
 
          5.2.3  To A List .........................................   6
       5.3  One-To-All .............................................   6
@@ -121,6 +108,14 @@ Table of Contents
    of the protocol which is able to link all the other components
    together: it provides a point to which clients may connect to talk to
 
+
+
+
+Kalt                         Informational                      [Page 2]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
+
    each other [IRC-CLIENT], and a point for other servers to connect to
    [IRC-SERVER].  The server is also responsible for providing the basic
    services defined by the IRC protocol.
@@ -169,6 +164,14 @@ Table of Contents
 
                     [ Fig. 1. Sample small IRC network ]
 
+
+
+
+Kalt                         Informational                      [Page 3]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
+
    The IRC protocol provides no mean for two clients to directly
    communicate.  All communication between clients is relayed by the
    server(s).
@@ -213,6 +216,18 @@ Table of Contents
    organization of the IRC protocol and how different classes of
    messages are delivered.
 
+
+
+
+
+
+
+
+Kalt                         Informational                      [Page 4]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
+
 5.1 One-To-One Communication
 
    Communication on a one-to-one basis is usually performed by clients,
@@ -228,12 +243,12 @@ Table of Contents
    Example 1: A message between clients 1 and 2 is only seen by server
        A, which sends it straight to client 2.
 
-   Example 2: A message between clients 1 and 3 is seen by servers A &amp;
+   Example 2: A message between clients 1 and 3 is seen by servers A &
        B, and client 3.  No other clients or servers are allowed see the
        message.
 
    Example 3: A message between clients 2 and 4 is seen by servers A, B,
-       C &amp; D and client 4 only.
+       C & D and client 4 only.
 
 5.2 One-To-Many
 
@@ -258,6 +273,16 @@ Table of Contents
    Example 5: 2 clients in a channel. All messages traverse a path as if
        they were private messages between the two clients outside a
        channel.
+
+
+
+
+
+
+Kalt                         Informational                      [Page 5]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
 
    Example 6: Clients 1, 2 and 3 in a channel.  All messages to the
        channel are sent to all clients and only those servers which must
@@ -302,6 +327,18 @@ Table of Contents
 
    There is no class of message which, from a single message, results in
    a message being sent to every other client.
+
+
+
+
+
+
+
+
+Kalt                         Informational                      [Page 6]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
 
 5.3.2 Client-to-Server
 
@@ -351,6 +388,14 @@ Table of Contents
    network traffic, but the reconnection (eventually elsewhere) of two
    servers also generates more traffic.
 
+
+
+
+Kalt                         Informational                      [Page 7]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
+
    In an attempt to minimize the impact of these problems, it is
    strongly RECOMMENDED that servers do not automatically try to
    reconnect too fast, in order to avoid aggravating the situation.
@@ -371,19 +416,19 @@ Table of Contents
 8. Current Support And Availability
 
         Mailing lists for IRC related discussion:
-          General discussion: <a href="mailto:ircd-users@irc.org">ircd-users@irc.org</a>
-          Protocol development: <a href="mailto:ircd-dev@irc.org">ircd-dev@irc.org</a>
+          General discussion: ircd-users@irc.org
+          Protocol development: ircd-dev@irc.org
 
         Software implementations:
-          <a href="ftp://ftp.irc.org/irc/server">ftp://ftp.irc.org/irc/server</a>
-          <a href="ftp://ftp.funet.fi/pub/unix/irc">ftp://ftp.funet.fi/pub/unix/irc</a>
-          <a href="ftp://coombs.anu.edu.au/pub/irc">ftp://coombs.anu.edu.au/pub/irc</a>
+          ftp://ftp.irc.org/irc/server
+          ftp://ftp.funet.fi/pub/unix/irc
+          ftp://coombs.anu.edu.au/pub/irc
 
         Newsgroup: alt.irc
 
 9. Acknowledgements
 
-   Parts of this document were copied from the <a href="http://www.faqs.org/rfcs/rfc1459.html">RFC 1459</a> [IRC] which
+   Parts of this document were copied from the RFC 1459 [IRC] which
    first formally documented the IRC Protocol.  It has also benefited
    from many rounds of review and comments.  In particular, the
    following people have made significant contributions to this
@@ -392,13 +437,28 @@ Table of Contents
    Matthew Green, Michael Neumayer, Volker Paulsen, Kurt Roeckx, Vesa
    Ruokonen, Magnus Tjernstrom, Stefan Zehl.
 
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                      [Page 8]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
+
 10. References
 
    [KEYWORDS]   Bradner, S., "Key words for use in RFCs to Indicate
-                Requirement Levels", BCP 14, <a href="http://www.faqs.org/rfcs/rfc2119.html">RFC 2119</a>, March 1997.
+                Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [IRC]        Oikarinen, J. and D. Reed, "Internet Relay Chat
-                Protocol", <a href="http://www.faqs.org/rfcs/rfc1459.html">RFC 1459</a>, May 1993.
+                Protocol", RFC 1459, May 1993.
 
    [IRC-CLIENT] Kalt, C., "Internet Relay Chat: Client Protocol", RFC
                 2812, April 2000.
@@ -416,7 +476,37 @@ Table of Contents
    Ridgefield Park, NJ 07660
    USA
 
-   EMail: <a href="mailto:kalt@stealth.net">kalt@stealth.net</a>
+   EMail: kalt@stealth.net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                      [Page 9]
+
+RFC 2810           Internet Relay Chat: Architecture          April 2000
+
 
 12.  Full Copyright Statement
 
@@ -451,28 +541,23 @@ Acknowledgement
    Funding for the RFC Editor function is currently provided by the
    Internet Society.
 
-</pre>
-<p align="center"><script language="JavaScript"><!--
-erfc("2810");
-// --></script><a href="http://www.faqs.org/rfccomment.php?rfcnum=2810" target="_blank" onclick="window.open('/rfccomment.php?rfcnum=2810','Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=680,height=530,left=30,top=43'); return false;" )="">Comment on RFC 2810</a>
-</p>
-&nbsp;<br>
-<div align="center">
-<table border="0" cellpadding="3" cellspacing="3" width="100%">
-<tbody><tr><td width="45%">
-<p align="left">Previous: <a href="http://www.faqs.org/rfcs/rfc2809.html">RFC 2809 - Implementation of L2TP Compulsory Tunneling via RADIUS</a>
-</p></td><td width="10%">&nbsp;</td><td width="45%">
-<p align="right">Next: <a href="http://www.faqs.org/rfcs/rfc2811.html">RFC 2811 - Internet Relay Chat: Channel Management</a>
-</p></td></tr></tbody></table></div><p align="right">&nbsp;</p>
-<hr noshade="noshade" size="2">
-<div align="center">[ <a href="http://www.faqs.org/rfcs/">RFC Index</a> | <a href="http://www.faqs.org/rfcs/rfcsearch.html">RFC Search</a> | <a href="http://www.faqs.org/faqs/">Usenet FAQs</a> | <a href="http://www.faqs.org/contrib/">Web FAQs</a> | <a href="http://www.faqs.org/docs/">Documents</a> | <a href="http://www.city-data.com/">Cities</a> ]
-<p>
-</p></div>
-<small>
-<address>
-<p align="center">
- 
-</p>
-</address>
-</small>
-</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kalt                         Informational                     [Page 10]
+
